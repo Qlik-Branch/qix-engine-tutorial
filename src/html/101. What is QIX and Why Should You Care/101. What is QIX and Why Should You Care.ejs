@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <%= require('html-loader!../sidebar.ejs') %>
+
+    <div class="hamburger-open">&#9776;</div>
+
+    <div class="main-content">
+      <div class="container content">
+        <div class="header">
+          <%= require('html-loader!./101. What is QIX and Why Should You Care-header.ejs') %>
+          <hr/>
+        </div>
+        <div id="body-content">
+          <%=require('html-loader!./101. What is QIX and Why Should You Care-body.ejs')%>
+        </div>
+        <hr/>
+      </div>
+    </div>
+  </body>
+</html>
