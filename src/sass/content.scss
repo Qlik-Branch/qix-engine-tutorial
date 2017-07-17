@@ -1,1 +1,94 @@
+$FontPathOpenSans: "../../node_modules/npm-font-open-sans/fonts/";
+@import "../../node_modules/npm-font-open-sans/open-sans";
+
+$FontPath: "../../node_modules/roboto-slab-fontface-kit/fonts/";
+@import "../../node_modules/roboto-slab-fontface-kit/roboto-slab";
+
+$raleway-font-path: '../../node_modules/fonts-raleway/fonts/fonts-raleway';
+@import "../../node_modules/fonts-raleway/scss/raleway";
+
 @import "./sidebar";
+
+.main-content {
+  margin-left: 47px;
+  position: relative;
+  width: calc(100% - 47px);
+
+  .container.content {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+
+    .header {
+      h1 {
+        margin-top: 66px;
+        font-family: Raleway;
+        font-weight: 500;
+        color: #36B7CE;
+      }
+
+      p {
+        font-family: "Open Sans";
+        font-weight: 300;
+        padding: 15px 26px 17px 24px;
+        background-color: rgba(54,183,207,0.07);
+      }
+
+      hr {
+        border-top-width: 1px;
+        border-top-color: #E1E1E1;
+      }
+    }
+
+    #body-content {
+      h2 {
+        font-family: Raleway;
+        font-size: 24px;
+        font-weight: 500;
+        font-style: normal;
+        color: #36B7CF;
+      }
+
+      h3 {
+        font-family: Raleway;
+        font-size: 20px;
+        font-weight: 500;
+        font-style: normal;
+        color: #36B7CF;
+      }
+
+      h4 {
+        font-family: Raleway;
+        font-size: 18px;
+        font-weight: 500;
+        font-style: normal;
+        color: #36B7CF;
+      }
+
+      p {
+        font-family: 'Open Sans';
+        font-size: 16px;
+        font-weight: 300;
+        font-style: normal;
+        color: #565555;
+        line-height: 30px;
+      }
+
+      .section {
+        margin-top: 100px;
+      }
+    }
+  }
+}
+
+@media(min-width: 992px) {
+  .main-content {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+
+    .container.content {
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+  }
+}

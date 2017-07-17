@@ -53,6 +53,10 @@
     .sub-sidebar {
       display: none;
 
+      &.active {
+        display: block;
+      }
+
       a {
         font-family: "Open Sans";
         padding-left: 60px;
@@ -74,7 +78,10 @@
 
     & > .active > a,
     & > li > a:hover,
-    & > li > a:focus {
+    & > li > a:focus,
+    .sub-sidebar .active > a,
+    .sub-sidebar > li > a:hover,
+    .sub-sidebar > li > a:focus {
       background-color: #353D43;
       border-left: 3px solid #6EE8FC;
     }
