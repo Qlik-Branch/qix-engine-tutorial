@@ -48,6 +48,7 @@
     "fonts-raleway": "0.0.4",
     "jquery": "^3.2.1",
     "npm-font-open-sans": "^1.0.3",
-    "roboto-slab-fontface-kit": "^1.0.1"
+    "roboto-slab-fontface-kit": "^1.0.1",
+    "rxjs": "^5.4.2"
   }
 }
