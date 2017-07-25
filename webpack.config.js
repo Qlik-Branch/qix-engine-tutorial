@@ -6,7 +6,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   entry: {
     app: './src/js/index.js',
-    p1: './src/js/101/101. What is QIX and Why Should You Care.js'
+    p1: './src/js/101/101. What is QIX and Why Should You Care.js',
+    p2: './src/js/102/102. Meet the Engine.js'
   },
   output: {
     filename: '[name].bundle.js',
@@ -64,6 +65,12 @@ module.exports = {
       filename: "101. What is QIX and Why Should You Care.html",
       title: "What is QIX and Why Should You Care",
       chunks: ['app', 'p1']
+    }),
+    new HtmlWebpackPlugin({
+      template: "src/html/102. Meet the Engine/102. Meet the Engine.ejs",
+      filename: "102. Meet the Engine.html",
+      title: "Meet the Engine",
+      chunks: ['app', 'p2']
     }),
     new ExtractTextPlugin({
       filename: '[name].css'

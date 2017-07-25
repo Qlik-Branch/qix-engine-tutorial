@@ -79,15 +79,24 @@ $sidebar-width: 220px;
 
       .section {
         position: relative;
+        margin-top: 100px;
 
         .row {
           position: relative;
 
           .body-right {
-            top: 0;
-            // padding-top: 100px;
-            right: 0;
-            height: 100vh;
+            .ace_editor {
+              width: 100%;
+              height: 400px;
+            }
+          }
+
+          &.row-graph {
+            .body-right {
+              top: 0;
+              right: 0;
+              height: 100vh;
+            }
           }
         }
 
