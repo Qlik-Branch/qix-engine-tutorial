@@ -6,6 +6,7 @@
     "qDef": {
       "qFieldDefs": ["Item"]
     },
+    "qShowAlternatives": true,
     "qInitialDataFetch": [{
       "qLeft": 0,
       "qTop": 0,

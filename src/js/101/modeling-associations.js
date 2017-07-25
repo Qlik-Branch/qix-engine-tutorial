@@ -9,6 +9,9 @@ import itemListObjectDef from './object-defs/itemListObjectDef.json';
 import departmentListObjectDef from './object-defs/departmentListObjectDef.json';
 
 export default function modelingAssociations(section){
+  var altColor = '#686868',
+      selectionActive = false;
+
   // ============= RxQ Initialize =============
   // Connect to engine and get app
   var app$ = RxQ.connectEngine(serverConfig, 'warm')
@@ -200,7 +203,7 @@ export default function modelingAssociations(section){
         .selectAll('.list-object-circle')
         .data(data);
 
-
+        
       // Enter new Circle
       const circleEnter = update
           .enter()
@@ -213,8 +216,9 @@ export default function modelingAssociations(section){
         .merge(update)
           .style('fill', d =>{
             if(d[0].qState === 'O') return '#fff';
-            else if(d[0].qState === 'A') return '#686868';
+            else if(d[0].qState === 'A') return altColor;
             else if(d[0].qState === 'X') return '#686868';
+            else if(d[0].qState === 'XS') return '#686868';
             else if(d[0].qState === 'S') return '#45EE59';
           });
 
@@ -245,7 +249,7 @@ export default function modelingAssociations(section){
         var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
         
         // Return the observable of the elemno being selected (this will be merged with the click observable)
-        if(!isNaN(elemNo)){
+        if(!isNaN(elemNo) && selectionActive){
           return listObjObs$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
         } else return [null];
       })
@@ -311,15 +315,13 @@ export default function modelingAssociations(section){
       
       // Clear
       if(section.elemGroup < 5 && stage != 0){
-        console.log('clear');
         stage = 0;
-        return departmentListObject$.qClearSelections('/qListObjectDef');
+        return app$.qClearAll();
       }
 
       // Select Clothing
       else if((section.elemGroup < 13 && section.elemGroup >= 5) && stage != 1){
-        console.log('select clothing');
-        var prevStage = stage;
+        const prevStage = stage;
         stage = 1;
         if(prevStage > 1) return itemListObject$.qClearSelections('/qListObjectDef');
         else return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
@@ -327,35 +329,75 @@ export default function modelingAssociations(section){
 
       // Select T-Shirt
       else if((section.elemGroup < 15 && section.elemGroup >= 13) && stage != 2){
-        console.log('select tshirt');
         stage = 2;
-        if(prevStage > 2) return 
         return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
       }
 
       // Clear All
       else if((section.elemGroup < 16 && section.elemGroup >= 15) && stage != 3){
-        console.log('clear');
         stage = 3;
         return app$.qClearAll();
       }
 
-      else return [null];
+      // Select T-Shirt and Camera
+      else if((section.elemGroup < 18 && section.elemGroup >= 16) && stage != 4){
+        var prevStage = stage;
+        stage = 4;
+        if(prevStage > 4) return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
+        else return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true);
+      }
 
-      // if(+section.elemGroup < 5 && !(stage < 5)){
-      //   console.log('clear');
-      //   stage = +section.elemGroup;
-      //   return departmentListObject$.qClearSelections('/qListObjectDef');
-      // }
-      // else if(+section.elemGroup < 13 && !((stage < 13 && stage >=5))){
-      //   stage = +section.elemGroup;
-      //   return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
-      // } 
-      // else if(section.elemGroup === 13 && !(stage === 13)) {
-      //   stage = section.elemGroup;
-      //   return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
-      // }
-      // else return [null];
+      // Select Clothing
+      else if((section.elemGroup < 19 && section.elemGroup >= 18) && stage != 5){
+        stage = 5;
+        return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
+      }
+
+      // Select Clothing
+      else if((section.elemGroup < 21 && section.elemGroup >= 19) && stage != 6){
+        const prevStage = stage;
+        stage = 6;
+        if(prevStage > 6) return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true);
+        else return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
+      }
+
+      // Select Furniture
+      else if((section.elemGroup < 22 && section.elemGroup >= 21) && stage != 7){
+        stage = 7;
+        return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [0], true);
+      }
+
+      // Select T-Shirt and Camera
+      else if((section.elemGroup < 23 && section.elemGroup >= 22) && stage != 8){
+        const prevStage = stage;
+        stage = 8;
+        if(prevStage > 8) {
+          altColor = '#686868';
+          return departmentListObject$.qClearSelections('/qListObjectDef');
+        }
+        else return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true);
+      }
+
+      // Turn alternative
+      else if((section.elemGroup < 27 && section.elemGroup >= 23) && stage != 9){
+        const prevStage = stage;
+        stage = 9;
+        altColor = '#BEBEBE';
+        if(prevStage > 9) {
+          selectionActive = false;
+          return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true);
+        }
+        return departmentListObject$.qClearSelections('/qListObjectDef');
+      }
+
+      // Turn alternative
+      else if((section.elemGroup < 28 && section.elemGroup >= 27) && stage != 10){
+        stage = 10;
+        selectionActive = true;
+        return app$.qClearAll();
+      }
+
+      else return [null];
     })
     .subscribe();
 }

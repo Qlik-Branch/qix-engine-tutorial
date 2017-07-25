@@ -6,6 +6,7 @@
     "qDef": {
       "qFieldDefs": ["Department"]
     },
+    "qShowAlternatives": true,
     "qInitialDataFetch": [{
       "qLeft": 0,
       "qTop": 0,
