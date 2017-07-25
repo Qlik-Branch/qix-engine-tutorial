@@ -1,5 +1,15 @@
+import activateSidebar from '../lib/activate-sidebar.js';
+import {scrollPosition} from '../lib/scrolly-graph.js';
+
+import modelingAssociations from './modeling-associations.js';
+
 import '../../sass/101/101. What is QIX and Why Should You Care.scss';
 
-import activateSidebar from '../lib/activate-sidebar.js';
-
 activateSidebar(1);
+
+var scrollList = [
+];
+
+scrollPosition(scrollList);
+
+modelingAssociations('.modeling-associations');

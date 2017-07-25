@@ -1,0 +1,25 @@
+{
+  "qInfo": {
+    "qType": "chart"
+  },
+  "qHyperCubeDef": {
+    "qDimensions": [
+      {
+        "qDef": {
+          "qFieldDefs": ["Item"]
+        }
+      },
+      {
+        "qDef": {
+          "qFieldDefs": ["Department"]
+        }
+      }
+    ],
+    "qInitialDataFetch": [{
+      "qLeft": 0,
+      "qTop": 0,
+      "qWidth": 2,
+      "qHeight": 10
+    }]
+  }
+}

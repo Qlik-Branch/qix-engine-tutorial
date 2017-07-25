@@ -1,0 +1,16 @@
+{
+  "qInfo": {
+    "qType": "filter"
+  },
+  "qListObjectDef": {
+    "qDef": {
+      "qFieldDefs": ["Item"]
+    },
+    "qInitialDataFetch": [{
+      "qLeft": 0,
+      "qTop": 0,
+      "qWidth": 1,
+      "qHeight": 1000
+    }]
+  }
+}
