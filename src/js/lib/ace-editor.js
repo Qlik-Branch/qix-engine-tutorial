@@ -8,13 +8,13 @@ import '../../../node_modules/ace-builds/src-min-noconflict/theme-tomorrow_night
 
 export default function aceEditor(section, language, text, filename){
   // Get count of total previous editors
-  const previousEditors = document.querySelectorAll('.' +section +' .editor-container').length;
+  const previousEditors = document.querySelectorAll('.' +section +' .editor-container .tab-pane').length;
 
   // Get .graph div
   const editorGraph = d3.select('.' +section +' .graph');
 
   // Check if already tabs
-  if(previousEditors > 1) addTab();
+  if(previousEditors > 0) addTab();
   else createTab();
 
 
@@ -33,6 +33,11 @@ export default function aceEditor(section, language, text, filename){
   editor.resize();
   editor.setFadeFoldWidgets(true);
 
+  const lineCount = editor.session.doc.getAllLines().length;
+
+  d3.select('#' +section +'-embed-' +previousEditors)
+    .style('height', 16*(lineCount + 3) +'px');
+
 
   // Create Tabs
   function createTab(){
@@ -48,10 +53,12 @@ export default function aceEditor(section, language, text, filename){
     const editorContainer = editorGraph
       .append('div')
         .attr('class', 'editor-container')
-        .html(navTabsString)
+        .html(navTabsString);
+
+    editorContainer.select('.tab-content')
       .append('div')
-        .attr('id', section +'-embed-' +previousEditors)
-        .attr('class', 'tab-pane fade in active');
+      .attr('id', section +'-embed-' +previousEditors)
+      .attr('class', 'tab-pane fade in active');
   }
 
 
@@ -65,6 +72,11 @@ export default function aceEditor(section, language, text, filename){
         .html(filename)
 
     d3.select('.' +section +' .graph .editor-container .tab-content')
+      .append('div')
+      .attr('id', section +'-embed-' +previousEditors)
+      .attr('class', 'tab-pane fade');
+
+    d3.select('.' +section +` .graph .editor-container .tab-content #${section}-embed-${previousEditors}`)
       .append('div')
       .attr('id', section +'-embed-' +previousEditors)
       .attr('class', 'tab-pane fade');

@@ -7,7 +7,8 @@ module.exports = {
   entry: {
     app: './src/js/index.js',
     p1: './src/js/101/101. What is QIX and Why Should You Care.js',
-    p2: './src/js/102/102. Meet the Engine.js'
+    p2: './src/js/102/102. Meet the Engine.js',
+    p3: './src/js/103/103. Talk to the Engine.js'
   },
   output: {
     filename: '[name].bundle.js',
@@ -71,6 +72,12 @@ module.exports = {
       filename: "102. Meet the Engine.html",
       title: "Meet the Engine",
       chunks: ['app', 'p2']
+    }),
+    new HtmlWebpackPlugin({
+      template: "src/html/103. Talk to the Engine/103. Talk to the Engine.ejs",
+      filename: "103. Talk to the Engine.html",
+      title: "Talk to the Engine",
+      chunks: ['app', 'p3']
     }),
     new ExtractTextPlugin({
       filename: '[name].css'
