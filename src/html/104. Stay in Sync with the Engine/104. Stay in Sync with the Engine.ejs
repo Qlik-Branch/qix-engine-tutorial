@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <%= require('html-loader!../sidebar.ejs') %>
+
+    <div class="main-content">
+      <div class="container content">
+        <div class="header">
+          <%= require('html-loader!./104. Stay in Sync with the Engine-header.ejs') %>
+          <hr/>
+        </div>
+        <div id="body-content">
+          <%=require('html-loader!./104. Stay in Sync with the Engine-body.ejs')%>
+        </div>
+        <hr/>
+      </div>
+    </div>
+  </body>
+</html>

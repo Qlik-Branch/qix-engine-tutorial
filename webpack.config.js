@@ -8,7 +8,8 @@ module.exports = {
     app: './src/js/index.js',
     p1: './src/js/101/101. What is QIX and Why Should You Care.js',
     p2: './src/js/102/102. Meet the Engine.js',
-    p3: './src/js/103/103. Talk to the Engine.js'
+    p3: './src/js/103/103. Talk to the Engine.js',
+    p4: './src/js/104/104. Stay in Sync with the Engine.js'
   },
   output: {
     filename: '[name].bundle.js',
@@ -78,6 +79,12 @@ module.exports = {
       filename: "103. Talk to the Engine.html",
       title: "Talk to the Engine",
       chunks: ['app', 'p3']
+    }),
+    new HtmlWebpackPlugin({
+      template: "src/html/104. Stay in Sync with the Engine/104. Stay in Sync with the Engine.ejs",
+      filename: "104. Stay in Sync with the Engine.html",
+      title: "Stay in Sync with the Engine",
+      chunks: ['app', 'p4']
     }),
     new ExtractTextPlugin({
       filename: '[name].css'

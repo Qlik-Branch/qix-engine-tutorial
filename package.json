@@ -9,7 +9,8 @@
     "copy-dependencies": "node scripts/copy-dependencies.js",
     "build": "npm run compile-mdon && npm run copy-dependencies && webpack",
     "watch": "npm run compile-mdon && npm run copy-dependencies && webpack --watch",
-    "serve": "webpack-dev-server --content-base dist --port 9000 --open",
+    "http-serve": "http-server -p:8001",
+    "serve": "webpack-dev-server --content-base dist --port 8000 --open",
     "start": "npm run watch-markdown & npm run watch & npm run serve"
   },
   "repository": {
@@ -36,6 +37,7 @@
     "fs-extra": "^4.0.0",
     "html-loader": "^0.4.5",
     "html-webpack-plugin": "^2.29.0",
+    "http-server": "^0.10.0",
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
