@@ -14,25 +14,23 @@ export default function modelingAssociations(section){
 
   // ============= RxQ Initialize =============
   // Connect to engine and get app
-  var app$ = RxQ.connectEngine(serverConfig, 'warm')
+  const app$ = RxQ.connectEngine(serverConfig, 'warm')
     .qOpenDoc('76928257-797b-4702-8ff9-558d4b467a41');
 
 
   // Define getLayout stream
-  var hyperCubeLayout$ = 
+  const hyperCubeLayout$ = 
     app$.qCreateSessionObject(hyperCubeDef)
       .qLayouts();
 
   // Define item list object stream
-  var itemListObject$ = app$.qCreateSessionObject(itemListObjectDef);
-  // Define getLayout stream
-  var itemLayout$ = itemListObject$.qLayouts();
+  const itemListObject$ = app$.qCreateSessionObject(itemListObjectDef);
+  const itemLayout$ = itemListObject$.qLayouts();
 
 
   // Define department list object stream
-  var departmentListObject$ = app$.qCreateSessionObject(departmentListObjectDef);
-  // Define getLayout stream
-  var departmentLayout$ = departmentListObject$.qLayouts();
+  const departmentListObject$ = app$.qCreateSessionObject(departmentListObjectDef);
+  const departmentLayout$ = departmentListObject$.qLayouts();
 
 
   // ============= Create HTML =============
@@ -53,10 +51,11 @@ export default function modelingAssociations(section){
   })
 
   // Define scroll height
+  const groups = leftPaneElements._groups[0].length - subtractor;
   const scrollHeight = (leftPaneElements._groups[0].length - subtractor)*500;
 
   // Get section
-  var modelingAssociationsSection = d3.select(section)
+  const modelingAssociationsSection = d3.select(section)
     .classed('fixed-transition', true)
     .style('height', 'calc(' +scrollHeight +'px + 100vh)');
 
@@ -135,16 +134,13 @@ export default function modelingAssociations(section){
       itemList.attr('transform', 'translate(' +(svgWidth - 100) +', 259)');
     });
 
-  
 
-
-
-  // ============= Subscribe =============
+  // ============= HyperCube =============
   // Subscribe to hyperCube layout
   hyperCubeLayout$.subscribe(layout =>{
     // ------------ Table Header ------------
     // Get column labels
-    var label = layout.qHyperCube.qDimensionInfo.map(d =>{return {qText: d.qFallbackTitle}})
+    const label = layout.qHyperCube.qDimensionInfo.map(d =>{return {qText: d.qFallbackTitle}})
 
     // Create table header row and cells
     tableHeader.selectAll('tr')
@@ -160,7 +156,7 @@ export default function modelingAssociations(section){
 
     // ------------ Table Body ------------
     // qMatrix data
-    var data = layout.qHyperCube.qDataPages[0].qMatrix;
+    const data = layout.qHyperCube.qDataPages[0].qMatrix;
 
     // Attach data to table
     const rowUpdate = tableBody.selectAll('tr')
@@ -188,6 +184,47 @@ export default function modelingAssociations(section){
       .append('td')
       .html(d => d.qText)
   })
+
+
+  // ============= Scroll =============
+  var prevStage; // Hold state of prevStage
+
+  const scrollStream = Rx.Observable.fromEvent(window, 'scroll')
+    .map(() => document.querySelector(section).getBoundingClientRect().top);
+    
+  const stageSubject = new Rx.Subject();
+
+  const stageStream = scrollStream
+    .map(sectionTop =>{
+      if(sectionTop >= -500) return 0;
+      else if(sectionTop < -500*groups) return groups;
+      else return Math.floor(sectionTop/-500);
+    })
+    .filter(stage => {
+      if(stage === prevStage) return false;
+      else {
+        prevStage = stage;
+        return true;
+      }
+    });
+
+  stageSubject.subscribe(stage =>{
+    leftPaneElements.classed('hidden', (d, i) => stage != +leftPaneElements._groups[0][i].getAttribute('element-group'))
+  });
+
+  const clearAll = stageSubject
+    .filter(stage => stage < 5)
+    .mergeMap(() => app$.qClearAll());
+
+  const selectDepartment = stageSubject
+    .filter(stage => stage === 5)
+    .mergeMap(() => departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true));
+
+  const mergedSelection = Rx.Observable.merge(clearAll, selectDepartment);
+
+  app$.switchMap(() => mergedSelection).subscribe();
+
+  stageStream.subscribe(stageSubject);
 
 
   // ------------ List Box ------------
@@ -258,146 +295,4 @@ export default function modelingAssociations(section){
 
   listBoxSubscribe(departmentListObject$, departmentLayout$, departmentList, -Math.PI/2);
   listBoxSubscribe(itemListObject$, itemLayout$, itemList, -Math.PI/4);
-
-
-  // ============= Scroll =============
-  var stage = 0;
-  var scrollStream = Rx.Observable.fromEvent(window, 'scroll')
-    .startWith('startup scroll')
-    .map(() => {
-      // Get section top position
-      var sectionTop = document.querySelector(section).getBoundingClientRect().top;
-      var currGroup = 0;
-
-      // Hide elements out of view
-      leftPaneElements
-        .classed('hidden', (d, i) =>{
-          // Get element's group
-          var elemGroup = leftPaneElements._groups[0][i].getAttribute('element-group')
-
-          /* If first group, want to always show if sectionTop > -500 */
-          if(+elemGroup === 0) {
-            if(sectionTop > -500) {
-              currGroup = 0;
-              return false;
-            }
-            else return true;
-          } 
-          
-          /* If last group, want to always show if sectionTop < last position */
-          else if (+elemGroup === (leftPaneElements._groups[0].length - subtractor - 1)) {
-            if(sectionTop <= (+elemGroup)*-500) {
-              currGroup = +elemGroup;
-              return false;
-            }
-            else return true;
-          } 
-          
-          /* Else, show element if within range of it's position */
-          else {
-            if(sectionTop <= (+elemGroup)*-500 && sectionTop > (+elemGroup)*-500 - 500) {
-              currGroup = +elemGroup;
-              return false;
-            }
-            else return true;
-          }
-        })
-
-      return {
-        sectionTop: sectionTop,
-        elemGroup: currGroup
-      }
-    })
-    .mergeMap((section) =>{
-      section.elemGroup = +section.elemGroup;
-      // stage = section.elemGroup;
-      console.log(section.elemGroup);
-      
-      // Clear
-      if(section.elemGroup < 5 && stage != 0){
-        stage = 0;
-        return app$.qClearAll();
-      }
-
-      // Select Clothing
-      else if((section.elemGroup < 13 && section.elemGroup >= 5) && stage != 1){
-        const prevStage = stage;
-        stage = 1;
-        if(prevStage > 1) return itemListObject$.qClearSelections('/qListObjectDef');
-        else return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
-      }
-
-      // Select T-Shirt
-      else if((section.elemGroup < 15 && section.elemGroup >= 13) && stage != 2){
-        stage = 2;
-        return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
-      }
-
-      // Clear All
-      else if((section.elemGroup < 16 && section.elemGroup >= 15) && stage != 3){
-        stage = 3;
-        return app$.qClearAll();
-      }
-
-      // Select T-Shirt and Camera
-      else if((section.elemGroup < 18 && section.elemGroup >= 16) && stage != 4){
-        var prevStage = stage;
-        stage = 4;
-        if(prevStage > 4) return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
-        else return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true);
-      }
-
-      // Select Clothing
-      else if((section.elemGroup < 19 && section.elemGroup >= 18) && stage != 5){
-        stage = 5;
-        return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
-      }
-
-      // Select Clothing
-      else if((section.elemGroup < 21 && section.elemGroup >= 19) && stage != 6){
-        const prevStage = stage;
-        stage = 6;
-        if(prevStage > 6) return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true);
-        else return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
-      }
-
-      // Select Furniture
-      else if((section.elemGroup < 22 && section.elemGroup >= 21) && stage != 7){
-        stage = 7;
-        return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [0], true);
-      }
-
-      // Select T-Shirt and Camera
-      else if((section.elemGroup < 23 && section.elemGroup >= 22) && stage != 8){
-        const prevStage = stage;
-        stage = 8;
-        if(prevStage > 8) {
-          altColor = '#686868';
-          return departmentListObject$.qClearSelections('/qListObjectDef');
-        }
-        else return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true);
-      }
-
-      // Turn alternative
-      else if((section.elemGroup < 27 && section.elemGroup >= 23) && stage != 9){
-        const prevStage = stage;
-        stage = 9;
-        altColor = '#BEBEBE';
-        if(prevStage > 9) {
-          selectionActive = false;
-          return itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true);
-        }
-        return departmentListObject$.qClearSelections('/qListObjectDef');
-      }
-
-      // Turn alternative
-      else if((section.elemGroup < 28 && section.elemGroup >= 27) && stage != 10){
-        stage = 10;
-        selectionActive = true;
-        return app$.qClearAll();
-      }
-
-      else return [null];
-    })
-    .subscribe();
 }
