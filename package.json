@@ -11,7 +11,8 @@
     "watch": "npm run compile-mdon && npm run copy-dependencies && webpack --watch",
     "http-serve": "http-server -p:8001",
     "serve": "webpack-dev-server --content-base dist --port 8000 --open",
-    "start": "npm run watch-markdown & npm run watch & npm run serve"
+    "start": "npm run watch-markdown & npm run watch & npm run serve",
+    "publish": "node scripts/publish.js"
   },
   "repository": {
     "type": "git",
