@@ -187,73 +187,77 @@ export default function modelingAssociations(section){
 
 
   // ------------ List Box ------------
+  function paintListBox(data, listObjectContainer, offset){
+    // Attach data
+    const theta = 2*Math.PI/data.length;
+    const update = listObjectContainer
+      .selectAll('.list-object-circle')
+      .data(data);
+
+      
+    // Enter new Circle
+    const circleEnter = update
+        .enter()
+        .append('circle')
+        .attr('data-qelemno', d=> d[0].qElemNumber)
+        .attr('class', 'list-object-circle')
+        .attr('cx', (d, i) => (circleContainerRadius/2)*Math.cos(i*theta + offset))
+        .attr('cy', (d, i) => (circleContainerRadius/2)*Math.sin(i*theta + offset))
+        .attr('r', circleContainerRadius/4)
+      .merge(update)
+        .style('fill', d =>{
+          if(d[0].qState === 'O') return '#fff';
+          else if(d[0].qState === 'A') return altColor;
+          else if(d[0].qState === 'X') return '#686868';
+          else if(d[0].qState === 'XS') return '#686868';
+          else if(d[0].qState === 'S') return '#45EE59';
+        });
+
+
+    // Enter new Label
+    const labelEnter = update
+        .enter()
+        .append('text')
+        .text(d => d[0].qText)
+        .attr('data-qelemno', d => d[0].qElemNumber)
+        .attr('class', 'list-object-label')
+        .attr('x', (d, i) => (circleContainerRadius + 5)*Math.cos(i*theta + offset))
+        .attr('y', (d, i) => (circleContainerRadius + 5)*Math.sin(i*theta + offset))
+      .merge(update)
+        .style('text-anchor', (d, i) =>{
+          if(Math.abs(Math.cos(i*theta + offset)) < 0.0000001) return 'middle';
+          else if(Math.cos(i*theta + offset) > 0) return 'start';
+          else return 'end';
+        })
+        .style('alignment-baseline', 'middle');
+  }
+
   /* Subscribe each listbox to update its state */
   function listBoxSubscribe(listObjObs$, layoutObs$, listObjectContainer, offset){
     layoutObs$.subscribe(layout =>{
       // qMatrix data
       const data = layout.qListObject.qDataPages[0].qMatrix;
-      
-      // Attach data
-      const theta = 2*Math.PI/data.length;
-      const update = listObjectContainer
-        .selectAll('.list-object-circle')
-        .data(data);
 
-        
-      // Enter new Circle
-      const circleEnter = update
-          .enter()
-          .append('circle')
-          .attr('data-qelemno', d=> d[0].qElemNumber)
-          .attr('class', 'list-object-circle')
-          .attr('cx', (d, i) => (circleContainerRadius/2)*Math.cos(i*theta + offset))
-          .attr('cy', (d, i) => (circleContainerRadius/2)*Math.sin(i*theta + offset))
-          .attr('r', circleContainerRadius/4)
-        .merge(update)
-          .style('fill', d =>{
-            if(d[0].qState === 'O') return '#fff';
-            else if(d[0].qState === 'A') return altColor;
-            else if(d[0].qState === 'X') return '#686868';
-            else if(d[0].qState === 'XS') return '#686868';
-            else if(d[0].qState === 'S') return '#45EE59';
-          });
-
-
-      // Enter new Label
-      const labelEnter = update
-          .enter()
-          .append('text')
-          .text(d => d[0].qText)
-          .attr('data-qelemno', d => d[0].qElemNumber)
-          .attr('class', 'list-object-label')
-          .attr('x', (d, i) => (circleContainerRadius + 5)*Math.cos(i*theta + offset))
-          .attr('y', (d, i) => (circleContainerRadius + 5)*Math.sin(i*theta + offset))
-        .merge(update)
-          .style('text-anchor', (d, i) =>{
-            if(Math.abs(Math.cos(i*theta + offset)) < 0.0000001) return 'middle';
-            else if(Math.cos(i*theta + offset) > 0) return 'start';
-            else return 'end';
-          })
-          .style('alignment-baseline', 'middle');
+      paintListBox(data, listObjectContainer, offset);
     })
 
     
-    // Create observable from item-list click
-    Rx.Observable.fromEvent(listObjectContainer._groups[0][0], 'click')
-      .mergeMap(function(evt){ // Merge click observable stream with following observable stream..
-        // Get elem no of item just clicked on
-        var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
+    // // Create observable from item-list click
+    // Rx.Observable.fromEvent(listObjectContainer._groups[0][0], 'click')
+    //   .mergeMap(function(evt){ // Merge click observable stream with following observable stream..
+    //     // Get elem no of item just clicked on
+    //     var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
         
-        // Return the observable of the elemno being selected (this will be merged with the click observable)
-        if(!isNaN(elemNo) && selectionActive){
-          return listObjObs$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
-        } else return [null];
-      })
-      .subscribe()
+    //     // Return the observable of the elemno being selected (this will be merged with the click observable)
+    //     if(!isNaN(elemNo) && selectionActive){
+    //       return listObjObs$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
+    //     } else return [null];
+    //   })
+    //   .subscribe()
   }
 
-  listBoxSubscribe(departmentListObject$, departmentLayout$, departmentList, -Math.PI/2);
-  listBoxSubscribe(itemListObject$, itemLayout$, itemList, -Math.PI/4);
+  // listBoxSubscribe(departmentListObject$, departmentLayout$, departmentList, -Math.PI/2);
+  // listBoxSubscribe(itemListObject$, itemLayout$, itemList, -Math.PI/4);
 
 
   // ============= Scroll =============
