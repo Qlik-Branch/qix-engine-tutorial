@@ -11,7 +11,8 @@ module.exports = {
     p3: './src/js/103/103. Talk to the Engine.js',
     p4: './src/js/104/104. Stay in Sync with the Engine.js',
     p5: './src/js/105/105. Streamline with Enigma.js',
-    p6: './src/js/106/106. Build a Dashboard - Set Up.js'
+    p6: './src/js/106/106. Build a Dashboard - Set Up.js',
+    p7: './src/js/107/107. Creating Filters with ListObjects.js'
   },
   output: {
     filename: '[name].bundle.js',
@@ -99,6 +100,12 @@ module.exports = {
       filename: "106. Build a Dashboard - Set Up.html",
       title: "Build a Dashboard - Set Up",
       chunks: ['app', 'p6']
+    }),
+    new HtmlWebpackPlugin({
+      template: "src/html/107. Creating Filters with ListObjects/107. Creating Filters with ListObjects.ejs",
+      filename: "107. Creating Filters with ListObjects.html",
+      title: "Creating Filters with ListObjects",
+      chunks: ['app', 'p7']
     }),
     new ExtractTextPlugin({
       filename: '[name].css'

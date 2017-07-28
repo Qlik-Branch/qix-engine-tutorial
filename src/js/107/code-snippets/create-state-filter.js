@@ -1,0 +1,19 @@
+export default
+`{
+    "qInfo": {
+        "qType": "filter"
+    },
+    "qListObjectDef": {
+        "qDef": {
+            "qFieldDefs": ["State"]
+        },
+        "qInitialDataFetch": [
+            {
+                "qLeft": 0,
+                "qWidth": 1,
+                "qTop": 0,
+                "qHeight": 51
+            }
+        ]
+    }
+}`

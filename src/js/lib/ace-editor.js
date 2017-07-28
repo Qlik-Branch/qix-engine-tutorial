@@ -4,6 +4,7 @@ import '../../../node_modules/ace-builds/src-min-noconflict/ace.js';
 import '../../../node_modules/ace-builds/src-min-noconflict/mode-json.js';
 import '../../../node_modules/ace-builds/src-min-noconflict/mode-javascript.js';
 import '../../../node_modules/ace-builds/src-min-noconflict/mode-css.js';
+import '../../../node_modules/ace-builds/src-min-noconflict/mode-html.js';
 import '../../../node_modules/ace-builds/src-min-noconflict/theme-tomorrow_night.js';
 
 export default function aceEditor(section, language, text, filename){
@@ -30,14 +31,13 @@ export default function aceEditor(section, language, text, filename){
   editor.setReadOnly(true);
   editor.setValue(text)
   editor.clearSelection();
-  editor.resize();
+  // editor.resize();
   editor.setFadeFoldWidgets(true);
 
   const lineCount = editor.session.doc.getAllLines().length;
 
   d3.select('#' +section +'-embed-' +previousEditors)
-    .style('height', 16*(lineCount + 3) +'px');
-
+    .style('height', 16*(lineCount + 3) +'px')
 
   // Create Tabs
   function createTab(){
