@@ -186,47 +186,6 @@ export default function modelingAssociations(section){
   })
 
 
-  // ============= Scroll =============
-  var prevStage; // Hold state of prevStage
-
-  const scrollStream = Rx.Observable.fromEvent(window, 'scroll')
-    .map(() => document.querySelector(section).getBoundingClientRect().top);
-    
-  const stageSubject = new Rx.Subject();
-
-  const stageStream = scrollStream
-    .map(sectionTop =>{
-      if(sectionTop >= -500) return 0;
-      else if(sectionTop < -500*groups) return groups;
-      else return Math.floor(sectionTop/-500);
-    })
-    .filter(stage => {
-      if(stage === prevStage) return false;
-      else {
-        prevStage = stage;
-        return true;
-      }
-    });
-
-  stageSubject.subscribe(stage =>{
-    leftPaneElements.classed('hidden', (d, i) => stage != +leftPaneElements._groups[0][i].getAttribute('element-group'))
-  });
-
-  const clearAll = stageSubject
-    .filter(stage => stage < 5)
-    .mergeMap(() => app$.qClearAll());
-
-  const selectDepartment = stageSubject
-    .filter(stage => stage === 5)
-    .mergeMap(() => departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true));
-
-  const mergedSelection = Rx.Observable.merge(clearAll, selectDepartment);
-
-  app$.switchMap(() => mergedSelection).subscribe();
-
-  stageStream.subscribe(stageSubject);
-
-
   // ------------ List Box ------------
   /* Subscribe each listbox to update its state */
   function listBoxSubscribe(listObjObs$, layoutObs$, listObjectContainer, offset){
@@ -295,4 +254,155 @@ export default function modelingAssociations(section){
 
   listBoxSubscribe(departmentListObject$, departmentLayout$, departmentList, -Math.PI/2);
   listBoxSubscribe(itemListObject$, itemLayout$, itemList, -Math.PI/4);
+
+
+  // ============= Scroll =============
+  var prevParagraph, prevStage; // Hold state of prevStage and prevParagraph
+
+  /* Scroll observable that emits the scroll position relative to the top of 
+      the modeling-associations section */
+  const scrollStream = Rx.Observable.fromEvent(window, 'scroll')
+    .map(() => document.querySelector(section).getBoundingClientRect().top);
+    
+
+  /* Create a reactive Subject to emit our stage stream to multiple observers */
+  const paragraphSubject = new Rx.Subject();
+
+  /* Observable to emit the current paragraph section we scroll to. Only emits
+      when a new paragraph is reached (paragraph != prevParagraph) */
+  const paragraphStream = scrollStream
+    .map(sectionTop =>{
+      // Return current paragraph section 
+      if(sectionTop >= -500) return 0;
+      else if(sectionTop < -500*groups) return groups;
+      else return Math.floor(sectionTop/-500);
+    })
+    .filter(paragraph => {
+      // Only emit if we see a new paragraph
+      if(paragraph === prevParagraph) return false;
+      else {
+        prevParagraph = paragraph;
+        return true;
+      }
+    });
+
+
+  /* Create a reactive Subject to emit our stage stream to multiple observers */
+  const stageSubject = new Rx.Subject();
+
+  /* Observable to emit the current selection stage */
+  const stageStream = paragraphSubject
+    .map(paragraph => {
+      // Return stage
+      if(paragraph < 5)       return 0;   // Clear all
+      else if(paragraph < 13) return 1;   // Select Clothing
+      else if(paragraph < 15) return 2;   // Select T-Shirt
+      else if(paragraph < 16) return 3;   // Clear all
+      else if(paragraph < 18) return 4;   // Select T-Shirt and Camera
+      else if(paragraph < 19) return 5;   // Select Clothing
+      else if(paragraph < 21) return 6;   // Select ONLY T-Shirt and Camera
+      else if(paragraph < 22) return 7;   // Select Furniture
+      else if(paragraph < 24) return 8;   // Select T-Shirt and Camera
+      else if(paragraph < 27) return 9;   // Alternative Grey
+      else                    return 10;  // Interactive
+    })
+    .filter(stage =>{
+      // Only emit if we see a new stage
+      if(stage === prevStage) return false;
+      else {
+        prevStage = stage;
+        return true;
+      }
+    });
+
+
+  /* Subscribe to paragraph stream and display when in appropriate section */
+  paragraphSubject.subscribe(paragraph =>{
+    console.log('paragraph: ', paragraph);
+    leftPaneElements.classed('hidden', (d, i) => paragraph != +leftPaneElements._groups[0][i].getAttribute('element-group'))
+  });
+
+
+  /* Declare different selection observables */
+  // const clearAll = app$.qClearAll();
+  // const selectClothing = departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
+  // const selectTShirt = itemListObject$.qSelectListObjectValues('/qListObjectDef', [1], true);
+
+  
+  const clearAll = stageSubject
+    .filter(stage => stage === 0 || stage === 3)
+    .mergeMap(() => app$.qClearAll());
+
+  const selectClothing = stageSubject
+    .filter(stage => stage === 1)
+    .mergeMap(() => Rx.Observable.merge(
+      app$.qClearAll(),
+      departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true)
+    ));
+  
+  const selectClothingTShirt = stageSubject
+    .filter(stage => stage === 2)
+    .mergeMap(() => Rx.Observable.merge(
+      app$.qClearAll(),
+      departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true), 
+      itemListObject$.qSelectListObjectValues('/qListObjectDef', [1], true)
+    ));
+
+  const selectTShirtCamera = stageSubject
+    .filter(stage => stage === 4 || stage === 6 || stage === 8 || stage === 9)
+    .mergeMap(() => Rx.Observable.merge(
+      app$.qClearAll(),
+      itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true)
+    ));
+
+  const selectTShirtCameraClothing = stageSubject
+    .filter(stage => stage === 5)
+    .mergeMap(() => Rx.Observable.merge(
+      app$.qClearAll(),
+      itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true),
+      departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true)
+    ));
+
+  const selectTShirtCameraFurniture = stageSubject
+    .filter(stage => stage === 7)
+    .mergeMap(() => Rx.Observable.merge(
+      app$.qClearAll(),
+      itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true),
+      departmentListObject$.qSelectListObjectValues('/qListObjectDef', [0], true)
+    ));
+
+  const setAlternativeGrey = stageSubject
+    .do(stage =>{
+      if(stage < 9) altColor = '#686868';
+      else altColor = '#BEBEBE';
+    });
+
+  const setInteractivity = stageSubject
+    .do(stage =>{
+      if(stage === 10) selectionActive = true;
+      else selectionActive = false;
+    });
+
+
+  // Merge all selection observables
+  const mergedSelection = Rx.Observable.merge(
+    clearAll,
+    selectClothing,
+    selectClothingTShirt,
+    selectTShirtCamera,
+    selectTShirtCameraClothing,
+    selectTShirtCameraFurniture,
+    setAlternativeGrey,
+    setInteractivity
+  );
+
+
+  /* On emmission of app observable, switch to merged selection observables */
+  app$.switchMap(() => mergedSelection).subscribe();
+
+
+  /* Subscribe stream to all subjects */
+  paragraphStream.subscribe(paragraphSubject);
+  stageStream.subscribe(stageSubject);
+
 }
