@@ -1,4 +1,9 @@
 .modeling-associations {
+  .body-left {
+    position: relative;
+    top: 0;
+  }
+
   .body-right {
     padding-top: 200px;
 
@@ -53,12 +58,34 @@
         top: 200px;
         height: 400px;
 
+        .connector-rect {
+          fill: #D3F4F9
+        }
+
+        .arrow-base {
+          fill: none;
+        }
+
+        .arrow {
+          stroke-width: 1;
+          stroke: #8F8F8F;
+        }
+
+        .connector-line {
+          fill: white;
+          stroke: none;
+        }
+
         .circle-container {
           fill: #212E3D;
         }
 
         .list-object-circle {
           fill: #fff;
+        }
+
+        .list-object-checkmark {
+          // transform: translate(-50%, -50%);
         }
 
         .list-object-label {

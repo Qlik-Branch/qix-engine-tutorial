@@ -242,22 +242,22 @@ export default function modelingAssociations(section){
     })
 
     
-    // // Create observable from item-list click
-    // Rx.Observable.fromEvent(listObjectContainer._groups[0][0], 'click')
-    //   .mergeMap(function(evt){ // Merge click observable stream with following observable stream..
-    //     // Get elem no of item just clicked on
-    //     var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
+    // Create observable from item-list click
+    Rx.Observable.fromEvent(listObjectContainer._groups[0][0], 'click')
+      .mergeMap(function(evt){ // Merge click observable stream with following observable stream..
+        // Get elem no of item just clicked on
+        var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
         
-    //     // Return the observable of the elemno being selected (this will be merged with the click observable)
-    //     if(!isNaN(elemNo) && selectionActive){
-    //       return listObjObs$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
-    //     } else return [null];
-    //   })
-    //   .subscribe()
+        // Return the observable of the elemno being selected (this will be merged with the click observable)
+        if(!isNaN(elemNo) && selectionActive){
+          return listObjObs$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
+        } else return [null];
+      })
+      .subscribe()
   }
 
-  // listBoxSubscribe(departmentListObject$, departmentLayout$, departmentList, -Math.PI/2);
-  // listBoxSubscribe(itemListObject$, itemLayout$, itemList, -Math.PI/4);
+  listBoxSubscribe(departmentListObject$, departmentLayout$, departmentList, -Math.PI/2);
+  listBoxSubscribe(itemListObject$, itemLayout$, itemList, -Math.PI/4);
 
 
   // ============= Scroll =============

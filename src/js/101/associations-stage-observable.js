@@ -41,18 +41,18 @@ export default function(sectionClass, leftPaneGroups){
       if(paragraph < 1)       return 0;   // Display Table
       else if(paragraph < 2)  return 1;   // Draw Item Listbox
       else if(paragraph < 3)  return 2;   // Draw Department Listbox
-      else if(paragraph < 4)  return 4;   // Draw Listbox Connection
-      else if(paragraph < 5)  return 5;   // Clear all
-      else if(paragraph < 13) return 6;   // Select Clothing
-      else if(paragraph < 15) return 7;   // Select T-Shirt
-      else if(paragraph < 16) return 8;   // Clear all
-      else if(paragraph < 18) return 9;   // Select T-Shirt and Camera
-      else if(paragraph < 19) return 10;   // Select Clothing
-      else if(paragraph < 21) return 11;   // Select ONLY T-Shirt and Camera
-      else if(paragraph < 22) return 12;   // Select Furniture
-      else if(paragraph < 24) return 13;   // Select T-Shirt and Camera
-      else if(paragraph < 27) return 14;   // Alternative Grey
-      else                    return 15;  // Interactive
+      else if(paragraph < 4)  return 3;   // Draw Listbox Connection
+      else if(paragraph < 5)  return 4;   // Clear all
+      else if(paragraph < 13) return 5;   // Select Clothing
+      else if(paragraph < 15) return 6;   // Select T-Shirt
+      else if(paragraph < 16) return 7;   // Clear all
+      else if(paragraph < 17) return 8;   // Select T-Shirt and Camera
+      else if(paragraph < 18) return 9;   // Select Clothing
+      else if(paragraph < 21) return 10;   // Select ONLY T-Shirt and Camera
+      else if(paragraph < 22) return 11;   // Select Furniture
+      else if(paragraph < 23) return 12;   // Select T-Shirt and Camera
+      else if(paragraph < 26) return 13;   // Alternative Grey
+      else                    return 14;  // Interactive
     })
     .filter(stage =>{
       // Only emit if we see a new stage
