@@ -128,6 +128,7 @@ export default function(sectionClass, circleRadius){
     .attr('y2', (itemListY + departmentListY)/2)
 
 
+  // List Groups
   const departmentList = svg
     .append('g')
     .attr('class', 'department-list')

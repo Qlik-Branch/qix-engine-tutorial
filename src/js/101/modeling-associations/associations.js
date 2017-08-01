@@ -1,17 +1,17 @@
 import Rx from 'rxjs';
 import * as d3 from 'd3';
 
-import connectToApp from '../../lib/connect-to-app.js';
-import serverConfig from '../../server-config/john-server.json';
+// import connectToApp from '../../lib/connect-to-app.js';
+// import serverConfig from '../../server-config/john-server.json';
 // import serverConfig from '../server-config/axis-sense-internal.json';
 import associationsHtml from './associations-html.js';
 import associationsStageObservable from './associations-stage-observable.js';
-import associationsAppObjects from './associations-app-objects.js';
+// import associationsAppObjects from './associations-app-objects.js';
 import associationsPaintTable from './associations-paint-table.js';
 import associationsPaintListContainer from './associations-paint-list-container.js';
 import associationsPaintListValues from './associations-paint-list-values.js';
 
-export default function(sectionClass){
+export default function(sectionClass, app$, objectObservables){
   // ============ Global Variables ============
   var altColor = '#686868';
   var selectionActive = false;
@@ -24,31 +24,22 @@ export default function(sectionClass){
 
 
   // ============ Observables ============
-  const [paragraphSubject, stageSubject] = associationsStageObservable('.modeling-associations', elementGroups._groups[0].length, sectionHeight);
+  const stageSubject = associationsStageObservable('.modeling-associations', elementGroups._groups[0].length, sectionHeight);
 
 
   window.addEventListener('load', function(){
     if(document.querySelector('body').scrollTop > 3000) document.querySelector('body').scrollTop = 3000;
   })
 
-  // Get app observable;
-  const app$ = connectToApp(serverConfig, '76928257-797b-4702-8ff9-558d4b467a41');
-
-  // Get app object observables
-  const [hyperCube$, itemListObject$, departmentListObject$] = associationsAppObjects(app$);
-
+  const hyperCube$ = objectObservables.dimensionHyperCube.object$;
+  const itemListObject$ = objectObservables.itemListObject.object$;
+  const departmentListObject$ = objectObservables.departmentListObject.object$;
 
   // ============ Subscribe ============
-  // HyperCube
-  hyperCube$.qLayouts()
-    .subscribe(layout =>{
-      // Get data
-      const headerData = layout.qHyperCube.qDimensionInfo.map(d =>{return {qText: d.qFallbackTitle}});
-      const bodyData = layout.qHyperCube.qDataPages[0].qMatrix;
-
-      // Paint Table
-      associationsPaintTable(html.tableHeader, headerData, html.tableBody, bodyData);
-    });
+  objectObservables.dimensionHyperCube.layout$.subscribe(layout =>{
+    // Paint Table
+    associationsPaintTable(html.tableHeader, layout.headerData, html.tableBody, layout.bodyData);
+  })
 
   // State of Item ListObject
   var subscribeToItemList = false,
@@ -71,16 +62,14 @@ export default function(sectionClass){
     });
 
   Rx.Observable.fromEvent(html.itemList._groups[0][0], 'click')
-    .mergeMap(function(evt){ // Merge click observable stream with following observable stream..
+    .withLatestFrom(stageSubject)
+    .filter(f => f[1] === 14)
+    .pluck('0')
+    .mergeMap(evt =>{// Merge click observable stream with following observable stream..
       // Get elem no of item just clicked on
       var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
-
-      // Return the observable of the elemno being selected (this will be merged with the click observable)
-      if(!isNaN(elemNo) && selectionActive){
-        return itemListObject$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
-      } else return [null];
-    })
-    .subscribe();
+      return itemListObject$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
+    }).subscribe()
 
   // Department ListObject
   departmentListObject$.qLayouts()
@@ -94,18 +83,16 @@ export default function(sectionClass){
     .subscribe(qMatrix =>{
       associationsPaintListValues(html.departmentList, qMatrix, -Math.PI/2, altColor);
     });
-
+    
   Rx.Observable.fromEvent(html.departmentList._groups[0][0], 'click')
-    .mergeMap(function(evt){ // Merge click observable stream with following observable stream..
+    .withLatestFrom(stageSubject)
+    .filter(f => f[1] === 14)
+    .pluck('0')
+    .mergeMap(evt =>{// Merge click observable stream with following observable stream..
       // Get elem no of item just clicked on
       var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
-
-      // Return the observable of the elemno being selected (this will be merged with the click observable)
-      if(!isNaN(elemNo) && selectionActive){
-        return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
-      } else return [null];
-    })
-    .subscribe();
+      return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
+    }).subscribe()
 
 
   // ============ Stage ============
@@ -250,13 +237,6 @@ export default function(sectionClass){
       )
     })
     
-  const setInteractivity = stageSubject
-    .do(stage =>{
-      if(stage === 14) selectionActive = true;
-      else selectionActive = false;
-    })
-  
-    
   // Merge all stages
   const mergedStages = Rx.Observable.merge(
     destroyItemListObject,
@@ -269,8 +249,7 @@ export default function(sectionClass){
     selectTShirtCamera,
     selectTShirtCameraClothing,
     selectFurniture,
-    changeAltColor,
-    setInteractivity
+    changeAltColor
   );
 
   // Once app$ emits something, switch to merged observables

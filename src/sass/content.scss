@@ -128,6 +128,20 @@ $sidebar-width: 220px;
               top: auto;
             }
           }
+
+          &.row-5-12 {
+            &.graph-scroll-fixed {
+              .body-right {
+                left: calc(#{$hamburger-width} + (5/12)*(100% - #{$hamburger-width}));
+                width: calc((7/12)*(100% - #{$hamburger-width}));
+
+                @media(min-width: 992px){
+                  left: calc(#{$sidebar-width} + (5/12)*(100% - #{$sidebar-width} + 15px));
+                  width: calc((7/12)*(100% - #{$sidebar-width} - 70px));
+                }
+              }
+            }
+          }
         }
 
         &.fixed-transition {

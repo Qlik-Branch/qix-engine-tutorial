@@ -2,7 +2,6 @@
   "name": "qix-engine-tutorial",
   "version": "1.0.0",
   "description": "QIX Engine Tutorial",
-  "main": "index.js",
   "scripts": {
     "compile-mdon": "node mdon.js",
     "watch-markdown": "npm run compile-mdon && node scripts/watch.js",

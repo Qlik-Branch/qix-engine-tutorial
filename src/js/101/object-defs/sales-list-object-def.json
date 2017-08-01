@@ -1,0 +1,17 @@
+{
+  "qInfo": {
+    "qType": "filter"
+  },
+  "qListObjectDef": {
+    "qDef": {
+      "qFieldDefs": ["Sales"]
+    },
+    "qShowAlternatives": true,
+    "qInitialDataFetch": [{
+      "qLeft": 0,
+      "qTop": 0,
+      "qWidth": 1,
+      "qHeight": 1000
+    }]
+  }
+}

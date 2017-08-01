@@ -5,14 +5,14 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: './src/js/index.js',
     p1: './src/js/101/101. What is QIX and Why Should You Care.js',
     p2: './src/js/102/102. Meet the Engine.js',
     p3: './src/js/103/103. Talk to the Engine.js',
     p4: './src/js/104/104. Stay in Sync with the Engine.js',
     p5: './src/js/105/105. Streamline with Enigma.js',
     p6: './src/js/106/106. Build a Dashboard - Set Up.js',
-    p7: './src/js/107/107. Creating Filters with ListObjects.js'
+    p7: './src/js/107/107. Creating Filters with ListObjects.js',
+    app: './src/js/index.js'
   },
   output: {
     filename: '[name].bundle.js',
@@ -60,12 +60,6 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/html/index.ejs',
-      filename: 'index.html',
-      title: 'Qlik Sense Tutorial',
-      chunks: ['app']
-    }),
-    new HtmlWebpackPlugin({
       template: "src/html/101. What is QIX and Why Should You Care/101. What is QIX and Why Should You Care.ejs",
       filename: "101. What is QIX and Why Should You Care.html",
       title: "What is QIX and Why Should You Care",
@@ -106,6 +100,12 @@ module.exports = {
       filename: "107. Creating Filters with ListObjects.html",
       title: "Creating Filters with ListObjects",
       chunks: ['app', 'p7']
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/html/index.ejs',
+      filename: 'index.html',
+      title: 'Qlik Sense Tutorial',
+      chunks: ['app']
     }),
     new ExtractTextPlugin({
       filename: '[name].css'
