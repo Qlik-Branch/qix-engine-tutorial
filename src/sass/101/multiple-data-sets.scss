@@ -94,6 +94,29 @@ $sidebar-width: 220px;
           position: absolute;
           top: 100px;
           height: 600px;
+
+          .list-label {
+            text-anchor: middle;
+            fill: #4D4D4D;
+            font-family: 'Open Sans';
+            font-size: 16px;
+            font-weight: 300;
+          }
+
+          .connector-rect.top {
+            fill: #D3F4F9;
+          }
+
+          .connector-rect.bottom {
+            fill: #DDEFFF;
+          }
+
+          .connector-line {
+            path {
+              fill: white;
+              stroke: none;
+            }
+          }
         }
       }
     }

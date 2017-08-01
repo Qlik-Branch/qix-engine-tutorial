@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 
 export default function(circle, data, radius){
-  // const radius = 48.6;
   const update = circle.selectAll('.container-circle')
     .data(data, d => d);
 

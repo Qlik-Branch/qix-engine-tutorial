@@ -8,7 +8,7 @@ import associationsHtml from './associations-html.js';
 import associationsStageObservable from './associations-stage-observable.js';
 // import associationsAppObjects from './associations-app-objects.js';
 import associationsPaintTable from './associations-paint-table.js';
-import associationsPaintListContainer from './associations-paint-list-container.js';
+import associationsPaintListContainer from '../paint-list-container.js';
 import associationsPaintListValues from './associations-paint-list-values.js';
 
 export default function(sectionClass, app$, objectObservables){

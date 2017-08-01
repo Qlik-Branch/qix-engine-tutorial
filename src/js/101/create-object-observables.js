@@ -14,6 +14,7 @@ export default function(app$){
   const dayListObject$ = app$.qCreateSessionObject(dayListObjectDef);
   const salesListObject$ = app$.qCreateSessionObject(salesListObjectDef);
 
+  // Dimension HyperCube Layout
   const dimensionHyperCubeLayout$ = dimensionHyperCube$
     .qLayouts()
     .map(layout =>{
@@ -23,6 +24,7 @@ export default function(app$){
       }
     });
 
+  // Fact HyperCube Layout
   const factHyperCubeLayout$ = factHyperCube$
     .qLayouts()
     .map(layout =>{
@@ -32,18 +34,22 @@ export default function(app$){
       }
     });
 
+  // Item ListObject Layout
   const itemListObjectLayout$ = itemListObject$
     .qLayouts()
     .map(layout => layout.qListObject.qDataPages[0].qMatrix);
 
+  // Department ListObject Layout
   const departmentListObjectLayout$ = departmentListObject$
     .qLayouts()
     .map(layout => layout.qListObject.qDataPages[0].qMatrix);
 
+  // Day ListObject Layout
   const dayListObjectLayout$ = dayListObject$
     .qLayouts()
     .map(layout => layout.qListObject.qDataPages[0].qMatrix);
 
+  // Sales ListObject Layout
   const salesListObjectLayout$ = salesListObject$
     .qLayouts()
     .map(layout => layout.qListObject.qDataPages[0].qMatrix);
