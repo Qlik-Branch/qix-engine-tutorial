@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-import '../../imgs/checkmark.png';
+import '../../../imgs/checkmark.png';
 
 export default function(list, data, offset, altColor){
   const circleContainerRadius = 48.6;

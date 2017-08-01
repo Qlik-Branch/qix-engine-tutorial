@@ -1,9 +1,9 @@
 import Rx from 'rxjs';
 import * as d3 from 'd3';
 
-import connectToApp from '../lib/connect-to-app.js';
-// import serverConfig from '../server-config/john-server.json';
-import serverConfig from '../server-config/axis-sense-internal.json';
+import connectToApp from '../../lib/connect-to-app.js';
+import serverConfig from '../../server-config/john-server.json';
+// import serverConfig from '../server-config/axis-sense-internal.json';
 import associationsHtml from './associations-html.js';
 import associationsStageObservable from './associations-stage-observable.js';
 import associationsAppObjects from './associations-app-objects.js';
@@ -32,7 +32,7 @@ export default function(sectionClass){
   })
 
   // Get app observable;
-  const app$ = connectToApp(serverConfig, '28a10b6b-bfd2-4555-8fea-20db80e9c259');
+  const app$ = connectToApp(serverConfig, '76928257-797b-4702-8ff9-558d4b467a41');
 
   // Get app object observables
   const [hyperCube$, itemListObject$, departmentListObject$] = associationsAppObjects(app$);
