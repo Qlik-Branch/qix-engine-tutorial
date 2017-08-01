@@ -84,6 +84,12 @@ $sidebar-width: 220px;
         .row {
           position: relative;
 
+          .body-left {
+            .graph-scroll-active {
+              opacity: 1;
+            }
+          }
+
           .body-right {
             .ace_editor {
               width: 100%;
@@ -98,24 +104,31 @@ $sidebar-width: 220px;
               height: 100vh;
             }
           }
+
+          &.graph-scroll-fixed {
+            .body-right {
+              position: fixed;
+              top: 0;
+              right: 0;
+              left: calc(#{$hamburger-width} + 0.5*(100% - #{$hamburger-width}));
+              width: calc(0.5*(100% - #{$hamburger-width}));
+
+              @media(min-width: 992px){
+                left: calc(#{$sidebar-width} + 0.5*(100% - #{$sidebar-width}));
+                width: calc(0.5*(100% - #{$sidebar-width} - 70px));
+              }
+            }
+          }
+
+          &.graph-scroll-below {
+            .body-right{
+              position: absolute;
+              bottom: 0;
+              right: 0;
+              top: auto;
+            }
+          }
         }
-
-        // &.graph-scroll-fixed {
-        //   .body-right {
-        //     position: fixed;
-        //     right: 0;
-        //     left: calc(#{$hamburger-width} + 0.5*(100% - #{$hamburger-width}));
-        //     width: calc(0.5*(100% - #{$hamburger-width}));
-        //   }
-        // }
-
-        // &.graph-scroll-below {
-        //   .body-right{
-        //     position: absolute;
-        //     bottom: 0;
-        //     top: auto;
-        //   }
-        // }
 
         &.fixed-transition {
           .scroll-line {

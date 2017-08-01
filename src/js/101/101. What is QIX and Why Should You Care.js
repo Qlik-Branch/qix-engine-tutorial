@@ -16,4 +16,4 @@ const scrollList = [
 scrollPosition(scrollList);
 
 // modelingAssociations('.modeling-associations');
-associations();
+associations('.modeling-associations');

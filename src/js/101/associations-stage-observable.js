@@ -1,7 +1,8 @@
 import Rx from 'rxjs';
+import * as d3 from 'd3';
 
-export default function(sectionClass, leftPaneGroups){
-  const groups = leftPaneGroups.groups;
+export default function(sectionClass, groups, sectionHeight){
+  // const groups = leftPaneGroups.groups;
   var prevParagraph, prevStage; // Hold state of prevStage and prevParagraph
 
   // Create Scroll Observable
@@ -14,21 +15,13 @@ export default function(sectionClass, leftPaneGroups){
 
   /* Observable to emit the current paragraph section we scroll to. Only emits
       when a new paragraph is reached (paragraph != prevParagraph) */
-  const paragraphStream = scrollStream
-    .map(sectionTop =>{
-      // Return current paragraph section 
-      if(sectionTop >= -500) return 0;
-      else if(sectionTop < -500*groups) return groups;
-      else return Math.floor(sectionTop/-500);
+  const paragraphStream = Rx.Observable.fromEvent(window, 'scroll')
+    .map(() => {
+      const elemGroup = d3.select(sectionClass +' .graph-scroll-active');
+      
+      if(elemGroup._groups[0][0]) return +elemGroup.attr('element-group');
+      else return 0;
     })
-    .filter(paragraph => {
-      // Only emit if we see a new paragraph
-      if(paragraph === prevParagraph) return false;
-      else {
-        prevParagraph = paragraph;
-        return true;
-      }
-    });
 
 
   /* Create a reactive Subject to emit our stage stream to multiple observers */

@@ -4,9 +4,7 @@ import {graphScroll} from 'graph-scroll';
 export default function(sectionClass, circleRadius){
   // Get all left pane elements
   var subtractor = 0;
-  const leftPaneElements = d3.selectAll(sectionClass +' .body-left > *')
-    // .classed('hidden', true)
-    .attr('id', (d, i) => `element-${i}`);
+  const leftPaneElements = d3.selectAll(sectionClass +' .body-left > *');
 
   // Add element grouping attribute
   leftPaneElements
@@ -16,39 +14,34 @@ export default function(sectionClass, circleRadius){
       } else if(leftPaneElements._groups[0][i].localName === 'ul'){
         return i - ++subtractor;
       } 
-      // else if(leftPaneElements._groups[0][i].innerHTML.indexOf('<br>') != -1){
-      //   return i - subtractor++;
-      // } 
       else return i - subtractor;
     });
 
-  // Define scroll height
-  const groups = leftPaneElements._groups[0].length - subtractor;
-  const scrollHeight = (leftPaneElements._groups[0].length - subtractor)*500;
-
-  // Get section
-  const section = d3.select(sectionClass)
-      .classed('fixed-transition', true)
-      .style('height', `calc(${scrollHeight}px + 100vh)`)
-    .select('.row')
-      .classed('row-graph', true);
-
-
-  /* Add an invisible line width 0 width to use as the scrolling section
-      in graph-scroll */
-  section
-    .append('div')
-      .classed('scroll-line', true)
-      .style('height', 'calc(' +scrollHeight +'px + 100vh)')
-    .append('div');
-
   
-  window.addEventListener('load', function(){
-    graphScroll()
-      .container(d3.select(sectionClass))
-      .graph(d3.select(sectionClass +' .row'))
-      .sections(d3.selectAll(sectionClass +' .scroll-line'));
+  // Group elemnts into divs
+  const bodyLeft = document.querySelector(sectionClass +' .body-left');
+
+  var currentElementGroup = -1;
+  var divElementGroups = [];
+  leftPaneElements._groups[0].forEach(element =>{
+    if(+element.getAttribute('element-group') != currentElementGroup){
+      const div = document.createElement('div');
+      div.setAttribute('element-group', +element.getAttribute('element-group'));
+      div.appendChild(element);
+
+      divElementGroups.push(div);
+        
+      currentElementGroup = +element.getAttribute('element-group');
+    } else{
+      divElementGroups[divElementGroups.length - 1].appendChild(element);
+    }
   });
+
+  divElementGroups.forEach(div =>{
+    bodyLeft.appendChild(div);
+  });
+
+  const elementGroups = d3.selectAll(sectionClass +' .body-left > div');
 
 
   // Get modeling-associations graph
@@ -146,9 +139,16 @@ export default function(sectionClass, circleRadius){
     .attr('transform', 'translate(400, 259)');
 
 
+  window.addEventListener('load', function(){
+    graphScroll()
+      .container(d3.select(sectionClass +' .row'))
+      .graph(d3.select(sectionClass +' .body-right'))
+      .sections(d3.selectAll(sectionClass +' .body-left > div'))
+  });
+
+
   return {
-    elements: leftPaneElements,
-    groups: groups,
+    elements: elementGroups,
     tableHeader: tableHeader,
     tableBody: tableBody,
     svg: svg,

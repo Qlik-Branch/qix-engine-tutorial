@@ -2,7 +2,8 @@ import Rx from 'rxjs';
 import * as d3 from 'd3';
 
 import connectToApp from '../lib/connect-to-app.js';
-import serverConfig from '../server-config/john-server.json';
+// import serverConfig from '../server-config/john-server.json';
+import serverConfig from '../server-config/axis-sense-internal.json';
 import associationsHtml from './associations-html.js';
 import associationsStageObservable from './associations-stage-observable.js';
 import associationsAppObjects from './associations-app-objects.js';
@@ -10,76 +11,28 @@ import associationsPaintTable from './associations-paint-table.js';
 import associationsPaintListContainer from './associations-paint-list-container.js';
 import associationsPaintListValues from './associations-paint-list-values.js';
 
-export default function(){
+export default function(sectionClass){
+  // ============ Global Variables ============
   var altColor = '#686868';
   var selectionActive = false;
   const circleContainerRadius = 48.6;
+  const sectionHeight = 440;
 
   // ============ HTML ============
-  const html = associationsHtml('.modeling-associations', circleContainerRadius);
-  // console.log(html);
-  const paragraphs = html.elements;
+  const html = associationsHtml(sectionClass, circleContainerRadius);
+  const elementGroups = html.elements;
 
 
   // ============ Observables ============
-  const [paragraphSubject, stageSubject] = associationsStageObservable('.modeling-associations', html);
+  const [paragraphSubject, stageSubject] = associationsStageObservable('.modeling-associations', elementGroups._groups[0].length, sectionHeight);
 
-  stageSubject.subscribe(stage =>{
-    console.log('stage: ', stage);
-  });
+
   window.addEventListener('load', function(){
-    stageSubject
-      .take(1)
-      .subscribe(stage =>{
-        if(stage){
-          document.querySelector('body').scrollTop = 3000;
-        }
-      });
-  })
-
-  // update paragraph display using paragraph observable
-  const bodyLeft = d3.select('.modeling-associations .body-left');
-  // Start bodyTop counter
-  // var bodyTop = 40;
-  var prevParagraph = 0;
-
-  paragraphSubject.subscribe(paragraph =>{
-    paragraphs
-      .style('opacity', (d, i) =>{
-        if(paragraph != +paragraphs._groups[0][i].getAttribute('element-group')) return 0.25;
-        else return 1;
-      })
-
-    
-    bodyLeft
-      .transition()
-      .duration(150)
-      .style('top', () =>{ // set body-left top..
-        var groupHeight = 0;
-        // For each element..
-        paragraphs._groups[0].forEach((element, i) =>{
-          // if element is before current paragraph..
-          if(paragraph > +element.getAttribute('element-group')){
-            // Add elnement height to groupHeight
-            const style = element.currentStyle || window.getComputedStyle(element);
-            var margin = 0;
-
-            if(element.localName != 'h3'){
-              margin += +style.marginTop.split('px')[0];
-            }
-              margin += +style.marginBottom.split('px')[0];
-            groupHeight += element.offsetHeight + margin;
-          }
-        });
-
-        return -groupHeight +'px';
-      });
-
-    prevParagraph = paragraph;
+    if(document.querySelector('body').scrollTop > 3000) document.querySelector('body').scrollTop = 3000;
   })
 
   // Get app observable;
-  const app$ = connectToApp(serverConfig, '76928257-797b-4702-8ff9-558d4b467a41');
+  const app$ = connectToApp(serverConfig, '28a10b6b-bfd2-4555-8fea-20db80e9c259');
 
   // Get app object observables
   const [hyperCube$, itemListObject$, departmentListObject$] = associationsAppObjects(app$);
