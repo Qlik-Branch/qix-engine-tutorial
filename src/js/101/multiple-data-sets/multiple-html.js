@@ -220,6 +220,38 @@ export default function(sectionClass){
     .append('path')
       .attr('d', pathData)
       .attr('transform', 'rotate(-90)')
+
+
+  // ========== Arrows ==========
+  const topArrowBase = svg
+    .append('circle')
+    .attr('class', 'arrow top base')
+    .attr('cx', config.lists.department.x)
+    .attr('cy', (config.lists.item.y + config.lists.department.y)/2)
+    .attr('r', 4);
+
+  const topArrow = svg
+    .append('line')
+    .attr('class', 'arrow top')
+    .attr('x1', config.lists.department.x - 4)
+    .attr('y1', (config.lists.item.y + config.lists.department.y)/2)
+    .attr('x2', 273)
+    .attr('y2', (config.lists.item.y + config.lists.department.y)/2);
+
+  const bottomArrowBase = svg
+    .append('circle')
+    .attr('class', 'arrow bottom base')
+    .attr('cx', config.lists.item.x)
+    .attr('cy', (config.lists.day.y + config.lists.item.y)*.525)
+    .attr('r', 4);
+
+  const bottomArrow = svg
+    .append('line')
+    .attr('class', 'arrow bottom')
+    .attr('x1', config.lists.item.x - 4)
+    .attr('y1', (config.lists.day.y + config.lists.item.y)*.525)
+    .attr('x2', config.lists.item.x - 4)
+    .attr('y2', (config.lists.day.y + config.lists.item.y)*.525);
   
 
   // ========== List Groups ==========
@@ -254,7 +286,7 @@ export default function(sectionClass){
     .append('g')
     .attr('class', 'list day-list')
     .attr('transform', `translate(${config.lists.day.x}, ${config.lists.day.y})`);
-  paintListContainer(dayList, [1], config.lists.radius);
+  // paintListContainer(dayList, [1], config.lists.radius);
 
   const dayLabel = dayList
     .append('text')
@@ -267,7 +299,7 @@ export default function(sectionClass){
     .append('g')
     .attr('class', 'list sales-list')
     .attr('transform', `translate(${config.lists.sales.x}, ${config.lists.sales.y})`);
-  paintListContainer(salesList, [1], config.lists.radius);
+  // paintListContainer(salesList, [1], config.lists.radius);
 
   const salesLabel = salesList
     .append('text')
@@ -293,6 +325,10 @@ export default function(sectionClass){
       item: itemList,
       day: dayList,
       sales: salesList
+    },
+    rects: {
+      top: topRect,
+      bottom: bottomRect
     }
   }
 }

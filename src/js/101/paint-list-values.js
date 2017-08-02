@@ -6,12 +6,16 @@ export default function(list, data, offset, altColor){
   const circleContainerRadius = 48.6;
   const theta = 2*Math.PI/data.length;
 
-
+  console.log('paint');
   // =========== Circle ===========
+  /* Explore adding interrupt() here */
   // Attach data
   const updateCircle = list
     .selectAll('.list-object-circle')
-    .data(data, d => d[0].index +'|' +d[0].qElemNumber);
+    .data(data)
+    // .data(data, d => {
+    //   return d[0].index +'|' +d[0].qElemNumber;
+    // });
 
   // Enter new circle
   const enterCircle = updateCircle
@@ -19,8 +23,8 @@ export default function(list, data, offset, altColor){
     .append('circle')
     .attr('data-qelemno', d=> d[0].qElemNumber)
     .attr('class', 'list-object-circle')
-    .attr('cx', (d, i) => (circleContainerRadius/2)*Math.cos(i*theta + offset))
-    .attr('cy', (d, i) => (circleContainerRadius/2)*Math.sin(i*theta + offset))
+    .attr('cx', (d, i) => (circleContainerRadius*.6)*Math.cos(i*theta + offset))
+    .attr('cy', (d, i) => (circleContainerRadius*.6)*Math.sin(i*theta + offset))
     .attr('r', 0);
 
   // Transition entering circle radius
@@ -49,70 +53,70 @@ export default function(list, data, offset, altColor){
     .remove();
 
 
-  // =========== Checkmark ===========
-  // Attach data
-  const updateCheckmark = list
-    .selectAll('.list-object-checkmark')
-    .data(data, d => d[0].index +'|' +d[0].qElemNumber);
+  // // =========== Checkmark ===========
+  // // Attach data
+  // const updateCheckmark = list
+  //   .selectAll('.list-object-checkmark')
+  //   .data(data, d => d[0].index +'|' +d[0].qElemNumber);
 
-  // Enter new checkmark
-  const enterCheckmark = updateCheckmark
-    .enter()
-    .append('image')
-    .attr('class', 'list-object-checkmark')
-    .attr('data-qelemno', d => d[0].qElemNumber)
-    .attr('xlink:href', 'images/checkmark.png')
-    .attr('x', (d, i) => (circleContainerRadius/2)*Math.cos(i*theta + offset) - 9)
-    .attr('y', (d, i) => (circleContainerRadius/2)*Math.sin(i*theta + offset) - 7)
-    .merge(updateCheckmark)
-    .style('opacity', d =>{
-      if(d[0].qState === 'S' || d[0].qState === 'XS') return 1;
-      else return 0;
-    })
+  // // Enter new checkmark
+  // const enterCheckmark = updateCheckmark
+  //   .enter()
+  //   .append('image')
+  //   .attr('class', 'list-object-checkmark')
+  //   .attr('data-qelemno', d => d[0].qElemNumber)
+  //   .attr('xlink:href', 'images/checkmark.png')
+  //   .attr('x', (d, i) => (circleContainerRadius/2)*Math.cos(i*theta + offset) - 9)
+  //   .attr('y', (d, i) => (circleContainerRadius/2)*Math.sin(i*theta + offset) - 7)
+  //   .merge(updateCheckmark)
+  //   .style('opacity', d =>{
+  //     if(d[0].qState === 'S' || d[0].qState === 'XS') return 1;
+  //     else return 0;
+  //   })
 
-  // Exit Checkmark
-  updateCheckmark.exit()
-    .remove();
+  // // Exit Checkmark
+  // updateCheckmark.exit()
+  //   .remove();
 
 
-  // =========== Label ===========
-  // Attach data
-  const updateLabel = list
-    .selectAll('.list-object-label')
-    .data(data, d => d[0].index +'|' +d[0].qElemNumber);
+  // // =========== Label ===========
+  // // Attach data
+  // const updateLabel = list
+  //   .selectAll('.list-object-label')
+  //   .data(data, d => d[0].index +'|' +d[0].qElemNumber);
 
-  // Enter new label
-  const enterLabel = updateLabel
-    .enter()
-    .append('text')
-    .text(d => d[0].qText)
-    .attr('data-qelemno', d => d[0].qElemNumber)
-    .attr('class', 'list-object-label')
-    .attr('x', (d, i) => (circleContainerRadius + 5)*Math.cos(i*theta + offset))
-    .attr('y', (d, i) => (circleContainerRadius + 5)*Math.sin(i*theta + offset))
-    .style('opacity', 0);
+  // // Enter new label
+  // const enterLabel = updateLabel
+  //   .enter()
+  //   .append('text')
+  //   .text(d => d[0].qText)
+  //   .attr('data-qelemno', d => d[0].qElemNumber)
+  //   .attr('class', 'list-object-label')
+  //   .attr('x', (d, i) => (circleContainerRadius + 5)*Math.cos(i*theta + offset))
+  //   .attr('y', (d, i) => (circleContainerRadius + 5)*Math.sin(i*theta + offset))
+  //   .style('opacity', 0);
 
-  // Transition entering label opacity
-  enterLabel
-    .transition()
-    .delay(500)
-    .duration(750)
-    .style('opacity', 1);
+  // // Transition entering label opacity
+  // enterLabel
+  //   .transition()
+  //   .delay(500)
+  //   .duration(750)
+  //   .style('opacity', 1);
 
-  // Enter update label positioning
-  enterLabel
-    .merge(updateLabel)
-      .style('text-anchor', (d, i) =>{
-        if(Math.abs(Math.cos(i*theta + offset)) < 0.0000001) return 'middle';
-        else if(Math.cos(i*theta + offset) > 0) return 'start';
-        else return 'end';
-      })
-      .style('alignment-baseline', 'middle');
+  // // Enter update label positioning
+  // enterLabel
+  //   .merge(updateLabel)
+  //     .style('text-anchor', (d, i) =>{
+  //       if(Math.abs(Math.cos(i*theta + offset)) < 0.0000001) return 'middle';
+  //       else if(Math.cos(i*theta + offset) > 0) return 'start';
+  //       else return 'end';
+  //     })
+  //     .style('alignment-baseline', 'middle');
 
-  // Exit Label
-  updateLabel.exit()
-    .transition()
-    .duration(750)
-    .style('opacity', 0)
-    .remove();
+  // // Exit Label
+  // updateLabel.exit()
+  //   .transition()
+  //   .duration(750)
+  //   .style('opacity', 0)
+  //   .remove();
 }

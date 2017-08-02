@@ -109,12 +109,26 @@ $sidebar-width: 220px;
 
           .connector-rect.bottom {
             fill: #DDEFFF;
+            opacity: 0;
           }
 
           .connector-line {
             path {
               fill: white;
               stroke: none;
+            }
+          }
+
+          .arrow {
+            stroke-width: 1;
+            stroke: #8F8F8F;
+          }
+
+          .arrow.base {
+            fill: none;
+
+            &.bottom {
+              opacity: 0;
             }
           }
         }
