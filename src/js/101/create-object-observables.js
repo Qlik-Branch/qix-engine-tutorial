@@ -4,6 +4,8 @@ import itemListObjectDef from './object-defs/item-list-object-def.json';
 import departmentListObjectDef from './object-defs/department-list-object-def.json';
 import dayListObjectDef from './object-defs/day-list-object-def.json';
 import salesListObjectDef from './object-defs/sales-list-object-def.json';
+import salesSumObjectDef from './object-defs/sales-sum-object-def.json';
+import departmentSalesHyperCubeDef from './object-defs/department-sales-hyper-cube-def.json';
 
 export default function(app$){
   // Get app object observables
@@ -13,6 +15,8 @@ export default function(app$){
   const departmentListObject$ = app$.qCreateSessionObject(departmentListObjectDef);
   const dayListObject$ = app$.qCreateSessionObject(dayListObjectDef);
   const salesListObject$ = app$.qCreateSessionObject(salesListObjectDef);
+  const salesSumObject$ = app$.qCreateSessionObject(salesSumObjectDef);
+  const departmentSalesHyperCube$ = app$.qCreateSessionObject(departmentSalesHyperCubeDef);
 
   // Dimension HyperCube Layout
   const dimensionHyperCubeLayout$ = dimensionHyperCube$
@@ -34,6 +38,19 @@ export default function(app$){
       }
     });
 
+  // Department Sales HyperCube Layout
+  const departmentSalesHyperCubeLayout$ = departmentSalesHyperCube$
+    .qLayouts()
+    .map(layout =>{
+      const headerData = [];
+      layout.qHyperCube.qDimensionInfo.map(d => {headerData.push({qText: d.qFallbackTitle})});
+      layout.qHyperCube.qMeasureInfo.map(d => {headerData.push({qText: d.qFallbackTitle})});
+      return {
+        headerData: headerData,
+        bodyData: layout.qHyperCube.qDataPages[0].qMatrix
+      }
+    })
+
   // Item ListObject Layout
   const itemListObjectLayout$ = itemListObject$
     .qLayouts()
@@ -54,6 +71,12 @@ export default function(app$){
     .qLayouts()
     .map(layout => layout.qListObject.qDataPages[0].qMatrix);
 
+  // Sales Sum Layout
+  const salesSumLayout$ = salesSumObject$
+    .qLayouts()
+    .map(layout => +layout.sales);
+    
+
   return {
     dimensionHyperCube: {
       object$: dimensionHyperCube$,
@@ -62,6 +85,10 @@ export default function(app$){
     factHyperCube: {
       object$: factHyperCube$,
       layout$: factHyperCubeLayout$
+    },
+    departmentSalesHyperCube: {
+      object$: departmentSalesHyperCube$,
+      layout$: departmentSalesHyperCubeLayout$
     },
     itemListObject: {
       object$: itemListObject$,
@@ -78,6 +105,7 @@ export default function(app$){
     salesListObject: {
       object$: salesListObject$,
       layout$: salesListObjectLayout$
-    }
+    },
+    salesSumLayout$: salesSumLayout$
   };
 }

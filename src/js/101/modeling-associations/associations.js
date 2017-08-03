@@ -10,7 +10,6 @@ import paintListValues from '../paint-list-values.js';
 export default function(sectionClass, app$, objectObservables){
   // ============ Global Variables ============
   var altColor = '#686868';
-  // var selectionActive = false;
   const circleContainerRadius = 48.6;
 
   // ============ HTML ============
@@ -76,7 +75,7 @@ export default function(sectionClass, app$, objectObservables){
 
   // ============ Observables ============
   const stage$ = associationsStageObservable(sectionClass);
-  stage$.subscribe(s => console.log(s));
+  // stage$.subscribe(s => console.log(s));
 
   // ============ Subscribe ============
   // Dimension HyperCube

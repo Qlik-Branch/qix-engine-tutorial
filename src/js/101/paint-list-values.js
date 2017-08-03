@@ -37,8 +37,7 @@ export default function(list, data, offset, altColor){
     .transition()
     .delay(500)
     .duration(750)
-    .attr('r', 10)
-
+    .attr('r', 10);
 
   // Exit circle
   updateCircle.exit()
@@ -59,17 +58,17 @@ export default function(list, data, offset, altColor){
   // Enter new checkmark
   const enterCheckmark = updateCheckmark
     .enter()
-    .append('image')
-    .attr('class', 'list-object-checkmark')
-    .attr('data-qelemno', d => d[0].qElemNumber)
-    .attr('xlink:href', 'images/checkmark.png')
-    .attr('x', (d, i) => (circleContainerRadius*.6)*Math.cos(i*theta + offset) - 9)
-    .attr('y', (d, i) => (circleContainerRadius*.6)*Math.sin(i*theta + offset) - 5)
+      .append('image')
+      .attr('class', 'list-object-checkmark')
+      .attr('data-qelemno', d => d[0].qElemNumber)
+      .attr('xlink:href', 'images/checkmark.png')
+      .attr('x', (d, i) => (circleContainerRadius*.6)*Math.cos(i*theta + offset) - 9)
+      .attr('y', (d, i) => (circleContainerRadius*.6)*Math.sin(i*theta + offset) - 5)
     .merge(updateCheckmark)
-    .style('opacity', d =>{
-      if(d[0].qState === 'S' || d[0].qState === 'XS') return 1;
-      else return 0;
-    })
+      .style('opacity', d =>{
+        if(d[0].qState === 'S' || d[0].qState === 'XS') return 1;
+        else return 0;
+      })
 
   // Exit Checkmark
   updateCheckmark.exit()
@@ -91,7 +90,7 @@ export default function(list, data, offset, altColor){
     .attr('data-qelemno', d => d[0].qElemNumber)
     .attr('class', 'list-object-label')
     .attr('x', (d, i) => (circleContainerRadius + 5)*Math.cos(i*theta + offset))
-    .attr('y', (d, i) => (circleContainerRadius + 5)*Math.sin(i*theta + offset))
+    .attr('y', (d, i) => (circleContainerRadius + 5)*Math.sin(i*theta + offset) + 1)
     .style('opacity', 0);
 
   // Enter update label positioning

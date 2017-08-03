@@ -1,6 +1,9 @@
-import * as d3 from 'd3';
+export default function(table, data){
+  const tableHeader = table.header;
+  const tableBody = table.body;
+  const headerData = data.headerData;
+  const bodyData = data.bodyData;
 
-export default function(tableHeader, headerData, tableBody, bodyData){
   // Create table header row and cells
   tableHeader.selectAll('tr')
       .data([headerData])
@@ -30,7 +33,8 @@ export default function(tableHeader, headerData, tableBody, bodyData){
 
   // Any rows that don't exist shade grey
   rowUpdate.exit()
-    .style('color', '#aaa');
+    .remove();
+    // .style('color', '#aaa');
 
 
   // Add cells to all rows

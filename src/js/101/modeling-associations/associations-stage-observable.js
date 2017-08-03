@@ -7,9 +7,6 @@ export default function(sectionClass){
     .map(() => document.querySelector(sectionClass).getBoundingClientRect().top);
 
 
-  /* Create a reactive Subject to emit our stage stream to multiple observers */
-  const paragraphSubject = new Rx.Subject();
-
   /* Observable to emit the current paragraph section we scroll to. Only emits
       when a new paragraph is reached (paragraph != prevParagraph) */
   const paragraphStream = 

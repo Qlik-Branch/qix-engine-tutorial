@@ -1,0 +1,8 @@
+{
+  "qInfo": {
+    "qType": "expression"
+  },
+  "sales": {
+    "qStringExpression": "=Sum(Sales)"
+  }
+}

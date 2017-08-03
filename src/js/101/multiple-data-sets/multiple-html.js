@@ -9,11 +9,11 @@ export default function(sectionClass){
     lists: {
       radius: 48.6,
       department: {
-        x: 425,
+        x: 450,
         y: 95
       },
       item: {
-        x: 425,
+        x: 450,
         y: 259
       },
       day: {
@@ -21,7 +21,7 @@ export default function(sectionClass){
         y: 408
       },
       sales: {
-        x: 500,
+        x: 550,
         y: 408
       }
     }
@@ -96,15 +96,15 @@ export default function(sectionClass){
 
 
   // ========== Tables ==========
-  // Dimension Table Container
+  // Dimension Table
   const dimensionTableContainer = d3Graph
     .append('div');
   
-  // Dimension Table
   const dimensionTable = dimensionTableContainer
     .attr('class', 'table-container dim-table')
     .append('table');
 
+  // Fact Table
   const factTableContainer = d3Graph
     .append('div');
 
@@ -113,11 +113,25 @@ export default function(sectionClass){
       .style('opacity', 0)
     .append('table');
 
+  // Sum Table
+  const sumTableContainer = d3Graph
+    .append('div')
+    .style('left', config.lists.item.x +'px');
+
+  const sumTable = sumTableContainer
+      .attr('class', 'table-container sum-table')
+      .style('opacity', 0)
+    .append('table');
+
+  // Table Headers, Bodies
   const dimensionTableHeader = dimensionTable.append('thead');
   const dimensionTableBody = dimensionTable.append('tbody');
 
   const factTableHeader = factTable.append('thead');
   const factTableBody = factTable.append('tbody');
+
+  const sumTableHeader = sumTable.append('thead');
+  const sumTableBody = sumTable.append('tbody');
 
 
   // ========== Scroll Graph ==========
@@ -133,7 +147,6 @@ export default function(sectionClass){
   const svg = d3Graph
     .append('svg')
     .attr('width', '100%');
-
 
   // ========== Rect ==========
   // Top Rectangle
@@ -200,7 +213,7 @@ export default function(sectionClass){
       .attr('transform', `translate(${config.lists.day.x}, ${config.lists.day.y})`)
     .append('path')
       .attr('d', pathData)
-      .attr('transform', 'rotate(-160)scale(-1, 1)');
+      .attr('transform', 'rotate(-150)scale(-1, 1)');
 
   // Bottom Right Connector
   const curvePathBottomRight = svg
@@ -209,7 +222,7 @@ export default function(sectionClass){
       .attr('transform', `translate(${config.lists.sales.x}, ${config.lists.sales.y})`)
     .append('path')
       .attr('d', pathData)
-      .attr('transform', 'rotate(160)');
+      .attr('transform', 'rotate(150)');
 
   // Bottom Bottom Connector
   const bottomBottomXPos = config.lists.day.x
@@ -255,7 +268,15 @@ export default function(sectionClass){
     .attr('y1', (config.lists.day.y + config.lists.item.y)*.525)
     .attr('x2', config.lists.item.x - 4)
     .attr('y2', (config.lists.day.y + config.lists.item.y)*.525);
-  
+
+  const sumTableArrow = svg
+    .append('line')
+    .attr('class', 'arrow arrow-sum-table')
+    .attr('x1', config.lists.item.x)
+    .attr('y1', (config.lists.day.y + config.lists.item.y)*.525 + 4)
+    .attr('x2', config.lists.item.x)
+    .attr('y2', (config.lists.day.y + config.lists.item.y)*.525 + 4)
+    // .attr('y2', 500)
 
   // ========== List Groups ==========
   // Department List
@@ -295,7 +316,8 @@ export default function(sectionClass){
     .append('text')
     .attr('class', 'list-label day')
     .text('Day')
-    .attr('transform', `translate(0, ${-config.lists.radius*1.5})`);
+    .attr('transform', `translate(0, ${-config.lists.radius*1.5})`)
+    .style('opacity', 0);
 
   // Sales List
   const salesList = svg
@@ -308,7 +330,53 @@ export default function(sectionClass){
     .append('text')
     .attr('class', 'list-label sales')
     .text('Sales')
-    .attr('transform', `translate(0, ${-config.lists.radius*1.5})`);
+    .attr('transform', `translate(0, ${-config.lists.radius*1.5})`)
+    .style('opacity', 0);
+
+
+  // ========== Sum ==========
+  // Label
+  const sumLabel = d3Graph.append('div')
+    .attr('class', 'sum-label')
+    .style('left', (config.lists.item.x + config.lists.radius*1.6) +'px')
+    .style('top', config.lists.item.y +'px')
+    .html('Calculate Sum of Sales')
+    .style('opacity', 0);
+
+  // Static Line
+  const sumStaticLine = svg.append('line')
+    .attr('class' , 'sum-line static')
+    .attr('x1', config.lists.item.x + config.lists.radius*2)
+    .attr('y1', config.lists.item.y)
+    .attr('x2', config.lists.item.x + config.lists.radius*2)
+    .attr('y2', config.lists.sales.y - config.lists.radius*1.8)
+    .style('opacity', 0);
+
+  // Dynamic Line
+  const sumDynamicLine = svg.append('line')
+    .attr('class', 'sum-line dynamic')
+    .attr('x1', config.lists.item.x + config.lists.radius*2)
+    .attr('y1', config.lists.sales.y + config.lists.radius*1.2)
+    .attr('x2', config.lists.item.x + config.lists.radius*2)
+    .attr('y2', config.lists.sales.y + config.lists.radius*1.2)
+    .style('opacity', 0);
+    // .attr('y2', config.lists.sales.y + config.lists.radius*2.5)
+
+  // Sum Output
+  const sumOutput = d3Graph.append('div')
+    .attr('class', 'sum-output')
+    .style('left', config.lists.sales.x +'px')
+    .style('top', (config.lists.sales.y + config.lists.radius*2.5) +'px')
+    .style('opacity', 0);
+
+  sumOutput.append('span')
+    .attr('class', 'label')
+    .html('Total # of Sales');
+
+  sumOutput.append('br');
+
+  const sumOutputValue = sumOutput.append('span')
+    .attr('class', 'value')
 
 
   return {
@@ -323,15 +391,35 @@ export default function(sectionClass){
       header: factTableHeader,
       body: factTableBody
     },
+    departmentSalesTable: {
+      container: sumTableContainer,
+      header: sumTableHeader,
+      body: sumTableBody
+    },
     lists: {
       department: departmentList,
       item: itemList,
       day: dayList,
-      sales: salesList
+      dayLabel: dayLabel,
+      sales: salesList,
+      salesLabel: salesLabel
     },
     rects: {
       top: topRect,
       bottom: bottomRect
-    }
+    },
+    arrows: {
+      bottomArrow: bottomArrow,
+      bottomArrowBase: bottomArrowBase,
+      sumTableArrow: sumTableArrow
+    },
+    sum: {
+      label: sumLabel,
+      staticLine: sumStaticLine,
+      dynamicLine: sumDynamicLine,
+      output: sumOutput,
+      outputValue: sumOutputValue
+    },
+    config: config
   }
 }
