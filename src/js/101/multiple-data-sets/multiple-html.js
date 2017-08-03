@@ -88,6 +88,7 @@ export default function(sectionClass){
     elementBodyLeft.appendChild(div);
   });
 
+  // Get all paragraph divs
   const d3Paragraphs = d3.selectAll(sectionClass +' .body-left > div');
 
   // Get .graph
@@ -95,11 +96,13 @@ export default function(sectionClass){
 
 
   // ========== Tables ==========
+  // Dimension Table Container
   const dimensionTableContainer = d3Graph
     .append('div');
   
+  // Dimension Table
   const dimensionTable = dimensionTableContainer
-      .attr('class', 'table-container dim-table')
+    .attr('class', 'table-container dim-table')
     .append('table');
 
   const factTableContainer = d3Graph

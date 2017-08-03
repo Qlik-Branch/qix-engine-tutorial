@@ -24,7 +24,6 @@ export default function(sectionClass, app$, objectObservables){
         bottomRect = htmlSetup.rects.bottom;
 
 
-
   // ============ Observables ============
   const stage$ = multipleStageObservable(sectionClass);
 
@@ -73,78 +72,102 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // Day ListObject
-  var dayListIndex = 0;
-  Rx.Observable
-    .combineLatest(
-      objectObservables.dayListObject.layout$,
-      stage$
-    )
-    .filter(f => f[1] > 1)
-    .pluck('0')
-    .map(qMatrix =>{
-      return qMatrix.map(d =>{
-        d[0].index = dayListIndex;
-        return d;
-      })
-    })
-    .subscribe(qMatrix =>{
-      console.log(qMatrix);
-      paintListContainer(dayList, [dayListIndex], listContainerRadius);
-      paintListValues(dayList, qMatrix, Math.PI*(3/4), altColor);
-    });
+  // var dayListIndex = 0;
+  // Rx.Observable
+  //   .combineLatest(
+  //     objectObservables.dayListObject.layout$,
+  //     stage$
+  //   )
+  //   .filter(f => f[1] > 1)
+  //   .pluck('0')
+  //   .map(qMatrix =>{
+  //     return qMatrix.map(d =>{
+  //       d[0].index = dayListIndex;
+  //       return d;
+  //     })
+  //   })
+  //   .subscribe(qMatrix =>{
+  //     console.log(qMatrix);
+  //     paintListContainer(dayList, [dayListIndex], listContainerRadius);
+  //     paintListValues(dayList, qMatrix, Math.PI*(3/4), altColor);
+  //   });
 
 
-  // Sales ListObject
-  var salesListIndex = 0;
-  Rx.Observable
-    .combineLatest(
-      objectObservables.salesListObject.layout$,
-      stage$
-    )
-    .filter(f => f[1] > 1)
-    .pluck('0')
-    .map(qMatrix =>{
-      return qMatrix.map(d =>{
-        d[0].index = salesListIndex;
-        return d;
-      })
-    })
-    .subscribe(qMatrix =>{
-      paintListContainer(salesList, [salesListIndex], listContainerRadius);
-      paintListValues(salesList, qMatrix, Math.PI/6, altColor);
-    });
+  // // Sales ListObject
+  // var salesListIndex = 0;
+  // Rx.Observable
+  //   .combineLatest(
+  //     objectObservables.salesListObject.layout$,
+  //     stage$
+  //   )
+  //   .filter(f => f[1] > 1)
+  //   .pluck('0')
+  //   .map(qMatrix =>{
+  //     return qMatrix.map(d =>{
+  //       d[0].index = salesListIndex;
+  //       return d;
+  //     })
+  //   })
+  //   .subscribe(qMatrix =>{
+  //     paintListContainer(salesList, [salesListIndex], listContainerRadius);
+  //     paintListValues(salesList, qMatrix, Math.PI/6, altColor);
+  //   });
 
 
   // Bottom Connector
-  const stage2Stream = stage$
+  const [afterStage1, beforeStage1] = stage$
     .map(stage => stage > 1)
     .distinctUntilChanged()
-    .map((stage2, i) => {
-      return {
-        stage2: stage2,
-        index: i
-      }
-    })
+    // .map((stage2, i) => {
+    //   return {
+    //     stage2: stage2,
+    //     index: i
+    //   }
+    // })
     .publish()
-    .refCount();
+    .refCount()
+    .partition(stage => stage);
 
-
-  stage2Stream
-    .filter(stage => stage.stage2)
+  // ===== After ====
+  afterStage1
     .subscribe(() =>{
       bottomRect
         .transition()
         .duration(750)
         .style('opacity', 1);
+
+    });
+
+  Rx.Observable
+    .combineLatest(
+      objectObservables.dayListObject.layout$,
+      afterStage1
+    )
+    .pluck('0')
+    .subscribe(qMatrix =>{
+      paintListContainer(dayList, [1], listContainerRadius);
+      paintListValues(dayList, qMatrix, Math.PI*(3/4), altColor);
     })
 
-  stage2Stream
-    .filter(stage => !(stage.stage2))
+
+  // ==== Before ====
+  beforeStage1
     .subscribe(() =>{
       bottomRect
         .transition()
         .duration(750)
         .style('opacity', 0);
+    })
+
+  Rx.Observable
+    .combineLatest(
+      objectObservables.dayListObject.layout$,
+      beforeStage1
+    )
+    .pluck('0')
+    .subscribe(qMatrix =>{
+      paintListContainer(dayList, [], listContainerRadius);
+      paintListValues(dayList, [], Math.PI*(3/4), altColor);
     })
 
 
@@ -219,30 +242,30 @@ export default function(sectionClass, app$, objectObservables){
     })
 
   // ***** 1 *****
-  const paintFactTable = stage$
-    .filter(stage => stage === 1)
-    .mergeMap(() =>{
-      factTableContainer
-        .transition()
-        .duration(750)
-        .style('opacity', 1);
+  // const paintFactTable = stage$
+  //   .filter(stage => stage === 1)
+  //   .mergeMap(() =>{
+  //     factTableContainer
+  //       .transition()
+  //       .duration(750)
+  //       .style('opacity', 1);
 
-      dayListIndex++;
-      salesListIndex++;
-      paintListContainer(dayList, [], listContainerRadius);
-      paintListContainer(salesList, [], listContainerRadius);
-      paintListValues(dayList, [], Math.PI*(3/4), altColor);
-      paintListValues(salesList, [], Math.PI/6, altColor);
+  //     // dayListIndex++;
+  //     // salesListIndex++;
+  //     paintListContainer(dayList, [], listContainerRadius);
+  //     paintListContainer(salesList, [], listContainerRadius);
+  //     paintListValues(dayList, [], Math.PI*(3/4), altColor);
+  //     paintListValues(salesList, [], Math.PI/6, altColor);
 
-      return app$.qClearAll();
-    });
+  //     return app$.qClearAll();
+  //   });
 
   
 
 
   const mergedStages = Rx.Observable.merge(
     destroyFactTable,
-    paintFactTable
+    // paintFactTable
   );
 
   // Subscribe to app$

@@ -1,257 +1,321 @@
 import Rx from 'rxjs';
 import * as d3 from 'd3';
 
-// import connectToApp from '../../lib/connect-to-app.js';
-// import serverConfig from '../../server-config/john-server.json';
-// import serverConfig from '../server-config/axis-sense-internal.json';
 import associationsHtml from './associations-html.js';
 import associationsStageObservable from './associations-stage-observable.js';
-// import associationsAppObjects from './associations-app-objects.js';
-import associationsPaintTable from './associations-paint-table.js';
-import associationsPaintListContainer from '../paint-list-container.js';
-import associationsPaintListValues from './associations-paint-list-values.js';
+import paintTable from '../paint-table.js';
+import paintListContainer from '../paint-list-container.js';
+import paintListValues from '../paint-list-values.js';
 
 export default function(sectionClass, app$, objectObservables){
   // ============ Global Variables ============
   var altColor = '#686868';
-  var selectionActive = false;
+  // var selectionActive = false;
   const circleContainerRadius = 48.6;
-  const sectionHeight = 440;
 
   // ============ HTML ============
-  const html = associationsHtml(sectionClass, circleContainerRadius);
-  const elementGroups = html.elements;
+  const html = associationsHtml(sectionClass),
+    dimensionTable = html.dimensionTable,
+    departmentList = html.lists.department,
+    itemList = html.lists.item,
+    rect = html.rect,
+    arrowBase = html.arrow.base,
+    arrow = html.arrow.line,
+    config = html.config;
+
+  const dimensionHyperCubeLayout$ = objectObservables.dimensionHyperCube.layout$,
+    departmentListObject$ = objectObservables.departmentListObject.object$,
+    itemListObject$ = objectObservables.itemListObject.object$,
+    departmentListLayout$ = objectObservables.departmentListObject.layout$,
+    itemListLayout$ = objectObservables.itemListObject.layout$;
 
 
-  // ============ Observables ============
-  const stageSubject = associationsStageObservable('.modeling-associations', elementGroups._groups[0].length, sectionHeight);
+  // ============ Selection Functions ============
+  function clearAll(){
+    return app$.qClearAll();
+  };
 
-
-  window.addEventListener('load', function(){
-    if(document.querySelector('body').scrollTop > 3000) document.querySelector('body').scrollTop = 3000;
-  })
-
-  const hyperCube$ = objectObservables.dimensionHyperCube.object$;
-  const itemListObject$ = objectObservables.itemListObject.object$;
-  const departmentListObject$ = objectObservables.departmentListObject.object$;
-
-  // ============ Subscribe ============
-  objectObservables.dimensionHyperCube.layout$.subscribe(layout =>{
-    // Paint Table
-    associationsPaintTable(html.tableHeader, layout.headerData, html.tableBody, layout.bodyData);
-  })
-
-  // State of Item ListObject
-  var subscribeToItemList = false,
-      subscribeToDepartmentList = false,
-      itemListIndex = 0,
-      departmentListIndex = 0;
-
-  // Item ListObject
-  /* Item List Object observable will call the paint function whenever the list object updates */
-  itemListObject$.qLayouts()
-    .filter(() => subscribeToItemList)
-    .map((layout, i) => {
-      return layout.qListObject.qDataPages[0].qMatrix.map(d =>{
-        d[0].index = itemListIndex;
-        return d;
-      });
-    })
-    .subscribe(qMatrix =>{
-      associationsPaintListValues(html.itemList, qMatrix, -Math.PI/4, altColor);
-    });
-
-  Rx.Observable.fromEvent(html.itemList._groups[0][0], 'click')
-    .withLatestFrom(stageSubject)
-    .filter(f => f[1] === 14)
-    .pluck('0')
-    .mergeMap(evt =>{// Merge click observable stream with following observable stream..
-      // Get elem no of item just clicked on
-      var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
-      return itemListObject$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
-    }).subscribe()
-
-  // Department ListObject
-  departmentListObject$.qLayouts()
-    .filter(() => subscribeToDepartmentList)
-    .map((layout, i) =>{
-      return layout.qListObject.qDataPages[0].qMatrix.map(d =>{
-        d[0].index = departmentListIndex;
-        return d;
-      })
-    })
-    .subscribe(qMatrix =>{
-      associationsPaintListValues(html.departmentList, qMatrix, -Math.PI/2, altColor);
-    });
-    
-  Rx.Observable.fromEvent(html.departmentList._groups[0][0], 'click')
-    .withLatestFrom(stageSubject)
-    .filter(f => f[1] === 14)
-    .pluck('0')
-    .mergeMap(evt =>{// Merge click observable stream with following observable stream..
-      // Get elem no of item just clicked on
-      var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
-      return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
-    }).subscribe()
-
-
-  // ============ Stage ============
-  // ****** 0 ******
-  const destroyItemListObject = stageSubject
-    .filter(stage => stage === 0)
-    .do(() =>{
-      // Increase itemListIndex
-      itemListIndex++;
-      // RePaint itemList with empty data
-      associationsPaintListContainer(html.itemList, [], circleContainerRadius);
-      // Turn off itemList Subscription
-      subscribeToItemList = false;
-      // RePaint itemList values with empty data
-      associationsPaintListValues(html.itemList, [], -Math.PI/4, altColor);
-    })
-
-  // ****** 1 ******
-  const paintItemListObject = stageSubject
-    .filter(stage => stage === 1)
-    .mergeMap(stage => {
-      // Paint list Container with itemListIndex datum
-      associationsPaintListContainer(html.itemList, [itemListIndex], circleContainerRadius);
-      // ReSubscribe to itemList
-      subscribeToItemList = true;
-
-      departmentListIndex++;
-      associationsPaintListContainer(html.departmentList, [], circleContainerRadius);
-      subscribeToDepartmentList = false;
-      associationsPaintListValues(html.departmentList, [], -Math.PI/2, altColor);
-
-      // Call clearAll() so that listObject qLayouts() is called
-      return app$.qClearAll();
-    });
-
-  // ****** 2 ******
-  const paintDepartmentListObject = stageSubject
-    .filter(stage => stage === 2)
-    .mergeMap(stage =>{
-      // Paint Department List Container with departmentListIndex
-      associationsPaintListContainer(html.departmentList, [departmentListIndex], circleContainerRadius);
-      // Subscribe to departmentListObject
-      subscribeToDepartmentList = true;
-
-      html.rect
-        .transition()
-        .duration(750)
-        .style('opacity', 0);
-
-      html.arrowBase
-        .transition()
-        .duration(750)
-        .style('opacity', 0);
-
-      html.arrow
-        .transition()
-        .duration(750)
-        .attr('x2', 400 - 4)
-
-      // Call clearAll() so that listObject qLayouts() is called
-      return app$.qClearAll();
-    });
-
-  // ****** 3 ******
-  const paintListObjectConnector = stageSubject
-    .filter(stage => stage === 3)
-    .do(() =>{
-      html.rect
-        .transition()
-        .duration(750)
-        .style('opacity', 1);
-
-      html.arrowBase
-        .transition()
-        .duration(750)
-        .style('opacity', 1);
-
-      html.arrow
-        .transition()
-        .duration(750)
-        .attr('x2', 400 - 194.5);
-    });
-
-  // ****** 4 ******
-  const clearAll = stageSubject
-    .filter(stage => [4, 7].indexOf(stage) != -1)
-    .mergeMap(() => app$.qClearAll());
-
-  // ****** 5 ******
-  const selectClothing = stageSubject
-    .filter(stage => stage === 5)
-    .mergeMap(() => Rx.Observable.merge(
+  function selectClothing(){
+    return Rx.Observable.merge(
       app$.qClearAll(),
       departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true)
-    ));
+    );
+  };
 
-  // ****** 6 ******
-  const selectTShirt = stageSubject
-    .filter(stage => stage === 6)
-    .mergeMap(() => Rx.Observable.merge(
+  function selectClothingTShirt(){
+    return Rx.Observable.merge(
       app$.qClearAll(),
       departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true),
       itemListObject$.qSelectListObjectValues('/qListObjectDef', [1], true)
-    ));
+    )
+  }
 
-  // ****** 8 ******
-  const selectTShirtCamera = stageSubject
-    .filter(stage => [8, 10, 12].indexOf(stage) != -1)
-    .mergeMap(() => {
-      altColor = '#686868';
-      return Rx.Observable.merge(
-        app$.qClearAll(),
-        itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true)
-      )
-    });
+  function selectTShirtCamera(){
+    return Rx.Observable.merge(
+      app$.qClearAll(),
+      itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true)
+    )
+  };
 
-  // ****** 9 ******
-  const selectTShirtCameraClothing = stageSubject
-    .filter(stage => stage === 9)
-    .mergeMap(() => Rx.Observable.merge(
+  function selectTShirtCameraClothing(){
+    return Rx.Observable.merge(
       app$.qClearAll(),
       itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true),
       departmentListObject$.qSelectListObjectValues('/qListObjectDef', [1], true)
-    ));
+    )
+  };
 
-  // ****** 11 ******
-  const selectFurniture = stageSubject
-    .filter(stage => stage === 11)
-    .mergeMap(() => Rx.Observable.merge(
+  function selectFurniture(){
+    return Rx.Observable.merge(
       app$.qClearAll(),
       departmentListObject$.qSelectListObjectValues('/qListObjectDef', [0], true)
-    ));
+    )
+  }
 
-  // ****** 13 ******
-  const changeAltColor = stageSubject
-    .filter(stage => stage === 13)
-    .mergeMap(() =>{
-      altColor = '#BEBEBE';
-      return Rx.Observable.merge(
-        app$.qClearAll(),
-        itemListObject$.qSelectListObjectValues('/qListObjectDef', [1, 3], true)
-      )
+
+
+  // ============ Observables ============
+  const stage$ = associationsStageObservable(sectionClass);
+  stage$.subscribe(s => console.log(s));
+
+  // ============ Subscribe ============
+  // Dimension HyperCube
+  dimensionHyperCubeLayout$.subscribe(layout =>{
+    paintTable(dimensionTable, layout);
+  });
+  
+
+  // ***** Stage 1 *****
+  const stage1$ = Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] >= 1)
+    .distinctUntilChanged();
+
+  stage1$
+    .filter(f => f)
+    .mergeMap(() => clearAll())
+    .subscribe();
+
+  itemListLayout$
+    .withLatestFrom(stage1$)
+    .filter(f => f[1])
+    .pluck('0')
+    .do(qMatrix =>{
+      paintListContainer(itemList, [1], circleContainerRadius);
+      paintListValues(itemList, qMatrix, Math.PI/4, altColor);
     })
-    
-  // Merge all stages
-  const mergedStages = Rx.Observable.merge(
-    destroyItemListObject,
-    paintItemListObject,
-    paintDepartmentListObject,
-    paintListObjectConnector,
-    clearAll,
-    selectClothing,
-    selectTShirt,
-    selectTShirtCamera,
-    selectTShirtCameraClothing,
-    selectFurniture,
-    changeAltColor
-  );
+    .subscribe();
 
-  // Once app$ emits something, switch to merged observables
-  app$.switchMap(() => mergedStages).subscribe();
+  stage1$
+    .filter(f => !f[0])
+    .do(() =>{
+      paintListContainer(itemList, [], circleContainerRadius);
+      paintListValues(itemList, [], Math.PI/4, altColor);
+    })
+    .subscribe();
+
+  
+  // ***** Stage 2 *****
+  const stage2$ = Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] >= 2)
+    .distinctUntilChanged();
+
+  // Clear App Selections
+  stage2$
+    .filter(f => f)
+    .mergeMap(() => clearAll())
+    .subscribe();
+
+  // Clearing app will trigger ListObject Layout
+  departmentListLayout$
+    .withLatestFrom(stage2$)
+    .filter(f => f[1])
+    .pluck('0')
+    .do(qMatrix =>{
+      paintListContainer(departmentList, [1], circleContainerRadius);
+      paintListValues(departmentList, qMatrix, Math.PI/6, altColor);
+    })
+    .subscribe();
+
+  // Destroy list objects
+  stage2$
+    .filter(f => !f)
+    .do(() =>{
+      paintListContainer(departmentList, [], circleContainerRadius);
+      paintListValues(departmentList, [], Math.PI/6, altColor);
+    })
+    .subscribe();
+
+
+  // ***** Stage 3 *****
+  const stage3$ = Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] >= 3)
+    .distinctUntilChanged();
+
+  // Create Connector
+  stage3$
+    .filter(f => f)
+    .subscribe(() =>{
+      rect
+        .transition()
+        .duration(750)
+        .style('opacity', 1);
+
+      arrowBase
+        .transition()
+        .duration(750)
+        .style('opacity', 1);
+
+      arrow
+        .transition()
+        .duration(750)
+        .attr('x2', 207);
+    });
+
+  // Destroy Connector
+  stage3$
+    .filter(f => !f)
+    .subscribe(() =>{
+      rect
+        .transition()
+        .duration(750)
+        .style('opacity', 0);
+
+      arrowBase
+        .transition()
+        .duration(750)
+        .style('opacity', 0);
+
+      arrow
+        .transition()
+        .duration(750)
+        .attr('x2', config.lists.department.x - 4)
+    });
+
+
+  // ***** Stage 4 *****
+  Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] === 4)
+    .distinctUntilChanged()
+    .filter(f => f)
+    .mergeMap(() => clearAll())
+    .subscribe();
+
+
+  // ***** Stage 5 *****
+  Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] === 5)
+    .distinctUntilChanged()
+    .filter(f => f)
+    .mergeMap(() => selectClothing())
+    .subscribe();
+
+
+  // ***** Stage 6 *****
+  Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] === 6)
+    .distinctUntilChanged()
+    .filter(f => f)
+    .mergeMap(() => selectClothingTShirt())
+    .subscribe();
+
+
+  // ***** Stage 7 *****
+  Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] === 7)
+    .distinctUntilChanged()
+    .filter(f => f)
+    .mergeMap(() => clearAll())
+    .subscribe();
+
+
+  // ***** Stage 8 *****
+  Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] === 8)
+    .distinctUntilChanged()
+    .filter(f => f)
+    .mergeMap(() => selectTShirtCamera())
+    .subscribe();
+
+  
+  // ***** Stage 9 *****
+  Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] === 9)
+    .distinctUntilChanged()
+    .filter(f => f)
+    .mergeMap(() => selectTShirtCameraClothing())
+    .subscribe();
+
+
+  // ***** Stage 10 *****
+  Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] === 10)
+    .distinctUntilChanged()
+    .filter(f => f)
+    .mergeMap(() => selectTShirtCamera())
+    .subscribe();
+    
+
+  // ***** Stage 11 *****
+  Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] === 11)
+    .distinctUntilChanged()
+    .filter(f => f)
+    .mergeMap(() => selectFurniture())
+    .subscribe();
+    
+
+  // ***** Stage 12 *****
+  Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] === 12)
+    .distinctUntilChanged()
+    .filter(f => f)
+    .mergeMap(() => selectTShirtCamera())
+    .subscribe();
+
+
+  // ***** Stage 13 *****
+  const stage13$ = Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] >= 13)
+    .distinctUntilChanged();
+
+  stage13$
+    .filter(f => f)
+    .withLatestFrom(itemListLayout$)
+    .pluck('1')
+    .subscribe(qMatrix =>{
+      altColor = '#BEBEBE';
+      paintListValues(itemList, qMatrix, Math.PI/4, altColor);
+    });
+
+  stage13$
+    .filter(f => !f)
+    .subscribe(() =>{
+      altColor = '#686868';
+    });
+
+  
+  // ***** Stage 14 *****
+  Rx.Observable.fromEvent(itemList._groups[0][0], 'click')
+    .withLatestFrom(stage$)
+    .filter(f => f[1] >= 14)
+    .pluck('0')
+    .mergeMap(evt =>{// Merge click observable stream with following observable stream..
+      // Get elem no of item just clicked on
+      var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
+      
+      if(!isNaN(elemNo)) return itemListObject$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
+      else return [];
+    }).subscribe();
+
+  Rx.Observable.fromEvent(departmentList._groups[0][0], 'click')
+    .withLatestFrom(stage$)
+    .filter(f => f[1] >= 14)
+    .pluck('0')
+    .mergeMap(evt =>{// Merge click observable stream with following observable stream..
+      // Get elem no of item just clicked on
+      var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
+
+      if(!isNaN(elemNo)) return departmentListObject$.qSelectListObjectValues('/qListObjectDef', [elemNo], true);
+      else return [];
+    }).subscribe();
 }
