@@ -37,7 +37,28 @@ export default function aceEditor(section, language, text, filename){
   const lineCount = editor.session.doc.getAllLines().length;
 
   d3.select('#' +section +'-embed-' +previousEditors)
-    .style('height', 16*(lineCount + 3) +'px')
+    .style('height', 16*(lineCount + 3) +'px');
+
+  editorGraph.select('.editor-container .tab-content .ace_editor:last-of-type')
+    .append('div')
+    .attr('class', 'copy-button')
+    .attr('data-clipboard-text', editor.getValue())
+    .attr('data-toggle', 'tooltip')
+    .attr('title', 'copied')
+    .html('Copy');
+
+  $(document).ready(function(){
+    $('.copy-button').tooltip({
+      trigger: 'click'
+    })
+  })
+
+  var clipboard = new Clipboard('.copy-button');
+  clipboard.on('success', function(){
+    setTimeout(function(){
+      $('.copy-button').tooltip('hide');
+    }, 1000);
+  })
 
   // Create Tabs
   function createTab(){

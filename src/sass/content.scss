@@ -94,6 +94,36 @@ $sidebar-width: 220px;
             .ace_editor {
               width: 100%;
               height: 400px;
+
+              .ace_gutter,
+              .ace_scroller {
+                padding-top: 10px;
+              }
+
+              .ace_gutter {
+                border-left: 5px solid #36B7CF;
+
+                .ace_fold-widget {
+                  display: none;
+                }
+              }
+
+              .copy-button {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 54px;
+                height: 24px;
+                background-color: #36B7CF;
+                color: white;
+                font-family: Helvetica;
+                font-size: 14px;
+                font-weight: 300;
+                text-align: center;
+                line-height: 24px;
+                z-index: 100;
+                cursor: pointer;
+              }
             }
           }
 
