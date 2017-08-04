@@ -1,0 +1,8 @@
+{
+  "host": "playground.qlik.com",
+  "prefix": "/playground/",
+  "port": "443",
+  "rejectUnauthorized": false,
+	"apiKey": "BUjDOrihZtPL6ShJFOqShrrySGTWeKbM",
+  "isSecure": true
+}

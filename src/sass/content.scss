@@ -145,6 +145,8 @@ $sidebar-width: 220px;
         }
 
         &.fixed-transition {
+          margin-top: 0;
+
           .scroll-line {
             position: relative;
             top: 0;
@@ -161,11 +163,23 @@ $sidebar-width: 220px;
             top: 0;
             float: left;
             width: 100%;
-            height: 100vh;
+            height: 50vh;
 
             .body-left {
               height: 100%;
               padding-top: 25vh;
+            }
+
+            .body-right {
+              position: relative;
+              height: 100%;
+              padding-top: 20vh;
+
+              .graph {
+                position: relative;
+                width: 100%;
+                height: 100%;
+              }
             }
           }
 
@@ -203,17 +217,6 @@ $sidebar-width: 220px;
     .container.content {
       padding-left: 50px;
       padding-right: 50px;
-
-      #body-content {
-        .section {
-          // &.graph-scroll-fixed {
-          //   .body-right {
-          //     left: calc(#{$sidebar-width} + 0.50*(100% - #{$sidebar-width}));
-          //     width: calc(0.5*(100% - #{$sidebar-width}));
-          //   }
-          // }
-        }
-      }
     }
   }
 }

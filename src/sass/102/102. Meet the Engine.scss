@@ -1,0 +1,61 @@
+$scroll-line-height: calc(1000px + 50vh);
+
+.static-dyn-prop-diagram {
+  height: $scroll-line-height;
+
+  .scroll-line {
+    height: $scroll-line-height;
+  }
+
+  .graph {
+    img {
+      position: absolute;
+      width: 12%;
+      top: 74%;
+      left: 55%;
+      transform: translateY(-50%);
+    }
+
+    svg {
+      position: relative;
+      
+      .property-label {
+        font-family: 'Open Sans';
+        font-size: 16px;
+        color: #565656;
+      }
+      .number-label-left {
+        text-anchor: end;
+      }
+      .arrow-head {
+        fill: #36B7CF;
+      }
+      .static-line {
+        stroke-width: 1;
+        stroke: #36B7CF;
+      }
+      .dynamic-circle {
+        fill: none;
+        stroke: #36B7CF;
+        stroke-dasharray: 2, 4;
+      }
+      .dynamic-line-1,
+      .dynamic-line-2 {
+        stroke-width: 1;
+        stroke: #36B7CF;
+        stroke-dasharray: 2, 4;
+      }
+      .dynamic-line-1-fill {
+        stroke-width: 1.5;
+        stroke: #36B7CF;
+      }
+      .dynamic-circle-fill {
+        stroke: #36B7CF;
+      }
+      .dynamic-line-2-fill {
+        stroke-width: 1.5;
+        stroke: #36B7CF;
+      }
+    }
+  }
+}
