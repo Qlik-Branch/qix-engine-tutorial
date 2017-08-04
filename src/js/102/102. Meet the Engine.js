@@ -7,6 +7,7 @@ import '../../sass/102/102. Meet the Engine.scss';
 import genericObjectJson from './code-snippets/generic-object.js';
 
 import staticDynPropDiagram from './static-dyn-prop-diagram.js';
+import staticDynPropInteractive from './static-dyn-prop-interactive.js';
 
 activateSidebar(2);
 
@@ -16,3 +17,6 @@ aceEditor('generic-object', 'javascript', genericObjectJson, 'Generic Object');
 
 // Create Property diagram
 staticDynPropDiagram('.static-dyn-prop-diagram');
+
+// Create Interactive Properties diagram
+staticDynPropInteractive('.static-dyn-prop-interactive');

@@ -1,60 +1,148 @@
 $scroll-line-height: calc(1000px + 50vh);
 
-.static-dyn-prop-diagram {
-  height: $scroll-line-height;
-
-  .scroll-line {
-    height: $scroll-line-height;
-  }
+.section {
 
   .graph {
+
     img {
       position: absolute;
       width: 12%;
-      top: 74%;
-      left: 55%;
       transform: translateY(-50%);
     }
+  }
 
-    svg {
+  &.static-dyn-prop-diagram {
+    height: $scroll-line-height;
+
+    .scroll-line {
+      height: $scroll-line-height;
+    }
+
+    .graph {
+      img {
+        top: 74%;
+        left: 55%;
+      }
+
+      svg {
+        position: relative;
+        
+        .property-label {
+          font-family: 'Open Sans';
+          font-size: 16px;
+          color: #565656;
+        }
+        .number-label-left {
+          text-anchor: end;
+        }
+        .arrow-head {
+          fill: #36B7CF;
+        }
+        .static-line {
+          stroke-width: 1;
+          stroke: #36B7CF;
+        }
+        .dynamic-circle {
+          fill: none;
+          stroke: #36B7CF;
+          stroke-dasharray: 2, 4;
+        }
+        .dynamic-line-1,
+        .dynamic-line-2 {
+          stroke-width: 1;
+          stroke: #36B7CF;
+          stroke-dasharray: 2, 4;
+        }
+        .dynamic-line-1-fill {
+          stroke-width: 1.5;
+          stroke: #36B7CF;
+        }
+        .dynamic-circle-fill {
+          stroke: #36B7CF;
+        }
+        .dynamic-line-2-fill {
+          stroke-width: 1.5;
+          stroke: #36B7CF;
+        }
+      }
+    }
+  }
+
+  &.static-dyn-prop-interactive {
+    .graph {
       position: relative;
-      
-      .property-label {
-        font-family: 'Open Sans';
+      height: 300px;
+      margin-top: 52px;
+
+      img {
+        top: 71%;
+        left: 50%;
+      }
+
+      .input-box {
+        position: absolute;
+        left: 140px;
+        top: 29%;
+        font-family: "Open Sans";
         font-size: 16px;
         color: #565656;
+        width: 40px;
+        border: solid 1px #36B7CF;
       }
-      .number-label-left {
-        text-anchor: end;
+
+      .dropdown-box {
+        position: absolute;
+        left: 60px;
+        top: 67%;
+        width: 80px;
+        font-family: "Open Sans";
+        font-size: 14px;
+        color: #565656;
+        border: solid 1px #36B7CF;
       }
-      .arrow-head {
-        fill: #36B7CF;
-      }
-      .static-line {
-        stroke-width: 1;
-        stroke: #36B7CF;
-      }
-      .dynamic-circle {
-        fill: none;
-        stroke: #36B7CF;
-        stroke-dasharray: 2, 4;
-      }
-      .dynamic-line-1,
-      .dynamic-line-2 {
-        stroke-width: 1;
-        stroke: #36B7CF;
-        stroke-dasharray: 2, 4;
-      }
-      .dynamic-line-1-fill {
-        stroke-width: 1.5;
-        stroke: #36B7CF;
-      }
-      .dynamic-circle-fill {
-        stroke: #36B7CF;
-      }
-      .dynamic-line-2-fill {
-        stroke-width: 1.5;
-        stroke: #36B7CF;
+
+      svg {
+        width: 100%;
+        height: 100%;
+
+        .right-label {
+          text-anchor: start;
+        }
+        .interactive-number {
+          text-anchor: start;
+        }
+        .interactive-label,
+        .interactive-number {
+          font-family: "Open Sans";
+          font-size: 16px;
+          color: #565656;
+        }
+        .static-line {
+          stroke-width: 1;
+          stroke: #36B7CF;
+        }
+        .dotted-circle {
+          fill: none;
+          stroke: #36B7CF;
+          stroke-dasharray: 2, 4;
+        }
+        .dotted-line-1,
+        .dotted-line-2 {
+          stroke-width: 1;
+          stroke: #36B7CF;
+          stroke-dasharray: 2, 4;
+        }
+        .line-1-fill {
+          stroke-width: 1.5;
+          stroke: #36B7CF;
+        }
+        .circle-fill {
+          stroke: #36B7CF;
+        }
+        .line-2-fill {
+          stroke-width: 1.5;
+          stroke: #36B7CF;
+        }
       }
     }
   }
