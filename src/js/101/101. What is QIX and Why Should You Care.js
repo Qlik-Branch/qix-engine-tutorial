@@ -9,8 +9,8 @@ import multipleDataSets from './multiple-data-sets/multiple.js';
 
 import createObjectObservables from './create-object-observables.js';
 
-import serverConfig from '../server-config/john-server.json';
-// import serverConfig from '../server-config/qlik-playground.json';
+// import serverConfig from '../server-config/john-server.json';
+import serverConfig from '../server-config/qlik-playground.json';
 // import serverConfig from '../server-config/axis-sense-internal.json';
 
 import '../../sass/101/101. What is QIX and Why Should You Care.scss';
