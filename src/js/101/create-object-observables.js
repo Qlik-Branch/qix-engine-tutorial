@@ -20,7 +20,12 @@ export default function(app$){
 
   // Dimension HyperCube Layout
   const dimensionHyperCubeLayout$ = dimensionHyperCube$
-    .qLayouts()
+    // .qLayouts()
+    .qInvalidated()
+    .switchMap(obj => obj
+      .getLayout()
+      .retryWhen(errors => errors.delay(1000))
+      .catch(err=> Rx.Observable.empty()))
     .map(layout =>{
       return {
         headerData: layout.qHyperCube.qDimensionInfo.map(d =>{return {qText: d.qFallbackTitle}}),
@@ -30,7 +35,12 @@ export default function(app$){
 
   // Fact HyperCube Layout
   const factHyperCubeLayout$ = factHyperCube$
-    .qLayouts()
+    // .qLayouts()
+    .qInvalidated()
+    .switchMap(obj => obj
+      .getLayout()
+      .retryWhen(errors => errors.delay(1000))
+      .catch(err=> Rx.Observable.empty()))
     .map(layout =>{
       return {
         headerData: layout.qHyperCube.qDimensionInfo.map(d =>{return {qText: d.qFallbackTitle}}),
@@ -40,7 +50,12 @@ export default function(app$){
 
   // Department Sales HyperCube Layout
   const departmentSalesHyperCubeLayout$ = departmentSalesHyperCube$
-    .qLayouts()
+    // .qLayouts()
+    .qInvalidated()
+    .switchMap(obj => obj
+      .getLayout()
+      .retryWhen(errors => errors.delay(1000))
+      .catch(err=> Rx.Observable.empty()))
     .map(layout =>{
       const headerData = [];
       layout.qHyperCube.qDimensionInfo.map(d => {headerData.push({qText: d.qFallbackTitle})});
@@ -53,27 +68,52 @@ export default function(app$){
 
   // Item ListObject Layout
   const itemListObjectLayout$ = itemListObject$
-    .qLayouts()
+    // .qLayouts()
+    .qInvalidated()
+    .switchMap(obj=>
+      obj.getLayout()
+        .retryWhen(errors => errors.delay(1000))
+        .catch(err=> Rx.Observable.empty()))
     .map(layout => layout.qListObject.qDataPages[0].qMatrix);
 
   // Department ListObject Layout
   const departmentListObjectLayout$ = departmentListObject$
-    .qLayouts()
+    // .qLayouts()
+    .qInvalidated()
+    .switchMap(obj=>
+      obj.getLayout()
+        .retryWhen(errors => errors.delay(1000))
+        .catch(err=> Rx.Observable.empty()))
     .map(layout => layout.qListObject.qDataPages[0].qMatrix);
 
   // Day ListObject Layout
   const dayListObjectLayout$ = dayListObject$
-    .qLayouts()
+    // .qLayouts()
+    .qInvalidated()
+    .switchMap(obj => obj
+      .getLayout()
+      .retryWhen(errors => errors.delay(1000))
+      .catch(err=> Rx.Observable.empty()))
     .map(layout => layout.qListObject.qDataPages[0].qMatrix);
 
   // Sales ListObject Layout
   const salesListObjectLayout$ = salesListObject$
-    .qLayouts()
+    // .qLayouts()
+    .qInvalidated()
+    .switchMap(obj => obj
+      .getLayout()
+      .retryWhen(errors => errors.delay(1000))
+      .catch(err=> Rx.Observable.empty()))
     .map(layout => layout.qListObject.qDataPages[0].qMatrix);
 
   // Sales Sum Layout
   const salesSumLayout$ = salesSumObject$
-    .qLayouts()
+    // .qLayouts()
+    .qInvalidated()
+    .switchMap(obj => obj
+      .getLayout()
+      .retryWhen(errors => errors.delay(1000))
+      .catch(err=> Rx.Observable.empty()))
     .map(layout => +layout.sales);
     
 

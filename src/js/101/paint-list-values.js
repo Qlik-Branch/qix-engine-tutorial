@@ -38,7 +38,7 @@ export default function(list, data, offset, altColor, selectionTransition){
       else if(d[0].qState === 'X') return '#686868';
       else if(d[0].qState === 'XS') return '#686868';
       else if(d[0].qState === 'S') return '#45EE59';
-    })
+    });
 
   updateCircle
     .transition()
@@ -50,7 +50,7 @@ export default function(list, data, offset, altColor, selectionTransition){
       else if(d[0].qState === 'X') return '#686868';
       else if(d[0].qState === 'XS') return '#686868';
       else if(d[0].qState === 'S') return '#45EE59';
-    })
+    });
 
 
   // Exit circle
