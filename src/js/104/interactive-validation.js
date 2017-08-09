@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-import '../../imgs/checkmark.png';
+import '../../imgs/dark-checkmark.png';
 
 export default function(sectionClass){
   var stage = 0;
@@ -136,7 +136,7 @@ export default function(sectionClass){
 
 
   // ============= Checkmark =============
-  var checkmarkImageData = ['images/checkmark.png'];
+  var checkmarkImageData = ['images/dark-checkmark.png'];
   updateCheckmarkImage(checkmarkImageData);
   
   function updateCheckmarkImage(data){

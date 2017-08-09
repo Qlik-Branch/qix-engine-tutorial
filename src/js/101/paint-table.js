@@ -1,4 +1,4 @@
-export default function(table, data){
+export default function(table, data, selectionTransition){
   const tableHeader = table.header;
   const tableBody = table.body;
   const headerData = data.headerData;
@@ -24,15 +24,20 @@ export default function(table, data){
   
   // Enter new data
   const rowEnter = rowUpdate
-      .enter()
-      .append('tr')
-    .merge(rowUpdate)
-      // Update rows that still exist
-      .style('color', 'black');
+    .enter()
+    .append('tr')
+    .style('color', 'black');
+
+  rowUpdate
+    .transition()
+    .duration(selectionTransition)
+    .style('color', 'black');
 
 
   // Any rows that don't exist shade grey
   rowUpdate.exit()
+    .transition()
+    .duration(selectionTransition)
     .style('color', '#aaa');
 
 

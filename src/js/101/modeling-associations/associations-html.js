@@ -7,12 +7,10 @@ export default function(sectionClass){
     lists: {
       radius: 48.6,
       department: {
-        x: 425,
-        y: 95
+        y: 195
       },
       item: {
-        x: 425,
-        y: 259
+        y: 359
       }
     }
   }
@@ -30,6 +28,10 @@ export default function(sectionClass){
 
   d3.select(sectionClass +' .row')
     .classed('row-5-12', true);
+
+  const elemGraph = document.querySelector(sectionClass +' .graph');
+  config.lists.department.x = elemGraph.offsetWidth - config.lists.radius*1.5;
+  config.lists.item.x = elemGraph.offsetWidth - config.lists.radius*1.5;
 
 
   // ========== Left Pane Elements ==========
@@ -88,10 +90,10 @@ export default function(sectionClass){
   // ========== Tables ==========
   // Dimension Table
   const dimensionTableContainer = d3Graph
-    .append('div');
+    .append('div')
+    .attr('class', 'table-container');
   
   const dataTable = dimensionTableContainer
-    .attr('class', 'table-container')
     .append('table');
 
   const tableHeader = dataTable.append('thead');
@@ -110,14 +112,14 @@ export default function(sectionClass){
   // ========== SVG ==========
   const svg = d3Graph
     .append('svg')
-    .attr('width', '100%');
+    .attr('width', '100%')
+    .attr('height', '100%');
 
 
   // ========== Rect ==========
   const rect = svg
     .append('rect')
     .attr('class', 'connector-rect')
-    .attr('x', config.lists.department.x - config.lists.radius)
     .attr('y', config.lists.department.y)
     .attr('width', config.lists.radius*2)
     .attr('height', config.lists.item.y - config.lists.department.y)
@@ -129,16 +131,15 @@ export default function(sectionClass){
     .curve(d3.curveCardinal);
 
   // Define connector points
-  const departmentCircleLeftEdge = config.lists.department.x - config.lists.radius,
-    departmentCircleRightEdge = config.lists.department.x + config.lists.radius,
+  const 
     connectorIndent = 30,
     connectorVerticalSpacing = 55,
     baseLength = config.lists.item.y - config.lists.department.y,
     parabolaPoints = [
-      [0, 0],
+      [-2, 0],
       [connectorIndent, connectorVerticalSpacing],
       [connectorIndent, baseLength - connectorVerticalSpacing],
-      [0, baseLength]
+      [-2, baseLength]
     ];
 
   // Get PathData
@@ -147,17 +148,17 @@ export default function(sectionClass){
   // Left Connector
   const curvePathLeft = svg
     .append('g')
-      .attr('class', 'connector-line left')
-      .attr('transform', `translate(${departmentCircleLeftEdge}, ${config.lists.department.y})`)
-    .append('path')
+      .attr('class', 'connector-line left');
+  
+  curvePathLeft.append('path')
       .attr('d', pathData);
 
   // Right Connector
   const curvePathRight = svg
     .append('g')
-      .attr('class', 'connector-line right')
-      .attr('transform', `translate(${departmentCircleRightEdge}, ${config.lists.department.y})`)
-    .append('path')
+      .attr('class', 'connector-line right');
+    
+  curvePathRight.append('path')
       .attr('d', pathData)
       .attr('transform', 'scale(-1, 1)');
 
@@ -166,7 +167,7 @@ export default function(sectionClass){
   const arrowBase = svg
     .append('circle')
     .attr('class', 'arrow base')
-    .attr('cx', config.lists.department.x)
+    .attr('cx', '75%')
     .attr('cy', (config.lists.item.y + config.lists.department.y)/2)
     .attr('r', 4)
     .style('opacity', 0);
@@ -174,9 +175,7 @@ export default function(sectionClass){
   const arrow = svg
     .append('line')
     .attr('class', 'arrow')
-    .attr('x1', config.lists.department.x - 4)
     .attr('y1', (config.lists.item.y + config.lists.department.y)/2)
-    .attr('x2', config.lists.department.x - 4)
     .attr('y2', (config.lists.item.y + config.lists.department.y)/2)
 
 
@@ -184,14 +183,41 @@ export default function(sectionClass){
   const departmentList = svg
     .append('g')
     .attr('class', 'department-list')
-    .attr('transform', `translate(${config.lists.department.x}, ${config.lists.department.y})`);
 
   const itemList = svg
     .append('g')
     .attr('class', 'item-list')
-    .attr('transform', `translate(${config.lists.item.x}, ${config.lists.item.y})`);
 
 
+  // ========== Resize ==========
+  window.addEventListener('resize', function(){resize()});
+  function resize(){
+    config.lists.department.x = elemGraph.offsetWidth*0.75;
+    config.lists.item.x = elemGraph.offsetWidth*0.75;
+    const departmentCircleLeftEdge = config.lists.department.x - config.lists.radius;
+    const departmentCircleRightEdge = config.lists.department.x + config.lists.radius;
+
+
+    // Rect
+    rect.attr('x', `calc(75% - ${config.lists.radius}px)`)
+
+    // Connection Parabolas
+    curvePathLeft.attr('transform',
+      `translate(${departmentCircleLeftEdge}, ${config.lists.department.y})`);
+    curvePathRight.attr('transform',
+      `translate(${departmentCircleRightEdge}, ${config.lists.department.y})`);
+
+    // Arrows
+    arrow
+      .attr('x1', config.lists.department.x - 4)
+      .attr('x2', config.lists.department.x - 4);
+    
+    // List Groups
+    departmentList.attr('transform',
+      `translate(${config.lists.department.x}, ${config.lists.department.y})`);
+    itemList.attr('transform',
+      `translate(${config.lists.item.x}, ${config.lists.item.y})`);
+  } resize();
 
 
   return {

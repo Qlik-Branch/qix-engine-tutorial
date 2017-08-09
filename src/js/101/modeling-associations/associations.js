@@ -10,6 +10,7 @@ import paintListValues from '../paint-list-values.js';
 export default function(sectionClass, app$, objectObservables){
   // ============ Global Variables ============
   var altColor = '#686868';
+  var selectionTransition = 500;
   const circleContainerRadius = 48.6;
 
   // ============ HTML ============
@@ -80,7 +81,7 @@ export default function(sectionClass, app$, objectObservables){
   // ============ Subscribe ============
   // Dimension HyperCube
   dimensionHyperCubeLayout$.subscribe(layout =>{
-    paintTable(dimensionTable, layout);
+    paintTable(dimensionTable, layout, selectionTransition);
   });
   
 
@@ -100,7 +101,7 @@ export default function(sectionClass, app$, objectObservables){
     .pluck('0')
     .do(qMatrix =>{
       paintListContainer(itemList, [1], circleContainerRadius);
-      paintListValues(itemList, qMatrix, Math.PI/4, altColor);
+      paintListValues(itemList, qMatrix, Math.PI/4, altColor, selectionTransition);
     })
     .subscribe();
 
@@ -108,7 +109,7 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => !f[0])
     .do(() =>{
       paintListContainer(itemList, [], circleContainerRadius);
-      paintListValues(itemList, [], Math.PI/4, altColor);
+      paintListValues(itemList, [], Math.PI/4, altColor, selectionTransition);
     })
     .subscribe();
 
@@ -131,7 +132,7 @@ export default function(sectionClass, app$, objectObservables){
     .pluck('0')
     .do(qMatrix =>{
       paintListContainer(departmentList, [1], circleContainerRadius);
-      paintListValues(departmentList, qMatrix, Math.PI/6, altColor);
+      paintListValues(departmentList, qMatrix, Math.PI/6, altColor, selectionTransition);
     })
     .subscribe();
 
@@ -140,7 +141,7 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => !f)
     .do(() =>{
       paintListContainer(departmentList, [], circleContainerRadius);
-      paintListValues(departmentList, [], Math.PI/6, altColor);
+      paintListValues(departmentList, [], Math.PI/6, altColor, selectionTransition);
     })
     .subscribe();
 
@@ -283,7 +284,7 @@ export default function(sectionClass, app$, objectObservables){
     .pluck('1')
     .subscribe(qMatrix =>{
       altColor = '#BEBEBE';
-      paintListValues(itemList, qMatrix, Math.PI/4, altColor);
+      paintListValues(itemList, qMatrix, Math.PI/4, altColor, selectionTransition);
     });
 
   stage13$
@@ -294,6 +295,32 @@ export default function(sectionClass, app$, objectObservables){
 
   
   // ***** Stage 14 *****
+  const stage14$ = Rx.Observable.combineLatest(app$, stage$)
+    .map(m => m[1] >= 14)
+    .distinctUntilChanged();
+
+  // Add Class
+  stage14$.filter(f => f)
+    .subscribe(() =>{
+      d3.selectAll(sectionClass +' .list-object-circle')
+        .classed('selectable', true);
+      d3.selectAll(sectionClass +' .list-object-checkmark')
+        .classed('selectable', true);
+
+      selectionTransition = 0;
+    });
+
+  // Remove Class
+  stage14$.filter(f => !f)
+    .subscribe(() =>{
+      d3.selectAll(sectionClass +' .list-object-circle')
+        .classed('selectable', false);
+      d3.selectAll(sectionClass +' .list-object-checkmark')
+        .classed('selectable', false);
+
+      selectionTransition = 500;
+    });
+
   Rx.Observable.fromEvent(itemList._groups[0][0], 'click')
     .withLatestFrom(stage$)
     .filter(f => f[1] >= 14)

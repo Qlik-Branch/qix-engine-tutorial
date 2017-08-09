@@ -5,21 +5,26 @@
     top: 0;
 
     div {
-      height: 440px;
+      // height: 440px;
+      padding-top: 150px;
+      padding-bottom: 250px;
       opacity: 0.3;
     }
   }
 
   .body-right {
+    position: relative;
     padding-top: 100px;
 
     .graph {
-      height: 400px; 
+      position: relative;
+      height: 600px; 
 
       .table-container {
+        position: relative;
+        top: 200px;
         width: 207px;
         background-color: #D3F4F9;
-        margin-top: 200px;
         padding-top: 13px;
         padding-left: 12.5px;
         padding-right: 12.5px;
@@ -63,8 +68,7 @@
 
       svg {
         position: absolute;
-        top: 200px;
-        height: 400px;
+        top: 0;
 
         .connector-rect {
           fill: #D3F4F9
@@ -82,6 +86,13 @@
         .connector-line {
           fill: white;
           stroke: none;
+        }
+
+        .list-object-circle,
+        .list-object-checkmark {
+          &.selectable {
+            cursor: pointer;
+          }
         }
       }
     }
