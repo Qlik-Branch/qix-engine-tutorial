@@ -284,54 +284,26 @@ export default function(sectionClass){
     .append('g')
     .attr('class', 'department-list list')
     .attr('transform', `translate(${config.lists.department.x}, ${config.lists.department.y})`);
-  paintListContainer(departmentList, [1], config.lists.radius);
-
-  const departmentLabel = departmentList
-    .append('text')
-    .attr('class', 'list-label department')
-    .text('Department')
-    .attr('transform', `translate(0, ${-config.lists.radius*1.5})`);
+  paintListContainer(departmentList, [1], config.lists.radius, 'Department', 1.5);
 
   // Item List
   const itemList = svg
     .append('g')
     .attr('class', 'item-list list')
     .attr('transform', `translate(${config.lists.item.x}, ${config.lists.item.y})`);
-  paintListContainer(itemList, [1], config.lists.radius);
-
-  const itemLabel = itemList
-    .append('text')
-    .attr('class', 'list-label item')
-    .text('Item')
-    .attr('transform', `translate(0, ${-config.lists.radius*1.2})`);
+  paintListContainer(itemList, [1], config.lists.radius, 'Item', 1.25);
 
   // Day List
   const dayList = svg
     .append('g')
     .attr('class', 'list day-list')
     .attr('transform', `translate(${config.lists.day.x}, ${config.lists.day.y})`);
-  // paintListContainer(dayList, [1], config.lists.radius);
-
-  const dayLabel = dayList
-    .append('text')
-    .attr('class', 'list-label day')
-    .text('Day')
-    .attr('transform', `translate(0, ${-config.lists.radius*1.5})`)
-    .style('opacity', 0);
 
   // Sales List
   const salesList = svg
     .append('g')
     .attr('class', 'list sales-list')
     .attr('transform', `translate(${config.lists.sales.x}, ${config.lists.sales.y})`);
-  // paintListContainer(salesList, [1], config.lists.radius);
-
-  const salesLabel = salesList
-    .append('text')
-    .attr('class', 'list-label sales')
-    .text('Sales')
-    .attr('transform', `translate(0, ${-config.lists.radius*1.5})`)
-    .style('opacity', 0);
 
 
   // ========== Sum ==========
@@ -400,9 +372,9 @@ export default function(sectionClass){
       department: departmentList,
       item: itemList,
       day: dayList,
-      dayLabel: dayLabel,
+      // dayLabel: dayLabel,
       sales: salesList,
-      salesLabel: salesLabel
+      // salesLabel: salesLabel
     },
     rects: {
       top: topRect,

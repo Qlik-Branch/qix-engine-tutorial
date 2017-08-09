@@ -25,8 +25,6 @@ export default function(sectionClass, app$, objectObservables){
     dayList = htmlSetup.lists.day,
     salesList = htmlSetup.lists.sales,
     bottomRect = htmlSetup.rects.bottom,
-    dayLabel = htmlSetup.lists.dayLabel,
-    salesLabel = htmlSetup.lists.salesLabel,
     bottomArrow = htmlSetup.arrows.bottomArrow,
     bottomArrowBase = htmlSetup.arrows.bottomArrowBase,
     sumTableArrow = htmlSetup.arrows.sumTableArrow,
@@ -168,7 +166,7 @@ export default function(sectionClass, app$, objectObservables){
         .duration(750)
         .attr('x2', 273);
 
-      [bottomRect, bottomArrowBase, dayLabel, salesLabel].forEach(d3Element =>{
+      [bottomRect, bottomArrowBase].forEach(d3Element =>{
         d3Element
           .transition()
           .duration(750)
@@ -182,7 +180,7 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => f[1])
     .pluck('0')
     .subscribe(qMatrix =>{
-      paintListContainer(dayList, [1], listContainerRadius);
+      paintListContainer(dayList, [1], listContainerRadius, 'Day', 1.5);
       paintListValues(dayList, qMatrix, Math.PI*(3/4), altColor);
     });
 
@@ -192,7 +190,7 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => f[1])
     .pluck('0')
     .subscribe(qMatrix =>{
-      paintListContainer(salesList, [1], listContainerRadius);
+      paintListContainer(salesList, [1], listContainerRadius, 'Sales', 1.5);
       paintListValues(salesList, qMatrix, Math.PI/6, altColor);
     });
 
@@ -205,7 +203,7 @@ export default function(sectionClass, app$, objectObservables){
         .duration(750)
         .attr('x2', config.lists.item.x - 4);
 
-      [bottomRect, bottomArrowBase, dayLabel, salesLabel].forEach(d3Element =>{
+      [bottomRect, bottomArrowBase].forEach(d3Element =>{
         d3Element
           .transition()
           .duration(750)
@@ -213,11 +211,11 @@ export default function(sectionClass, app$, objectObservables){
       });
 
       // Destroy Day List Object
-      paintListContainer(dayList, [], listContainerRadius);
+      paintListContainer(dayList, [], listContainerRadius, '', 1.5);
       paintListValues(dayList, [], Math.PI*(3/4), altColor);
 
       // Destroy Sales List Object
-      paintListContainer(salesList, [], listContainerRadius);
+      paintListContainer(salesList, [], listContainerRadius, '', 1.5);
       paintListValues(salesList, [], Math.PI/6, altColor);
     });
 

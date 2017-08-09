@@ -25,4 +25,4 @@ const app$ = connectToApp(serverConfig);
 const objectObservables = createObjectObservables(app$);
 
 associations('.modeling-associations', app$, objectObservables);
-// multipleDataSets('.multiple-data-sets', app$, objectObservables);
+multipleDataSets('.multiple-data-sets', app$, objectObservables);
