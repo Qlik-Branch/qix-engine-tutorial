@@ -4,5 +4,6 @@
   "port": "443",
   "rejectUnauthorized": false,
 	"apiKey": "BUjDOrihZtPL6ShJFOqShrrySGTWeKbM",
-  "isSecure": true
+  "isSecure": true,
+  "appname": "a8ec5b10-9fee-4f72-ba5e-e1aebe76e8d2"
 }

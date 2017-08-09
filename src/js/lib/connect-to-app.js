@@ -1,6 +1,6 @@
 import RxQ from 'RxQ';
 
-export default function(config, appId){
+export default function(config){
   return RxQ.connectEngine(config, 'warm')
-    .qOpenDoc(appId);
+    .qOpenDoc(config.appname);
 }
