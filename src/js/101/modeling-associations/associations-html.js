@@ -175,6 +175,8 @@ export default function(sectionClass){
   const arrow = svg
     .append('line')
     .attr('class', 'arrow')
+    // .attr('x1', config.lists.department.x - 4)
+    // .attr('x2', config.lists.department.x - 4)
     .attr('y1', (config.lists.item.y + config.lists.department.y)/2)
     .attr('y2', (config.lists.item.y + config.lists.department.y)/2)
 
@@ -208,9 +210,8 @@ export default function(sectionClass){
       `translate(${departmentCircleRightEdge}, ${config.lists.department.y})`);
 
     // Arrows
-    arrow
-      .attr('x1', config.lists.department.x - 4)
-      // .attr('x2', config.lists.department.x - 4);
+    arrow.attr('x1', config.lists.department.x - 4)
+    if(!arrow.attr('x2')) arrow.attr('x2', config.lists.department.x - 4);
     
     // List Groups
     departmentList.attr('transform',

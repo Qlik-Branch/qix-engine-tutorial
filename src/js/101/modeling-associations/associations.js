@@ -77,12 +77,14 @@ export default function(sectionClass, app$, objectObservables){
   // ============ Observables ============
   const stage$ = associationsStageObservable(sectionClass);
   // stage$.subscribe(s => console.log(s));
+  /* Creating a debounced emitter so that fast scrolling isn't triggering many selections */
+  const stageDebounced$ = stage$
+    .debounceTime(150);
 
   // ============ Subscribe ============
   // Dimension HyperCube
-  dimensionHyperCubeLayout$.subscribe(layout =>{
-    paintTable(dimensionTable, layout, selectionTransition);
-  });
+  dimensionHyperCubeLayout$
+    .subscribe(layout => paintTable(dimensionTable, layout, selectionTransition));
   
 
   // ***** Stage 1 *****
@@ -140,7 +142,7 @@ export default function(sectionClass, app$, objectObservables){
   stage2$
     .filter(f => !f)
     .do(() =>{
-      paintListContainer(departmentList, [], circleContainerRadius, '', 5);
+      paintListContainer(departmentList, [], circleContainerRadius, '', 1.5);
       paintListValues(departmentList, [], Math.PI/6, altColor, selectionTransition);
     })
     .subscribe();
@@ -194,7 +196,7 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ***** Stage 4 *****
-  Rx.Observable.combineLatest(app$, stage$)
+  Rx.Observable.combineLatest(app$, stageDebounced$)
     .map(m => m[1] === 4)
     .distinctUntilChanged()
     .filter(f => f)
@@ -203,7 +205,7 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ***** Stage 5 *****
-  Rx.Observable.combineLatest(app$, stage$)
+  Rx.Observable.combineLatest(app$, stageDebounced$)
     .map(m => m[1] === 5)
     .distinctUntilChanged()
     .filter(f => f)
@@ -212,7 +214,7 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ***** Stage 6 *****
-  Rx.Observable.combineLatest(app$, stage$)
+  Rx.Observable.combineLatest(app$, stageDebounced$)
     .map(m => m[1] === 6)
     .distinctUntilChanged()
     .filter(f => f)
@@ -221,7 +223,7 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ***** Stage 7 *****
-  Rx.Observable.combineLatest(app$, stage$)
+  Rx.Observable.combineLatest(app$, stageDebounced$)
     .map(m => m[1] === 7)
     .distinctUntilChanged()
     .filter(f => f)
@@ -230,7 +232,7 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ***** Stage 8 *****
-  Rx.Observable.combineLatest(app$, stage$)
+  Rx.Observable.combineLatest(app$, stageDebounced$)
     .map(m => m[1] === 8)
     .distinctUntilChanged()
     .filter(f => f)
@@ -239,7 +241,7 @@ export default function(sectionClass, app$, objectObservables){
 
   
   // ***** Stage 9 *****
-  Rx.Observable.combineLatest(app$, stage$)
+  Rx.Observable.combineLatest(app$, stageDebounced$)
     .map(m => m[1] === 9)
     .distinctUntilChanged()
     .filter(f => f)
@@ -248,7 +250,7 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ***** Stage 10 *****
-  Rx.Observable.combineLatest(app$, stage$)
+  Rx.Observable.combineLatest(app$, stageDebounced$)
     .map(m => m[1] === 10)
     .distinctUntilChanged()
     .filter(f => f)
@@ -257,7 +259,7 @@ export default function(sectionClass, app$, objectObservables){
     
 
   // ***** Stage 11 *****
-  Rx.Observable.combineLatest(app$, stage$)
+  Rx.Observable.combineLatest(app$, stageDebounced$)
     .map(m => m[1] === 11)
     .distinctUntilChanged()
     .filter(f => f)
@@ -266,7 +268,7 @@ export default function(sectionClass, app$, objectObservables){
     
 
   // ***** Stage 12 *****
-  Rx.Observable.combineLatest(app$, stage$)
+  Rx.Observable.combineLatest(app$, stageDebounced$)
     .map(m => m[1] === 12)
     .distinctUntilChanged()
     .filter(f => f)

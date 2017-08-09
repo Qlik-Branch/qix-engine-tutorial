@@ -20,8 +20,6 @@ activateSidebar(1);
 // Connect to app
 const app$ = connectToApp(serverConfig);
 
-// app$.subscribe(s => console.log(s));
-
 const objectObservables = createObjectObservables(app$);
 
 associations('.modeling-associations', app$, objectObservables);
