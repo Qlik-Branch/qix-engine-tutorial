@@ -100,7 +100,7 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => f[1])
     .pluck('0')
     .do(qMatrix =>{
-      paintListContainer(itemList, [1], circleContainerRadius);
+      paintListContainer(itemList, [1], circleContainerRadius, 'Item', 1.25);
       paintListValues(itemList, qMatrix, Math.PI/4, altColor, selectionTransition);
     })
     .subscribe();
@@ -108,7 +108,7 @@ export default function(sectionClass, app$, objectObservables){
   stage1$
     .filter(f => !f[0])
     .do(() =>{
-      paintListContainer(itemList, [], circleContainerRadius);
+      paintListContainer(itemList, [], circleContainerRadius, '', 1.25);
       paintListValues(itemList, [], Math.PI/4, altColor, selectionTransition);
     })
     .subscribe();
@@ -131,7 +131,7 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => f[1])
     .pluck('0')
     .do(qMatrix =>{
-      paintListContainer(departmentList, [1], circleContainerRadius);
+      paintListContainer(departmentList, [1], circleContainerRadius, 'Department', 1.5);
       paintListValues(departmentList, qMatrix, Math.PI/6, altColor, selectionTransition);
     })
     .subscribe();
@@ -140,7 +140,7 @@ export default function(sectionClass, app$, objectObservables){
   stage2$
     .filter(f => !f)
     .do(() =>{
-      paintListContainer(departmentList, [], circleContainerRadius);
+      paintListContainer(departmentList, [], circleContainerRadius, '', 5);
       paintListValues(departmentList, [], Math.PI/6, altColor, selectionTransition);
     })
     .subscribe();
@@ -166,6 +166,7 @@ export default function(sectionClass, app$, objectObservables){
         .style('opacity', 1);
 
       arrow
+        .attr('x2', config.lists.department.x - 4)
         .transition()
         .duration(750)
         .attr('x2', 207);
@@ -302,7 +303,8 @@ export default function(sectionClass, app$, objectObservables){
   // Add Class
   stage14$.filter(f => f)
     .subscribe(() =>{
-      d3.selectAll(sectionClass +' .list-object-circle')
+      const listObjectCircles = d3.selectAll(sectionClass +' .list-object-circle');
+      listObjectCircles
         .classed('selectable', true);
       d3.selectAll(sectionClass +' .list-object-checkmark')
         .classed('selectable', true);

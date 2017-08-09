@@ -210,7 +210,7 @@ export default function(sectionClass){
     // Arrows
     arrow
       .attr('x1', config.lists.department.x - 4)
-      .attr('x2', config.lists.department.x - 4);
+      // .attr('x2', config.lists.department.x - 4);
     
     // List Groups
     departmentList.attr('transform',
