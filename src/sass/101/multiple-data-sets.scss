@@ -9,8 +9,12 @@ $sidebar-width: 220px;
       top: 0;
 
       div {
-        height: 440px;
+        // height: 440px;
+        padding-top: 400px;
+        padding-bottom: 300px;
         opacity: 0.3;
+        background-color: rgba(white, 0.8);
+        background-clip: content-box;
       }
     }
 
@@ -20,6 +24,9 @@ $sidebar-width: 220px;
       .graph {
         position: relative;
         height: 600px;
+        width: 800px;
+        margin-left: auto;
+        margin-right: auto;
 
         .table-container {
           position: relative;

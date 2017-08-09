@@ -9,19 +9,19 @@ export default function(sectionClass){
     lists: {
       radius: 48.6,
       department: {
-        x: 450,
+        x: 500,
         y: 95
       },
       item: {
-        x: 450,
+        x: 500,
         y: 259
       },
       day: {
-        x: 350,
+        x: 400,
         y: 408
       },
       sales: {
-        x: 550,
+        x: 600,
         y: 408
       }
     }
@@ -32,14 +32,15 @@ export default function(sectionClass){
   // Set left and right bodies to new widths
   d3.select(sectionClass +' .body-left')
     .classed('col-xs-6 col-sm-6 col-md-6 col-lg-6', false)
-    .classed('col-xs-5 col-sm-5 col-md-5 col-lg-5', true);
+    // .classed('col-xs-5 col-sm-5 col-md-5 col-lg-5', true);
 
   d3.select(sectionClass +' .body-right')
     .classed('col-xs-6 col-sm-6 col-md-6 col-lg-6', false)
-    .classed('col-xs-7 col-sm-7 col-md-7 col-lg-7', true);
+    // .classed('col-xs-7 col-sm-7 col-md-7 col-lg-7', true);
 
   d3.select(sectionClass +' .row')
-    .classed('row-5-12', true);
+    .classed('overlap-graph-scroll', true)
+    // .classed('row-5-12', true);
 
 
   // ========== Left Pane Elements ==========

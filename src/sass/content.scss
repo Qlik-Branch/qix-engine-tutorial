@@ -172,6 +172,44 @@ $sidebar-width: 220px;
               }
             }
           }
+
+          &.overlap-graph-scroll {
+            .body-left {
+              z-index: 100;
+              width: 800px;
+              margin-left: auto;
+              margin-right: auto;
+            }
+
+            .body-right {
+              position: absolute;
+              width: 100%;
+              top: 0;
+              padding-top: 100px;
+            } 
+
+            &.graph-scroll-fixed {
+              .body-right {
+                position: fixed;
+                left: $hamburger-width;
+                width: calc(100% - #{$hamburger-width});
+
+                @media(min-width: 992px){
+                  position: fixed;
+                  left: $sidebar-width;
+                  width: calc(100% - #{$sidebar-width});
+                }
+              }
+            }
+
+            &.graph-scroll-below {
+              .body-right {
+                position: absolute;
+                bottom: 0;
+                top: auto;
+              }
+            }
+          }
         }
 
         &.fixed-transition {
