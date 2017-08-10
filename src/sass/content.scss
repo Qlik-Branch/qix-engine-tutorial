@@ -12,6 +12,10 @@ $raleway-font-path: '../../node_modules/fonts-raleway/fonts/fonts-raleway';
 $hamburger-width: 47px;
 $sidebar-width: 220px;
 
+body {
+  overflow-x: hidden;
+}
+
 .main-content {
   margin-left: 47px;
   position: relative;

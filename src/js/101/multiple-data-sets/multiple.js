@@ -283,17 +283,26 @@ export default function(sectionClass, app$, objectObservables){
     
   interactiveStage$
     .filter(f => f)
-    .subscribe(() =>{
+    .withLatestFrom(dayListLayout$)
+    .withLatestFrom(salesListLayout$)
+    .subscribe(s =>{
       const listObjectCircles = d3.selectAll(sectionClass +' .list-object-circle');
       listObjectCircles
         .classed('selectable', true);
       d3.selectAll(sectionClass +' .list-object-checkmark')
         .classed('selectable', true);
       selectionTransition = 0;
-
+      
       paintPulseCircles(departmentList, [1, 1, 1], Math.PI/6);
       paintPulseCircles(itemList, [1, 1, 1, 1], Math.PI/4);
+
+      // Paint List Container and values first so that highlighting rings don't get painted underneath
+      paintListContainer(dayList, [1], listContainerRadius, 'Day', 1.5);
+      paintListValues(dayList, s[0][1], Math.PI*(3/4), altColor, selectionTransition);
       paintPulseCircles(dayList, [1, 1, 1, 1], Math.PI*(3/4));
+
+      paintListContainer(salesList, [1], listContainerRadius, 'Sales', 1.5);
+      paintListValues(salesList, s[1], Math.PI/6, altColor, selectionTransition);
       paintPulseCircles(salesList, [1, 1, 1, 1, 1, 1], Math.PI/6);
 
       const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
