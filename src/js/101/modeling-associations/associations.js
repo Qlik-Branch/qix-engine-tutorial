@@ -134,7 +134,6 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => f[1])
     .pluck('0')
     .do(qMatrix =>{
-      console.log('paint department list');
       paintListContainer(departmentList, [1], circleContainerRadius, 'Department', 1.5);
       paintListValues(departmentList, qMatrix, Math.PI/6, altColor, selectionTransition);
     })
@@ -289,6 +288,7 @@ export default function(sectionClass, app$, objectObservables){
     .pluck('1')
     .subscribe(qMatrix =>{
       altColor = '#BEBEBE';
+      paintListContainer(itemList, [1], circleContainerRadius, 'Item', 1.25);
       paintListValues(itemList, qMatrix, Math.PI/4, altColor, selectionTransition);
     });
 
@@ -331,9 +331,7 @@ export default function(sectionClass, app$, objectObservables){
 
   // Add Class
   Rx.Observable.combineLatest(departmentListLayout$, itemListLayout$, stage14$)
-    // .withLatestFrom(stage14$)
-    .filter(f => {console.log(f); return f[2]})
-    // .pluck('0')
+    .filter(f => f[2])
     .subscribe(s =>{
       const listObjectCircles = d3.selectAll(sectionClass +' .list-object-circle');
       listObjectCircles
@@ -341,49 +339,27 @@ export default function(sectionClass, app$, objectObservables){
       d3.selectAll(sectionClass +' .list-object-checkmark')
         .classed('selectable', true);
 
-      console.log(s);
       // Paint List Container and Values before the blue circles
       paintListContainer(departmentList, [1], circleContainerRadius, 'Department', 1.5);
       paintListValues(departmentList, s[0], Math.PI/6, altColor, selectionTransition);
       
-      paintListContainer(itemList, [1], circleContainerRadius, 'Department', 1.5);
-      paintListValues(itemList, s[1], Math.PI/6, altColor, selectionTransition);
-
+      paintListContainer(itemList, [1], circleContainerRadius, 'Item', 1.25);
+      paintListValues(itemList, s[1], Math.PI/4, altColor, selectionTransition);
+      
       paintPulseCircles(departmentList, [1, 1, 1], Math.PI/6);
       paintPulseCircles(itemList, [1, 1, 1, 1], Math.PI/4);
 
-      const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
-      pulse(highlightCircle, true);
-
       selectionTransition = 0;
     });
-  // stage14$
-  //   .filter(f => f)
-  //   .withLatestFrom(itemListLayout$)
-  //   .withLatestFrom(departmentListLayout$)
-  //   .subscribe(s =>{
-  //     const listObjectCircles = d3.selectAll(sectionClass +' .list-object-circle');
-  //     listObjectCircles
-  //       .classed('selectable', true);
-  //     d3.selectAll(sectionClass +' .list-object-checkmark')
-  //       .classed('selectable', true);
 
-  //     console.log(s);
-  //     // Paint List Container and Values before the blue circles
-  //     paintListContainer(departmentList, [1], circleContainerRadius, 'Department', 1.5);
-  //     // paintListValues(departmentList, s[0][1], Math.PI/6, altColor, selectionTransition);
-      
-  //     paintListContainer(departmentList, [1], circleContainerRadius, 'Department', 1.5);
-  //     // paintListValues(departmentList, s[1], Math.PI/6, altColor, selectionTransition);
+  stage14$
+    .filter(f => f)
+    .subscribe(() =>{
+      console.log('14')
 
-  //     paintPulseCircles(departmentList, [1, 1, 1], Math.PI/6);
-  //     paintPulseCircles(itemList, [1, 1, 1, 1], Math.PI/4);
-
-  //     const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
-  //     pulse(highlightCircle, true);
-
-  //     selectionTransition = 0;
-  //   });
+      const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
+      pulse(highlightCircle, true);
+    })
 
   // Remove Class
   stage14$.filter(f => !f)
@@ -404,6 +380,7 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => f[1] >= 14)
     .pluck('0')
     .do(() =>{
+      console.log('click');
       const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
       pulse(highlightCircle, false);
     })

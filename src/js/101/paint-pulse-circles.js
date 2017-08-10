@@ -15,10 +15,12 @@ export default function(list, data, offset){
 
   // Enter new
   const enterHighlight = updateHighlight
-    .enter()
-    .append('circle')
-    .attr('class', 'highlight-circle')
-    .attr('cx', (d, i) => (circleContainerRadius*.6)*Math.cos(i*theta + offset))
-    .attr('cy', (d, i) => (circleContainerRadius*.6)*Math.sin(i*theta + offset))
-    .attr('r', 11);
+      .enter()
+      .append('circle')
+      .attr('class', 'highlight-circle')
+      .attr('cx', (d, i) => (circleContainerRadius*.6)*Math.cos(i*theta + offset))
+      .attr('cy', (d, i) => (circleContainerRadius*.6)*Math.sin(i*theta + offset))
+      .attr('r', 11)
+    .merge(updateHighlight)
+      .style('opacity', 0);
 }
