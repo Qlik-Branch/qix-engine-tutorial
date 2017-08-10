@@ -127,13 +127,13 @@ $sidebar-width: 220px;
             }
           }
 
-          &.row-graph {
-            .body-right {
-              top: 0;
-              right: 0;
-              height: 100vh;
-            }
-          }
+          // &.row-graph {
+          //   .body-right {
+          //     top: 0;
+          //     right: 0;
+          //     height: 100vh;
+          //   }
+          // }
 
           &.graph-scroll-fixed {
             .body-right {
@@ -196,8 +196,8 @@ $sidebar-width: 220px;
 
                 @media(min-width: 992px){
                   position: fixed;
-                  left: $sidebar-width;
-                  width: calc(100% - #{$sidebar-width});
+                  left: calc(#{$sidebar-width} + 31px);
+                  width: calc(100% - (#{$sidebar-width} + 70px));
                 }
               }
             }

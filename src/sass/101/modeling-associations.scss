@@ -87,13 +87,6 @@
           fill: white;
           stroke: none;
         }
-
-        .list-object-circle,
-        .list-object-checkmark {
-          &.selectable {
-            cursor: pointer;
-          }
-        }
       }
     }
   }

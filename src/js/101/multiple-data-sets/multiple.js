@@ -1,4 +1,6 @@
 import Rx from 'rxjs';
+import * as d3 from 'd3';
+
 
 import multipleHtml from './multiple-html.js';
 import multipleStageObservable from './multiple-stage-observable.js';
@@ -6,9 +8,11 @@ import paintTable from '../paint-table.js';
 import paintDynamicTable from '../paint-dynamic-table.js';
 import paintListContainer from '../paint-list-container.js';
 import paintListValues from '../paint-list-values.js';
+import paintPulseCircles from '../paint-pulse-circles.js';
 
 export default function(sectionClass, app$, objectObservables){
   var altColor = '#BEBEBE';
+  var selectionTransition = 500;
   const listContainerRadius = 48.6;
 
   // ============ HTML Setup ============
@@ -27,7 +31,7 @@ export default function(sectionClass, app$, objectObservables){
     bottomRect = htmlSetup.rects.bottom,
     bottomArrow = htmlSetup.arrows.bottomArrow,
     bottomArrowBase = htmlSetup.arrows.bottomArrowBase,
-    sumTableArrow = htmlSetup.arrows.sumTableArrow,
+    // sumTableArrow = htmlSetup.arrows.sumTableArrow,
     sumLabel = htmlSetup.sum.label,
     sumStaticLine = htmlSetup.sum.staticLine,
     sumDynamicLine = htmlSetup.sum.dynamicLine,
@@ -80,13 +84,13 @@ export default function(sectionClass, app$, objectObservables){
   // ============ Subscribe ============
   // Dimension HyperCube
   dimensionHyperCubeLayout$.subscribe(layout =>{
-    paintTable(dimensionTable, layout);
+    paintTable(dimensionTable, layout, selectionTransition);
   });
 
 
   // Fact HyperCube
   factHyperCubeLayout$.subscribe(layout =>{
-    paintTable(factTable, layout);
+    paintTable(factTable, layout, selectionTransition);
   });
 
 
@@ -98,13 +102,13 @@ export default function(sectionClass, app$, objectObservables){
 
   // Department ListObject
   departmentListLayout$.subscribe(qMatrix =>{
-    paintListValues(departmentList, qMatrix, -Math.PI/2, altColor);
+    paintListValues(departmentList, qMatrix, -Math.PI/2, altColor, selectionTransition);
   });
 
 
   // Item ListObject
   itemListLayout$.subscribe(qMatrix =>{
-    paintListValues(itemList, qMatrix, -Math.PI/4, altColor);
+    paintListValues(itemList, qMatrix, -Math.PI/4, altColor, selectionTransition);
   });
 
 
@@ -181,7 +185,7 @@ export default function(sectionClass, app$, objectObservables){
     .pluck('0')
     .subscribe(qMatrix =>{
       paintListContainer(dayList, [1], listContainerRadius, 'Day', 1.5);
-      paintListValues(dayList, qMatrix, Math.PI*(3/4), altColor);
+      paintListValues(dayList, qMatrix, Math.PI*(3/4), altColor, selectionTransition);
     });
 
   // Create Sales List
@@ -191,7 +195,7 @@ export default function(sectionClass, app$, objectObservables){
     .pluck('0')
     .subscribe(qMatrix =>{
       paintListContainer(salesList, [1], listContainerRadius, 'Sales', 1.5);
-      paintListValues(salesList, qMatrix, Math.PI/6, altColor);
+      paintListValues(salesList, qMatrix, Math.PI/6, altColor, selectionTransition);
     });
 
   // Destroy All
@@ -212,11 +216,11 @@ export default function(sectionClass, app$, objectObservables){
 
       // Destroy Day List Object
       paintListContainer(dayList, [], listContainerRadius, '', 1.5);
-      paintListValues(dayList, [], Math.PI*(3/4), altColor);
+      paintListValues(dayList, [], Math.PI*(3/4), altColor, selectionTransition);
 
       // Destroy Sales List Object
       paintListContainer(salesList, [], listContainerRadius, '', 1.5);
-      paintListValues(salesList, [], Math.PI/6, altColor);
+      paintListValues(salesList, [], Math.PI/6, altColor, selectionTransition);
     });
 
 
@@ -248,11 +252,77 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ============ Interactivity ============
+  const interactiveStage$ = Rx.Observable.combineLatest(app$, stage$)
+    .map(f => [6, 10, 12].indexOf(f[1]) != -1)
+    .distinctUntilChanged();
+
+  // Pulse Function
+  /* Takes in a d3 selection and whether it should be pulsing or not.
+      If pulseActive is true, the transition will fade in then out and then
+      call the recursive transition again. if false, it will fade out then stop */
+  function pulse(selection, pulseActive){
+    recursiveTransition();
+    function recursiveTransition(){
+      if(pulseActive){
+        selection
+          .transition()
+          .duration(500)
+          .style('opacity', 0.8)
+          .transition()
+          .duration(500)
+          .style('opacity', 0)
+          .on('end', recursiveTransition)
+      } else{
+        selection
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      }
+    }
+  }
+    
+  interactiveStage$
+    .filter(f => f)
+    .subscribe(() =>{
+      const listObjectCircles = d3.selectAll(sectionClass +' .list-object-circle');
+      listObjectCircles
+        .classed('selectable', true);
+      d3.selectAll(sectionClass +' .list-object-checkmark')
+        .classed('selectable', true);
+      selectionTransition = 0;
+
+      paintPulseCircles(departmentList, [1, 1, 1], Math.PI/6);
+      paintPulseCircles(itemList, [1, 1, 1, 1], Math.PI/4);
+      paintPulseCircles(dayList, [1, 1, 1, 1], Math.PI*(3/4));
+      paintPulseCircles(salesList, [1, 1, 1, 1, 1, 1], Math.PI/6);
+
+      const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
+      pulse(highlightCircle, true);
+    });
+
+  interactiveStage$
+    .filter(f => !f)
+    .subscribe(() =>{
+      d3.selectAll(sectionClass +' .list-object-circle')
+        .classed('selectable', false);
+      d3.selectAll(sectionClass +' .list-object-checkmark')
+        .classed('selectable', false);
+      selectionTransition = 500;
+
+      const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
+      pulse(highlightCircle, false);
+    })
+
+
   function listObjectInteractivity(list, listObject$){
     Rx.Observable.fromEvent(list._groups[0][0], 'click')
       .withLatestFrom(stage$)
       .filter(f => [6, 10, 12].indexOf(f[1]) != -1)
       .pluck('0')
+      .do(() =>{
+        const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
+        pulse(highlightCircle, false);
+      })
       .mergeMap(evt =>{// Merge click observable stream with following observable stream..
         // Get elem no of item just clicked on
         var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
@@ -347,11 +417,11 @@ export default function(sectionClass, app$, objectObservables){
         .duration(750)
         .style('opacity', 1);
 
-      sumTableArrow
-        .transition()
-        .delay(750)
-        .duration(750)
-        .attr('y2', 500);
+      // sumTableArrow
+      //   .transition()
+      //   .delay(750)
+      //   .duration(750)
+      //   .attr('y2', 500);
     });
 
   // Destroy
@@ -363,10 +433,10 @@ export default function(sectionClass, app$, objectObservables){
         .duration(750)
         .style('opacity', 0);
 
-      sumTableArrow
-        .transition()
-        .duration(750)
-        .attr('y2', (config.lists.day.y + config.lists.item.y)*.525 + 4);
+      // sumTableArrow
+      //   .transition()
+      //   .duration(750)
+      //   .attr('y2', config.lists.department.y);
     })
 
 }

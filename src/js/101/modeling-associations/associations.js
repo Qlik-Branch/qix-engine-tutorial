@@ -6,6 +6,7 @@ import associationsStageObservable from './associations-stage-observable.js';
 import paintTable from '../paint-table.js';
 import paintListContainer from '../paint-list-container.js';
 import paintListValues from '../paint-list-values.js';
+import paintPulseCircles from '../paint-pulse-circles.js';
 
 export default function(sectionClass, app$, objectObservables){
   // ============ Global Variables ============
@@ -302,6 +303,31 @@ export default function(sectionClass, app$, objectObservables){
     .map(m => m[1] >= 14)
     .distinctUntilChanged();
 
+  // Pulse Function
+  /* Takes in a d3 selection and whether it should be pulsing or not.
+      If pulseActive is true, the transition will fade in then out and then
+      call the recursive transition again. if false, it will fade out then stop */
+  function pulse(selection, pulseActive){
+    recursiveTransition();
+    function recursiveTransition(){
+      if(pulseActive){
+        selection
+          .transition()
+          .duration(500)
+          .style('opacity', 0.8)
+          .transition()
+          .duration(500)
+          .style('opacity', 0)
+          .on('end', recursiveTransition)
+      } else{
+        selection
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      }
+    }
+  }
+
   // Add Class
   stage14$.filter(f => f)
     .subscribe(() =>{
@@ -310,6 +336,12 @@ export default function(sectionClass, app$, objectObservables){
         .classed('selectable', true);
       d3.selectAll(sectionClass +' .list-object-checkmark')
         .classed('selectable', true);
+
+      paintPulseCircles(departmentList, [1, 1, 1], Math.PI/6);
+      paintPulseCircles(itemList, [1, 1, 1, 1], Math.PI/4);
+
+      const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
+      pulse(highlightCircle, true);
 
       selectionTransition = 0;
     });
@@ -322,6 +354,9 @@ export default function(sectionClass, app$, objectObservables){
       d3.selectAll(sectionClass +' .list-object-checkmark')
         .classed('selectable', false);
 
+      const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
+      pulse(highlightCircle, false);
+
       selectionTransition = 500;
     });
 
@@ -329,6 +364,10 @@ export default function(sectionClass, app$, objectObservables){
     .withLatestFrom(stage$)
     .filter(f => f[1] >= 14)
     .pluck('0')
+    .do(() =>{
+      const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
+      pulse(highlightCircle, false);
+    })
     .mergeMap(evt =>{// Merge click observable stream with following observable stream..
       // Get elem no of item just clicked on
       var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));
@@ -341,6 +380,10 @@ export default function(sectionClass, app$, objectObservables){
     .withLatestFrom(stage$)
     .filter(f => f[1] >= 14)
     .pluck('0')
+    .do(() =>{
+      const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
+      pulse(highlightCircle, false);
+    })
     .mergeMap(evt =>{// Merge click observable stream with following observable stream..
       // Get elem no of item just clicked on
       var elemNo = parseInt(evt.target.getAttribute('data-qelemno'));

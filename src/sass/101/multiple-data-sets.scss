@@ -6,7 +6,9 @@ $sidebar-width: 220px;
     .body-left {
       position: relative;
       padding-top: 200px;
+      padding-bottom: 300px;
       top: 0;
+      pointer-events: none;
 
       div {
         // height: 440px;
@@ -92,7 +94,7 @@ $sidebar-width: 220px;
 
           &.fact-table {
             width: 273px;
-            background-color: #DDEFFF;
+            background-color: #D3F4F9;
 
             table {
               width: 248px;
@@ -102,7 +104,7 @@ $sidebar-width: 220px;
           &.sum-table {
             position: absolute;
             width: 197px;
-            background-color: #D3F4F9;
+            background-color: #DDEFFF;
             top: 450px;
             transform: translateX(-50%);
 
@@ -136,7 +138,7 @@ $sidebar-width: 220px;
           }
 
           .connector-rect.bottom {
-            fill: #DDEFFF;
+            fill: #D3F4F9;
             opacity: 0;
           }
 

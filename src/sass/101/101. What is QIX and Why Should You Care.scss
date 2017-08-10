@@ -25,6 +25,45 @@
           font-style: italic;
           fill: #5C7490;
         }
+
+        .list-object-circle,
+        .list-object-checkmark {
+          &.selectable {
+            cursor: pointer;
+          }
+        }
+
+        .highlight-circle {
+          fill: none;
+          stroke-width: 3;
+          stroke: #00B3E5;
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  &.embed-dashboard {
+    .graph {
+      position: relative;
+
+      .iframe-container {
+        position: absolute;
+        top: 4.8%;
+        left: 3.9%;
+        width: 92.2%;
+        height: 64.2%;
+        border: none;
+
+        iframe {
+          position: relative;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          border: none;
+          transform: scale(0.5, 0.5);
+        }
       }
     }
   }

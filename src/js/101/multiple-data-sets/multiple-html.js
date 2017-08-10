@@ -29,18 +29,18 @@ export default function(sectionClass){
 
 
   // ========== New Widths ==========
-  // Set left and right bodies to new widths
-  d3.select(sectionClass +' .body-left')
-    .classed('col-xs-6 col-sm-6 col-md-6 col-lg-6', false)
-    // .classed('col-xs-5 col-sm-5 col-md-5 col-lg-5', true);
+  window.addEventListener('load', function(){onload()});
+  function onload(){
+    // Set left and right bodies to new widths
+    d3.select(sectionClass +' .body-left')
+      .classed('col-xs-6 col-sm-6 col-md-6 col-lg-6', false)
 
-  d3.select(sectionClass +' .body-right')
-    .classed('col-xs-6 col-sm-6 col-md-6 col-lg-6', false)
-    // .classed('col-xs-7 col-sm-7 col-md-7 col-lg-7', true);
+    d3.select(sectionClass +' .body-right')
+      .classed('col-xs-6 col-sm-6 col-md-6 col-lg-6', false)
 
-  d3.select(sectionClass +' .row')
-    .classed('overlap-graph-scroll', true)
-    // .classed('row-5-12', true);
+    d3.select(sectionClass +' .row')
+      .classed('overlap-graph-scroll', true)
+  }
 
 
   // ========== Left Pane Elements ==========
@@ -270,14 +270,13 @@ export default function(sectionClass){
     .attr('x2', config.lists.item.x - 4)
     .attr('y2', (config.lists.day.y + config.lists.item.y)*.525);
 
-  const sumTableArrow = svg
-    .append('line')
-    .attr('class', 'arrow arrow-sum-table')
-    .attr('x1', config.lists.item.x)
-    .attr('y1', (config.lists.day.y + config.lists.item.y)*.525 + 4)
-    .attr('x2', config.lists.item.x)
-    .attr('y2', (config.lists.day.y + config.lists.item.y)*.525 + 4)
-    // .attr('y2', 500)
+  // const sumTableArrow = svg
+  //   .append('line')
+  //   .attr('class', 'arrow arrow-sum-table')
+  //   .attr('x1', config.lists.item.x)
+  //   .attr('y1', config.lists.department.y)
+  //   .attr('x2', config.lists.item.x)
+  //   .attr('y2', config.lists.department.y)
 
   // ========== List Groups ==========
   // Department List
@@ -373,9 +372,7 @@ export default function(sectionClass){
       department: departmentList,
       item: itemList,
       day: dayList,
-      // dayLabel: dayLabel,
-      sales: salesList,
-      // salesLabel: salesLabel
+      sales: salesList
     },
     rects: {
       top: topRect,
@@ -384,7 +381,7 @@ export default function(sectionClass){
     arrows: {
       bottomArrow: bottomArrow,
       bottomArrowBase: bottomArrowBase,
-      sumTableArrow: sumTableArrow
+      // sumTableArrow: sumTableArrow
     },
     sum: {
       label: sumLabel,
