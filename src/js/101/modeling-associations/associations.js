@@ -112,13 +112,6 @@ export default function(sectionClass, app$, objectObservables, appReady$){
 
 
   // ============ Observables ============
-  // const appReady$ = dimensionHyperCubeObject$
-  //   .withLatestFrom(departmentListObject$)
-  //   .withLatestFrom(itemListObject$)
-  //   .publish();
-  // appReady$.connect();
-
-    
   const stage$ = associationsStageObservable(sectionClass);
   // stage$.subscribe(s => console.log(s));
   /* Creating a debounced emitter so that fast scrolling isn't triggering many selections */

@@ -33,14 +33,6 @@ const app$ = connectToApp(serverConfig);
 
 const 
   objectObservables = createObjectObservables(app$),
-  // dimensionHyperCubeObject$ = objectObservables.dimensionHyperCube.object$,
-  // departmentListObject$ = objectObservables.departmentListObject.object$,
-  // itemListObject$ = objectObservables.itemListObject.object$,
-  // factHyperCubeObject$ = objectObservables.factHyperCube.object$,
-  // dayListObject$ = objectObservables.dayListObject.object$,
-  // salesListObject$ = objectObservables.salesListObject.object$,
-  // salesSumObject$ = objectObservables.salesSumObject.object$,
-  // departmentSalesHyperCubeObject$ = objectObservables.departmentSalesHyperCube.object$;
   dimensionHyperCubeLayout$ = objectObservables.dimensionHyperCube.layout$,
   departmentListLayout$ = objectObservables.departmentListObject.layout$,
   itemListLayout$ = objectObservables.itemListObject.layout$,
@@ -51,16 +43,6 @@ const
   departmentSalesHyperCubeLayout$ = objectObservables.departmentSalesHyperCube.layout$;
 
 /* Get all session objects to create an observable that emits when the app is ready */
-// const appReady$ = dimensionHyperCubeObject$
-//   .withLatestFrom(departmentListObject$)
-//   .withLatestFrom(itemListObject$)
-//   .withLatestFrom(factHyperCubeObject$)
-//   .withLatestFrom(dayListObject$)
-//   .withLatestFrom(salesListObject$)
-//   .withLatestFrom(salesSumObject$)
-//   .withLatestFrom(departmentSalesHyperCubeObject$)
-//   .publish();
-// appReady$.connect();
 const appReady$ = dimensionHyperCubeLayout$
   .withLatestFrom(departmentListLayout$)
   .withLatestFrom(itemListLayout$)

@@ -117,7 +117,7 @@ export default function(sectionClass){
   // Sum Table
   const sumTableContainer = d3Graph
     .append('div')
-    .style('left', config.lists.item.x +'px');
+    .style('left', (config.lists.item.x + 125) +'px');
 
   const sumTable = sumTableContainer
       .attr('class', 'table-container sum-table')
@@ -327,17 +327,17 @@ export default function(sectionClass){
   // Dynamic Line
   const sumDynamicLine = svg.append('line')
     .attr('class', 'sum-line dynamic')
-    .attr('x1', config.lists.item.x + config.lists.radius*2)
-    .attr('y1', config.lists.sales.y + config.lists.radius*1.2)
-    .attr('x2', config.lists.item.x + config.lists.radius*2)
-    .attr('y2', config.lists.sales.y + config.lists.radius*1.2)
+    .attr('x1', config.lists.sales.x + config.lists.radius)
+    .attr('y1', config.lists.sales.y)
+    .attr('x2', config.lists.sales.x + config.lists.radius)
+    .attr('y2', config.lists.sales.y)
     .style('opacity', 0);
     // .attr('y2', config.lists.sales.y + config.lists.radius*2.5)
 
   // Sum Output
   const sumOutput = d3Graph.append('div')
     .attr('class', 'sum-output')
-    .style('left', (config.lists.sales.x + 200) +'px')
+    .style('left', (config.lists.sales.x + 100) +'px')
     .style('top', config.lists.sales.y +'px')
     .style('opacity', 0);
 

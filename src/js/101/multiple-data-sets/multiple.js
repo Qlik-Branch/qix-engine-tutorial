@@ -112,56 +112,8 @@ export default function(sectionClass, app$, objectObservables, appReady$){
     return mergedObservable$;
   }
 
-
-
   // ============ Observables ============
-  // factHyperCubeObject$.subscribe(s => console.log(s));
-  // const appReady$ = dimensionHyperCubeObject$
-  //   .withLatestFrom(factHyperCubeObject$)
-  //   .withLatestFrom(departmentListObject$)
-  //   .withLatestFrom(itemListObject$)
-  //   .withLatestFrom(dayListObject$)
-  //   .withLatestFrom(salesListObject$)
-  //   .withLatestFrom(salesSumObject$)
-  //   .withLatestFrom(departmentSalesHyperCubeObject$)
-  //   .publish();
-
-  // const dimensionHyperCubeReady$ = dimensionHyperCubeObject$.take(1);
-  // const factHyperCubeReady$ = dimensionHyperCubeReady$
-  //   .concat(factHyperCubeObject$.take(1));
-  // const departmentListObjectReady$ = factHyperCubeReady$
-  //   .concat(departmentListObject$.take(1));
-  // const itemListObjectReady$ = departmentListObjectReady$
-  //   .concat(itemListObject$.take(1));
-  // const dayListObjectReady$ = itemListObjectReady$
-  //   .concat(dayListObject$.take(1));
-  // const salesListObjectReady$ = dayListObjectReady$
-  //   .concat(salesListObject$.take(1));
-  // const salesSumObjectReady$ = salesListObjectReady$
-  //   .concat(salesSumObject$.take(1));
-  // const departmentSalesHyperCubeReady$ = salesSumObjectReady$
-  //   .concat(departmentSalesHyperCubeObject$.take(1));
-
-  // const mergedValues = dimensionHyperCubeObject$
-  //   .merge(factHyperCubeObject$)
-  //   .merge(departmentListObject$)
-  //   .merge(itemListObject$)
-  //   .merge(dayListObject$)
-  //   .merge(salesListObject$)
-  //   .merge(salesSumObject$)
-  //   .merge(departmentSalesHyperCubeObject$)
-  //   .publish();
-  
-  //   mergedValues.connect();
-
-  // const appReady$ = Rx.Observable.concat(departmentSalesHyperCubeReady$)
-  //   .publish();
-
-  // mergedValues.subscribe(s => console.log(s));
-  
   const stage$ = multipleStageObservable(sectionClass);
-  stage$.subscribe(s => console.log(s))
-
   const stageDebounced$ = stage$.debounceTime(150);
 
   
@@ -170,25 +122,20 @@ export default function(sectionClass, app$, objectObservables, appReady$){
   dimensionHyperCubeLayout$.subscribe(layout =>{
     paintTable(dimensionTable, layout, selectionTransition);
   });
-
-
   // Fact HyperCube
   factHyperCubeLayout$.subscribe(layout =>{
     paintTable(factTable, layout, selectionTransition);
   });
-
 
   // Department Sales HyperCube
   departmentSalesHyperCubeLayout$.subscribe(layout =>{
     paintDynamicTable(departmentSalesTable, layout);
   })
 
-
   // Department ListObject
   departmentListLayout$.subscribe(qMatrix =>{
     paintListValues(departmentList, qMatrix, -Math.PI/2, altColor, selectionTransition);
   });
-
 
   // Item ListObject
   itemListLayout$.subscribe(qMatrix =>{
@@ -203,10 +150,10 @@ export default function(sectionClass, app$, objectObservables, appReady$){
     .pluck('0')
     .subscribe(sales =>{
       sumDynamicLine
-          .attr('y2', config.lists.sales.y + config.lists.radius*1.2)
+        .attr('x2', config.lists.sales.x + config.lists.radius)
         .transition()
         .duration(250)
-          .attr('y2', config.lists.sales.y + config.lists.radius*2.5);
+        .attr('x2', config.lists.sales.x + 100);
 
       setTimeout(function(){
         sumOutputValue.html(sales);
@@ -263,7 +210,6 @@ export default function(sectionClass, app$, objectObservables, appReady$){
     .filter(f => f[1])
     .pluck('0')
     .subscribe(qMatrix =>{
-      console.log(qMatrix);
       paintListContainer(dayList, [1], listContainerRadius, 'Day', 1.5);
       paintListValues(dayList, qMatrix, Math.PI*(3/4), altColor, selectionTransition);
     });
@@ -274,7 +220,6 @@ export default function(sectionClass, app$, objectObservables, appReady$){
     .filter(f => f[1])
     .pluck('0')
     .subscribe(qMatrix =>{
-      console.log(qMatrix);
       paintListContainer(salesList, [1], listContainerRadius, 'Sales', 1.5);
       paintListValues(salesList, qMatrix, Math.PI/6, altColor, selectionTransition);
     });
@@ -330,10 +275,6 @@ export default function(sectionClass, app$, objectObservables, appReady$){
 
 
   // ============ Interactivity ============
-  // const interactiveStage$ = Rx.Observable.combineLatest(app$, stage$)
-  //   .map(f => [6, 10, 12].indexOf(f[1]) != -1)
-  //   .distinctUntilChanged();
-    
   const interactiveInitial$ = appReady$.withLatestFrom(stage$)
     .map(m => [6, 10, 12].indexOf(m[1]) != -1);
 
@@ -469,7 +410,7 @@ export default function(sectionClass, app$, objectObservables, appReady$){
         .transition()
         .duration(750)
         .delay(750)
-        .attr('y2', config.lists.sales.y + config.lists.radius*2.5)
+        .attr('x2', config.lists.sales.x + 100);
     });
 
   // Destroy all
@@ -496,17 +437,10 @@ export default function(sectionClass, app$, objectObservables, appReady$){
 
   // ============ Stage 11 ============
   const stage11$ = new greaterThanObservable(11);
-  // stage$
-  //   .map(stage => stage === 11)
-  //   .distinctUntilChanged()
   stage11$
     .filter(f => f)
     .mergeMap(() => clearAll())
     .subscribe();
-
-  // const stage11$ = stage$
-  //   .map(stage => stage >= 11)
-  //   .distinctUntilChanged();
 
   // Create
   stage11$
@@ -517,12 +451,6 @@ export default function(sectionClass, app$, objectObservables, appReady$){
         .delay(750)
         .duration(750)
         .style('opacity', 1);
-
-      // sumTableArrow
-      //   .transition()
-      //   .delay(750)
-      //   .duration(750)
-      //   .attr('y2', 500);
     });
 
   // Destroy
@@ -533,11 +461,6 @@ export default function(sectionClass, app$, objectObservables, appReady$){
         .transition()
         .duration(750)
         .style('opacity', 0);
-
-      // sumTableArrow
-      //   .transition()
-      //   .duration(750)
-      //   .attr('y2', config.lists.department.y);
     })
 
 }

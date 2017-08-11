@@ -3,6 +3,9 @@ import * as d3 from 'd3';
 import '../../imgs/light-checkmark.png';
 import '../../imgs/dark-checkmark.png';
 
+import checkmarkSVG from '../../imgs/checkmark.svg';
+
+
 export default function(list, data, offset, altColor, selectionTransition){
   // const selectionTransition = 500;
   const circleContainerRadius = 48.6;
@@ -62,6 +65,11 @@ export default function(list, data, offset, altColor, selectionTransition){
 
 
   // =========== Checkmark ===========
+  const check = d3.xml(checkmarkSVG)
+    .get((error, xml) =>{
+      console.log(xml.documentElement);
+    })
+
   // Attach data
   const updateCheckmark = list
     .selectAll('.list-object-checkmark')

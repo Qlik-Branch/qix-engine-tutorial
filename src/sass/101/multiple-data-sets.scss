@@ -105,8 +105,8 @@ $sidebar-width: 220px;
             position: absolute;
             width: 197px;
             background-color: #DDEFFF;
-            top: 450px;
-            transform: translateX(-50%);
+            top: 100px;
+            // left: 600px;
 
             table {
               width: 172px;
@@ -184,7 +184,7 @@ $sidebar-width: 220px;
           position: absolute;
           width: 156px;
           background-color: #F1F1F1;
-          transform: translateX(-50%);
+          transform: translateY(-50%);
           padding-left: 21px;
           padding-top: 15px;
           padding-bottom: 13px;
