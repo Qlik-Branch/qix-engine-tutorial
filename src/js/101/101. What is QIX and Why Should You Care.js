@@ -24,7 +24,7 @@ d3.select('.embed-dashboard .graph')
   .append('div')
     .classed('iframe-container', true)
   .append('iframe')
-    // .attr('src', 'https://sense-demo.qlik.com/site/sense/app/ec296874-47bf-48e4-822f-0cc4e1068723/sheet/af39d324-2604-4182-b1a5-08b49898e35f/state/analysis');
+    .attr('src', 'https://sense-demo.qlik.com/site/sense/app/ec296874-47bf-48e4-822f-0cc4e1068723/sheet/af39d324-2604-4182-b1a5-08b49898e35f/state/analysis');
 
 
 // ========= Connect App =========

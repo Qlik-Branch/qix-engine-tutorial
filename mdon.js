@@ -1376,19 +1376,32 @@ function compileMarkdown(inputMarkdown) {
     });
     bodyHtml += '<div id="section-' + section.section + '"';
     bodyHtml += 'class="section ' + ids + '">';
-    // if(section.content.length > 0){
-    //   if(section.img && section.content[0].tag === 'ol'){
-    //     bodyHtml += ' section-list">';
-    //   } else bodyHtml += '">';
-    // } else bodyHtml += '">';
-    bodyHtml += '<div class="row">\n          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 body-left">\n    ';
-    bodyHtml += (0, _generateHTML2.default)(section.content);
-    bodyHtml += '</div>';
 
     if (section.graph) {
-      bodyHtml += '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 body-right">';
-      bodyHtml += (0, _generateHTML2.default)(section.graph);
-      bodyHtml += '</div>';
+      // if more than just a class is set in attributes, give width of 6
+      if (section.graph[0].attrs.length > 1) {
+        /* Give left width of 6 */
+        bodyHtml += '<div class="row">\n              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 body-left">\n        ';
+        bodyHtml += (0, _generateHTML2.default)(section.content);
+        bodyHtml += '</div>';
+
+        /* Give right width of 6 */
+        bodyHtml += '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 body-right">';
+        bodyHtml += (0, _generateHTML2.default)(section.graph);
+        bodyHtml += '</div>';
+      }
+      // Otherwise, give 0
+      else {
+          /* Give left width of 6 and offset by 3*/
+          bodyHtml += '<div class="row">\n              <div class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 body-left">\n        ';
+          bodyHtml += (0, _generateHTML2.default)(section.content);
+          bodyHtml += '</div>';
+
+          /* Give right width of 0 */
+          bodyHtml += '<div class="col-xs-0 col-sm-0 col-md-0 col-lg-0 body-right">';
+          bodyHtml += (0, _generateHTML2.default)(section.graph);
+          bodyHtml += '</div>';
+        }
     }
 
     bodyHtml += '</div></div>';
