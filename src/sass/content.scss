@@ -189,7 +189,7 @@ body {
               position: absolute;
               width: 100%;
               top: 0;
-              padding-top: 100px;
+              padding-top: 150px;
             } 
 
             &.graph-scroll-fixed {
@@ -200,7 +200,7 @@ body {
 
                 @media(min-width: 992px){
                   position: fixed;
-                  left: calc(#{$sidebar-width} + 31px);
+                  left: calc(#{$sidebar-width} + 35px);
                   width: calc(100% - (#{$sidebar-width} + 70px));
                 }
               }

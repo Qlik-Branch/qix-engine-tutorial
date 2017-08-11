@@ -24,10 +24,12 @@ export default function(sectionClass, app$, objectObservables){
     arrow = html.arrow.line,
     config = html.config;
 
-  const dimensionHyperCubeLayout$ = objectObservables.dimensionHyperCube.layout$,
+  const 
+    dimensionHyperCubeObject$ = objectObservables.dimensionHyperCube.object$,
+    dimensionHyperCubeLayout$ = objectObservables.dimensionHyperCube.layout$,
     departmentListObject$ = objectObservables.departmentListObject.object$,
-    itemListObject$ = objectObservables.itemListObject.object$,
     departmentListLayout$ = objectObservables.departmentListObject.layout$,
+    itemListObject$ = objectObservables.itemListObject.object$,
     itemListLayout$ = objectObservables.itemListObject.layout$;
 
 
@@ -74,8 +76,14 @@ export default function(sectionClass, app$, objectObservables){
   }
 
 
-
   // ============ Observables ============
+  const appReady$ = dimensionHyperCubeObject$
+    .withLatestFrom(departmentListObject$)
+    .withLatestFrom(itemListObject$)
+    .publish();
+  appReady$.connect();
+
+    
   const stage$ = associationsStageObservable(sectionClass);
   // stage$.subscribe(s => console.log(s));
   /* Creating a debounced emitter so that fast scrolling isn't triggering many selections */
@@ -83,16 +91,50 @@ export default function(sectionClass, app$, objectObservables){
     .debounceTime(150);
 
   // ============ Subscribe ============
+  /* Function to generate observable that triggers when it is within or past a
+      specified stage */
+  function greaterThanObservable(stage){
+    // When app is ready, emit stage status
+    const stageInitial$ = appReady$.withLatestFrom(stage$)
+      .map(m => m[1] >= stage);
+
+    /* When changing stage, as long as appReady has emitted a value,
+        emit stage status */
+    const stageApp$ = stageDebounced$.withLatestFrom(appReady$)
+      .map(m => m[0] >= stage);
+
+    /* Create a new observable by merging the two above. Only emit when the status
+        changes */
+    const mergedObservable$ = Rx.Observable.merge(stageInitial$, stageApp$).distinctUntilChanged();
+
+    return mergedObservable$;
+  }
+
+  function equalToObservable(stage){
+    // When app is ready, emit stage status
+    const stageInitial$ = appReady$.withLatestFrom(stage$)
+      .map(m => m[1] === stage);
+
+    /* When changing stage, as long as appReady has emitted a value,
+        emit stage status */
+    const stageApp$ = stageDebounced$.withLatestFrom(appReady$)
+      .map(m => m[0] === stage);
+
+    /* Create a new observable by merging the two above. Only emit when the status
+        changes */
+    const mergedObservable$ = Rx.Observable.merge(stageInitial$, stageApp$).distinctUntilChanged();
+
+    return mergedObservable$;
+  }
+  
   // Dimension HyperCube
   dimensionHyperCubeLayout$
     .subscribe(layout => paintTable(dimensionTable, layout, selectionTransition));
   
-
+    
   // ***** Stage 1 *****
-  const stage1$ = Rx.Observable.combineLatest(app$, stage$)
-    .map(m => m[1] >= 1)
-    .distinctUntilChanged();
-
+  const stage1$ = new greaterThanObservable(1)
+    
   stage1$
     .filter(f => f)
     .mergeMap(() => clearAll())
@@ -117,10 +159,9 @@ export default function(sectionClass, app$, objectObservables){
     .subscribe();
 
   
+
   // ***** Stage 2 *****
-  const stage2$ = Rx.Observable.combineLatest(app$, stage$)
-    .map(m => m[1] >= 2)
-    .distinctUntilChanged();
+  const stage2$ = new greaterThanObservable(2);
 
   // Clear App Selections
   stage2$
@@ -150,9 +191,7 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ***** Stage 3 *****
-  const stage3$ = Rx.Observable.combineLatest(app$, stage$)
-    .map(m => m[1] >= 3)
-    .distinctUntilChanged();
+  const stage3$ = new greaterThanObservable(3);
 
   // Create Connector
   stage3$
@@ -197,90 +236,88 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ***** Stage 4 *****
-  Rx.Observable.combineLatest(app$, stageDebounced$)
-    .map(m => m[1] === 4)
-    .distinctUntilChanged()
+  const stage4$ = equalToObservable(4);
+
+  stage4$
     .filter(f => f)
     .mergeMap(() => clearAll())
     .subscribe();
 
 
   // ***** Stage 5 *****
-  Rx.Observable.combineLatest(app$, stageDebounced$)
-    .map(m => m[1] === 5)
-    .distinctUntilChanged()
+  const stage5$ = equalToObservable(5);
+
+  stage5$
     .filter(f => f)
     .mergeMap(() => selectClothing())
     .subscribe();
 
 
   // ***** Stage 6 *****
-  Rx.Observable.combineLatest(app$, stageDebounced$)
-    .map(m => m[1] === 6)
-    .distinctUntilChanged()
+  const stage6$ = equalToObservable(6);
+
+  stage6$
     .filter(f => f)
     .mergeMap(() => selectClothingTShirt())
     .subscribe();
 
 
   // ***** Stage 7 *****
-  Rx.Observable.combineLatest(app$, stageDebounced$)
-    .map(m => m[1] === 7)
-    .distinctUntilChanged()
+  const stage7$ = equalToObservable(7);
+
+  stage7$
     .filter(f => f)
     .mergeMap(() => clearAll())
     .subscribe();
 
 
   // ***** Stage 8 *****
-  Rx.Observable.combineLatest(app$, stageDebounced$)
-    .map(m => m[1] === 8)
-    .distinctUntilChanged()
+  const stage8$ = equalToObservable(8);
+
+  stage8$
     .filter(f => f)
     .mergeMap(() => selectTShirtCamera())
     .subscribe();
 
   
   // ***** Stage 9 *****
-  Rx.Observable.combineLatest(app$, stageDebounced$)
-    .map(m => m[1] === 9)
-    .distinctUntilChanged()
+  const stage9$ = equalToObservable(9);
+
+  stage9$
     .filter(f => f)
     .mergeMap(() => selectTShirtCameraClothing())
     .subscribe();
 
 
   // ***** Stage 10 *****
-  Rx.Observable.combineLatest(app$, stageDebounced$)
-    .map(m => m[1] === 10)
-    .distinctUntilChanged()
+  const stage10$ = equalToObservable(10);
+
+  stage10$
     .filter(f => f)
     .mergeMap(() => selectTShirtCamera())
     .subscribe();
     
 
   // ***** Stage 11 *****
-  Rx.Observable.combineLatest(app$, stageDebounced$)
-    .map(m => m[1] === 11)
-    .distinctUntilChanged()
+  const stage11$ = equalToObservable(11);
+
+  stage11$
     .filter(f => f)
     .mergeMap(() => selectFurniture())
     .subscribe();
     
 
   // ***** Stage 12 *****
-  Rx.Observable.combineLatest(app$, stageDebounced$)
-    .map(m => m[1] === 12)
-    .distinctUntilChanged()
+  const stage12$ = equalToObservable(12);
+
+  stage12$
     .filter(f => f)
     .mergeMap(() => selectTShirtCamera())
     .subscribe();
 
 
   // ***** Stage 13 *****
-  const stage13$ = Rx.Observable.combineLatest(app$, stage$)
-    .map(m => m[1] >= 13)
-    .distinctUntilChanged();
+  const stage13$ = greaterThanObservable(13);
 
   stage13$
     .filter(f => f)
@@ -300,9 +337,7 @@ export default function(sectionClass, app$, objectObservables){
 
   
   // ***** Stage 14 *****
-  const stage14$ = Rx.Observable.combineLatest(app$, stage$)
-    .map(m => m[1] >= 14)
-    .distinctUntilChanged();
+  const stage14$ = greaterThanObservable(14);
 
   // Pulse Function
   /* Takes in a d3 selection and whether it should be pulsing or not.
@@ -355,8 +390,6 @@ export default function(sectionClass, app$, objectObservables){
   stage14$
     .filter(f => f)
     .subscribe(() =>{
-      console.log('14')
-
       const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
       pulse(highlightCircle, true);
     })
@@ -380,7 +413,6 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => f[1] >= 14)
     .pluck('0')
     .do(() =>{
-      console.log('click');
       const highlightCircle = d3.selectAll(sectionClass +' .highlight-circle');
       pulse(highlightCircle, false);
     })

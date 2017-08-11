@@ -337,8 +337,8 @@ export default function(sectionClass){
   // Sum Output
   const sumOutput = d3Graph.append('div')
     .attr('class', 'sum-output')
-    .style('left', config.lists.sales.x +'px')
-    .style('top', (config.lists.sales.y + config.lists.radius*2.5) +'px')
+    .style('left', (config.lists.sales.x + 200) +'px')
+    .style('top', config.lists.sales.y +'px')
     .style('opacity', 0);
 
   sumOutput.append('span')
