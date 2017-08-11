@@ -67,6 +67,13 @@
 
         .action-rect {
           fill: #F1F1F1;
+          cursor: pointer;
+        }
+        .pulse-rect {
+          fill: none;
+          stroke-width: 2;
+          stroke: #00B3E5;
+
         }
         .action-text {
           font-family: 'Open Sans';
@@ -74,6 +81,7 @@
           font-weight: normal;
           // fill: #4D4D4D;
           text-anchor: middle;
+          cursor: pointer;
         }
       }
     }

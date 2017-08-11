@@ -223,6 +223,7 @@ export default function(sectionClass){
     .attr('width', 103)
     .attr('height', 29)
     .on('click', function(){
+      pulse(actionPulse, false);
       if(stage === 0){
         recordCount = [{count: 1, key: 1}];
         stateCircleText[1].text = '1 of 4 records';
@@ -267,6 +268,7 @@ export default function(sectionClass){
         .attr('x', 80)
         .attr('y', 180)
         .on('click', function(){
+          pulse(actionPulse, false);
           if(stage === 0){
             recordCount = [{count: 1, key: 1}];
             stateCircleText[1].text = '1 of 4 records';
@@ -305,6 +307,43 @@ export default function(sectionClass){
         .remove();
 
   }
+
+
+  // ============= Action Pulse =============
+  const actionPulse = svg.append('rect')
+    .attr('class', 'pulse-rect')
+    .attr('x', 28.5)
+    .attr('y', 160)
+    .attr('width', 103)
+    .attr('height', 29)
+
+
+  // Pulse Function
+  /* Takes in a d3 selection and whether it should be pulsing or not.
+      If pulseActive is true, the transition will fade in then out and then
+      call the recursive transition again. if false, it will fade out then stop */
+  function pulse(selection, pulseActive){
+    recursiveTransition();
+    function recursiveTransition(){
+      if(pulseActive){
+        selection
+          .transition()
+          .duration(500)
+          .style('opacity', 1)
+          .transition()
+          .duration(500)
+          .style('opacity', 0)
+          .on('end', recursiveTransition)
+      } else{
+        selection
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      }
+    }
+  }
+
+  pulse(actionPulse, true);
 
 
   // ============= Resize =============
