@@ -2,11 +2,6 @@ import Rx from 'rxjs';
 import * as d3 from 'd3';
 
 export default function(sectionClass){
-  // Create Scroll Observable
-  const scrollStream = Rx.Observable.fromEvent(window, 'scroll')
-    .map(() => document.querySelector(sectionClass).getBoundingClientRect().top);
-
-
   /* Observable to emit the current paragraph section we scroll to. Only emits
       when a new paragraph is reached (paragraph != prevParagraph) */
   const paragraphStream = 

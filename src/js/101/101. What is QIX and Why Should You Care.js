@@ -31,7 +31,46 @@ d3.select('.embed-dashboard .graph')
 // Connect to app
 const app$ = connectToApp(serverConfig);
 
-const objectObservables = createObjectObservables(app$);
+const 
+  objectObservables = createObjectObservables(app$),
+  // dimensionHyperCubeObject$ = objectObservables.dimensionHyperCube.object$,
+  // departmentListObject$ = objectObservables.departmentListObject.object$,
+  // itemListObject$ = objectObservables.itemListObject.object$,
+  // factHyperCubeObject$ = objectObservables.factHyperCube.object$,
+  // dayListObject$ = objectObservables.dayListObject.object$,
+  // salesListObject$ = objectObservables.salesListObject.object$,
+  // salesSumObject$ = objectObservables.salesSumObject.object$,
+  // departmentSalesHyperCubeObject$ = objectObservables.departmentSalesHyperCube.object$;
+  dimensionHyperCubeLayout$ = objectObservables.dimensionHyperCube.layout$,
+  departmentListLayout$ = objectObservables.departmentListObject.layout$,
+  itemListLayout$ = objectObservables.itemListObject.layout$,
+  factHyperCubeLayout$ = objectObservables.factHyperCube.layout$,
+  dayListLayout$ = objectObservables.dayListObject.layout$,
+  salesListLayout$ = objectObservables.salesListObject.layout$,
+  salesSumLayout$ = objectObservables.salesSumObject.layout$,
+  departmentSalesHyperCubeLayout$ = objectObservables.departmentSalesHyperCube.layout$;
 
-associations('.modeling-associations', app$, objectObservables);
-multipleDataSets('.multiple-data-sets', app$, objectObservables);
+/* Get all session objects to create an observable that emits when the app is ready */
+// const appReady$ = dimensionHyperCubeObject$
+//   .withLatestFrom(departmentListObject$)
+//   .withLatestFrom(itemListObject$)
+//   .withLatestFrom(factHyperCubeObject$)
+//   .withLatestFrom(dayListObject$)
+//   .withLatestFrom(salesListObject$)
+//   .withLatestFrom(salesSumObject$)
+//   .withLatestFrom(departmentSalesHyperCubeObject$)
+//   .publish();
+// appReady$.connect();
+const appReady$ = dimensionHyperCubeLayout$
+  .withLatestFrom(departmentListLayout$)
+  .withLatestFrom(itemListLayout$)
+  .withLatestFrom(factHyperCubeLayout$)
+  .withLatestFrom(dayListLayout$)
+  .withLatestFrom(salesListLayout$)
+  .withLatestFrom(salesSumLayout$)
+  .withLatestFrom(departmentSalesHyperCubeLayout$)
+  .publish();
+appReady$.connect();
+
+associations('.modeling-associations', app$, objectObservables, appReady$);
+multipleDataSets('.multiple-data-sets', app$, objectObservables, appReady$);

@@ -8,7 +8,7 @@ import paintListContainer from '../paint-list-container.js';
 import paintListValues from '../paint-list-values.js';
 import paintPulseCircles from '../paint-pulse-circles.js';
 
-export default function(sectionClass, app$, objectObservables){
+export default function(sectionClass, app$, objectObservables, appReady$){
   // ============ Global Variables ============
   var altColor = '#686868';
   var selectionTransition = 500;
@@ -74,24 +74,7 @@ export default function(sectionClass, app$, objectObservables){
       departmentListObject$.qSelectListObjectValues('/qListObjectDef', [0], true)
     )
   }
-
-
-  // ============ Observables ============
-  const appReady$ = dimensionHyperCubeObject$
-    .withLatestFrom(departmentListObject$)
-    .withLatestFrom(itemListObject$)
-    .publish();
-  appReady$.connect();
-
-    
-  const stage$ = associationsStageObservable(sectionClass);
-  // stage$.subscribe(s => console.log(s));
-  /* Creating a debounced emitter so that fast scrolling isn't triggering many selections */
-  const stageDebounced$ = stage$
-    .debounceTime(150);
-
-  // ============ Subscribe ============
-  /* Function to generate observable that triggers when it is within or past a
+   /* Function to generate observable that triggers when it is within or past a
       specified stage */
   function greaterThanObservable(stage){
     // When app is ready, emit stage status
@@ -126,6 +109,24 @@ export default function(sectionClass, app$, objectObservables){
 
     return mergedObservable$;
   }
+
+
+  // ============ Observables ============
+  // const appReady$ = dimensionHyperCubeObject$
+  //   .withLatestFrom(departmentListObject$)
+  //   .withLatestFrom(itemListObject$)
+  //   .publish();
+  // appReady$.connect();
+
+    
+  const stage$ = associationsStageObservable(sectionClass);
+  // stage$.subscribe(s => console.log(s));
+  /* Creating a debounced emitter so that fast scrolling isn't triggering many selections */
+  const stageDebounced$ = stage$
+    .debounceTime(150);
+
+  // ============ Subscribe ============
+ 
   
   // Dimension HyperCube
   dimensionHyperCubeLayout$

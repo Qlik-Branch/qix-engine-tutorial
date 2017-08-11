@@ -1,26 +1,21 @@
 import Rx from 'rxjs';
 import * as d3 from 'd3';
 
-export default function(sectionClass, app$){
-  // Create Scroll Observable
-  const scrollStream = Rx.Observable.fromEvent(window, 'scroll')
-    .map(() => document.querySelector(sectionClass).getBoundingClientRect().top);
-
-
+export default function(sectionClass){
   /* Observable to emit the current paragraph section we scroll to. Only emits
       when a new paragraph is reached (paragraph != prevParagraph) */
   const paragraph$ = Rx.Observable.fromEvent(window, 'load')
     .switchMap(() =>{
-      return app$.switchMap(() =>{
-        return Rx.Observable.fromEvent(window, 'scroll')
-          .map(() =>{
-            const elemGroup = d3.select(sectionClass +' .graph-scroll-active');
-            
-            if(elemGroup._groups[0][0]) return +elemGroup.attr('element-group');
-            else return 0;
-          })
-          .distinctUntilChanged();
-      })
+      return Rx.Observable.fromEvent(window, 'scroll')
+        .startWith(window, 'scroll')
+        .delay(1000)
+        .map(() =>{
+          const elemGroup = d3.select(sectionClass +' .graph-scroll-active');
+          
+          if(elemGroup._groups[0][0]) return +elemGroup.attr('element-group');
+          else return 0;
+        })
+        .distinctUntilChanged();
     })
 
 

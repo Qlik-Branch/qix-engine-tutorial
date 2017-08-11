@@ -146,6 +146,9 @@ export default function(app$){
       object$: salesListObject$,
       layout$: salesListObjectLayout$
     },
-    salesSumLayout$: salesSumLayout$
+    salesSumObject: {
+      object$: salesSumObject$,
+      layout$: salesSumLayout$
+    }
   };
 }

@@ -10,7 +10,7 @@ import paintListContainer from '../paint-list-container.js';
 import paintListValues from '../paint-list-values.js';
 import paintPulseCircles from '../paint-pulse-circles.js';
 
-export default function(sectionClass, app$, objectObservables){
+export default function(sectionClass, app$, objectObservables, appReady$){
   var altColor = '#BEBEBE';
   var selectionTransition = 500;
   const listContainerRadius = 48.6;
@@ -31,7 +31,6 @@ export default function(sectionClass, app$, objectObservables){
     bottomRect = htmlSetup.rects.bottom,
     bottomArrow = htmlSetup.arrows.bottomArrow,
     bottomArrowBase = htmlSetup.arrows.bottomArrowBase,
-    // sumTableArrow = htmlSetup.arrows.sumTableArrow,
     sumLabel = htmlSetup.sum.label,
     sumStaticLine = htmlSetup.sum.staticLine,
     sumDynamicLine = htmlSetup.sum.dynamicLine,
@@ -39,17 +38,22 @@ export default function(sectionClass, app$, objectObservables){
     sumOutputValue = htmlSetup.sum.outputValue,
     config = htmlSetup.config;
 
-  const dimensionHyperCubeLayout$ = objectObservables.dimensionHyperCube.layout$,
+  const 
+    dimensionHyperCubeObject$ = objectObservables.dimensionHyperCube.object$,
+    dimensionHyperCubeLayout$ = objectObservables.dimensionHyperCube.layout$,
+    factHyperCubeObject$ = objectObservables.factHyperCube.object$,
     factHyperCubeLayout$ = objectObservables.factHyperCube.layout$,
     departmentListObject$ = objectObservables.departmentListObject.object$,
-    itemListObject$ = objectObservables.itemListObject.object$,
     departmentListLayout$ = objectObservables.departmentListObject.layout$,
+    itemListObject$ = objectObservables.itemListObject.object$,
     itemListLayout$ = objectObservables.itemListObject.layout$,
     dayListObject$ = objectObservables.dayListObject.object$,
     dayListLayout$ = objectObservables.dayListObject.layout$,
     salesListObject$ = objectObservables.salesListObject.object$,
     salesListLayout$ = objectObservables.salesListObject.layout$,
-    salesSumLayout$ = objectObservables.salesSumLayout$,
+    salesSumObject$ = objectObservables.salesSumObject.object$,
+    salesSumLayout$ = objectObservables.salesSumObject.layout$,
+    departmentSalesHyperCubeObject$ = objectObservables.departmentSalesHyperCube.object$,
     departmentSalesHyperCubeLayout$ = objectObservables.departmentSalesHyperCube.layout$;
 
   
@@ -72,13 +76,93 @@ export default function(sectionClass, app$, objectObservables){
     );
   };
 
+   /* Function to generate observable that triggers when it is within or past a
+      specified stage */
+  function greaterThanObservable(stage){
+    // When app is ready, emit stage status
+    const stageInitial$ = appReady$.withLatestFrom(stage$)
+      .map(m => m[1] >= stage);
+
+    /* When changing stage, as long as appReady has emitted a value,
+        emit stage status */
+    const stageApp$ = stageDebounced$.withLatestFrom(appReady$)
+      .map(m => m[0] >= stage);
+
+    /* Create a new observable by merging the two above. Only emit when the status
+        changes */
+    const mergedObservable$ = Rx.Observable.merge(stageInitial$, stageApp$).distinctUntilChanged();
+
+    return mergedObservable$;
+  }
+
+  function equalToObservable(stage){
+    // When app is ready, emit stage status
+    const stageInitial$ = appReady$.withLatestFrom(stage$)
+      .map(m => m[1] === stage);
+
+    /* When changing stage, as long as appReady has emitted a value,
+        emit stage status */
+    const stageApp$ = stageDebounced$.withLatestFrom(appReady$)
+      .map(m => m[0] === stage);
+
+    /* Create a new observable by merging the two above. Only emit when the status
+        changes */
+    const mergedObservable$ = Rx.Observable.merge(stageInitial$, stageApp$).distinctUntilChanged();
+
+    return mergedObservable$;
+  }
+
+
 
   // ============ Observables ============
-  const stage$ = multipleStageObservable(sectionClass, app$);
+  // factHyperCubeObject$.subscribe(s => console.log(s));
+  // const appReady$ = dimensionHyperCubeObject$
+  //   .withLatestFrom(factHyperCubeObject$)
+  //   .withLatestFrom(departmentListObject$)
+  //   .withLatestFrom(itemListObject$)
+  //   .withLatestFrom(dayListObject$)
+  //   .withLatestFrom(salesListObject$)
+  //   .withLatestFrom(salesSumObject$)
+  //   .withLatestFrom(departmentSalesHyperCubeObject$)
+  //   .publish();
 
-  // stage$.subscribe(stage =>{
-  //   console.log(stage);
-  // });
+  // const dimensionHyperCubeReady$ = dimensionHyperCubeObject$.take(1);
+  // const factHyperCubeReady$ = dimensionHyperCubeReady$
+  //   .concat(factHyperCubeObject$.take(1));
+  // const departmentListObjectReady$ = factHyperCubeReady$
+  //   .concat(departmentListObject$.take(1));
+  // const itemListObjectReady$ = departmentListObjectReady$
+  //   .concat(itemListObject$.take(1));
+  // const dayListObjectReady$ = itemListObjectReady$
+  //   .concat(dayListObject$.take(1));
+  // const salesListObjectReady$ = dayListObjectReady$
+  //   .concat(salesListObject$.take(1));
+  // const salesSumObjectReady$ = salesListObjectReady$
+  //   .concat(salesSumObject$.take(1));
+  // const departmentSalesHyperCubeReady$ = salesSumObjectReady$
+  //   .concat(departmentSalesHyperCubeObject$.take(1));
+
+  // const mergedValues = dimensionHyperCubeObject$
+  //   .merge(factHyperCubeObject$)
+  //   .merge(departmentListObject$)
+  //   .merge(itemListObject$)
+  //   .merge(dayListObject$)
+  //   .merge(salesListObject$)
+  //   .merge(salesSumObject$)
+  //   .merge(departmentSalesHyperCubeObject$)
+  //   .publish();
+  
+  //   mergedValues.connect();
+
+  // const appReady$ = Rx.Observable.concat(departmentSalesHyperCubeReady$)
+  //   .publish();
+
+  // mergedValues.subscribe(s => console.log(s));
+  
+  const stage$ = multipleStageObservable(sectionClass);
+  stage$.subscribe(s => console.log(s))
+
+  const stageDebounced$ = stage$.debounceTime(150);
 
   
   // ============ Subscribe ============
@@ -129,11 +213,8 @@ export default function(sectionClass, app$, objectObservables){
       }, 250)
     })
 
-
-  // ============ Stage 3 ============
-  const stage1$ = stage$
-    .map(stage => stage >= 1)
-    .distinctUntilChanged();
+  // ============ Stage 1 ============
+  const stage1$ = new greaterThanObservable(1);
 
   // Clear All
   stage1$
@@ -156,9 +237,7 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ============ Stage 2 ============
-  const stage2$ = stage$
-    .map(stage => stage >= 2)
-    .distinctUntilChanged();
+  const stage2$ = new greaterThanObservable(2);
 
   // Clear All and Create Bottom Connector
   stage2$
@@ -184,6 +263,7 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => f[1])
     .pluck('0')
     .subscribe(qMatrix =>{
+      console.log(qMatrix);
       paintListContainer(dayList, [1], listContainerRadius, 'Day', 1.5);
       paintListValues(dayList, qMatrix, Math.PI*(3/4), altColor, selectionTransition);
     });
@@ -194,6 +274,7 @@ export default function(sectionClass, app$, objectObservables){
     .filter(f => f[1])
     .pluck('0')
     .subscribe(qMatrix =>{
+      console.log(qMatrix);
       paintListContainer(salesList, [1], listContainerRadius, 'Sales', 1.5);
       paintListValues(salesList, qMatrix, Math.PI/6, altColor, selectionTransition);
     });
@@ -225,35 +306,41 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ============ Stage 3 ============
-  stage$
-    .map(stage => stage === 3)
-    .distinctUntilChanged()
+  const stage3$ = new equalToObservable(3)
+  stage3$
     .filter(f => f)
     .mergeMap(() => clearAll())
     .subscribe();
     
     
   // ============ Stage 4 ============
-  stage$
-    .map(stage => stage === 4)
-    .distinctUntilChanged()
+  const stage4$ = new equalToObservable(4)
+  stage4$
     .filter(f => f)
     .mergeMap(() => selectTShirtCamera())
     .subscribe();
 
 
   // ============ Stage 5 ============
-  stage$
-    .map(stage => stage === 5)
-    .distinctUntilChanged()
+  const stage5$ = new equalToObservable(5)
+  stage5$
     .filter(f => f)
     .mergeMap(() => selectClothing())
     .subscribe();
 
 
   // ============ Interactivity ============
-  const interactiveStage$ = Rx.Observable.combineLatest(app$, stage$)
-    .map(f => [6, 10, 12].indexOf(f[1]) != -1)
+  // const interactiveStage$ = Rx.Observable.combineLatest(app$, stage$)
+  //   .map(f => [6, 10, 12].indexOf(f[1]) != -1)
+  //   .distinctUntilChanged();
+    
+  const interactiveInitial$ = appReady$.withLatestFrom(stage$)
+    .map(m => [6, 10, 12].indexOf(m[1]) != -1);
+
+  const interactiveApp$ = stageDebounced$.withLatestFrom(appReady$)
+    .map(m => [6, 10, 12].indexOf(m[0]) != -1);
+
+  const interactiveStage$ = Rx.Observable.merge(interactiveInitial$, interactiveApp$)
     .distinctUntilChanged();
 
   // Pulse Function
@@ -348,16 +435,20 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ============ Stage 8 ============
-  stage$
-    .map(stage => stage === 8)
-    .distinctUntilChanged()
+  const stage8$ = new equalToObservable(8);
+  stage8$
     .filter(f => f)
     .mergeMap(() => clearAll())
     .subscribe();
 
   // ============ Sum KPI ============
-  const sumKPI$ = stage$
-    .map(stage => stage >= 8 && stage < 11)
+  const sumKPIInitial$ = appReady$.withLatestFrom(stageDebounced$)
+    .map(m => m[1] >= 8 && m[1] < 11);
+
+  const sumKPIApp$ = stageDebounced$.withLatestFrom(appReady$)
+    .map(m => m[0] >= 8 && m[0] < 11);
+
+  const sumKPI$ = Rx.Observable.merge(sumKPIInitial$, sumKPIApp$)
     .distinctUntilChanged();
   
   // Create
@@ -396,25 +487,26 @@ export default function(sectionClass, app$, objectObservables){
 
 
   // ============ Stage 9 ============
-  stage$
-    .map(stage => stage === 9)
-    .distinctUntilChanged()
+  const stage9$ = new equalToObservable(9);
+  stage9$
     .filter(f => f)
     .mergeMap(() => selectClothing())
     .subscribe();
 
 
   // ============ Stage 11 ============
-  stage$
-    .map(stage => stage === 11)
-    .distinctUntilChanged()
+  const stage11$ = new greaterThanObservable(11);
+  // stage$
+  //   .map(stage => stage === 11)
+  //   .distinctUntilChanged()
+  stage11$
     .filter(f => f)
     .mergeMap(() => clearAll())
     .subscribe();
 
-  const stage11$ = stage$
-    .map(stage => stage >= 11)
-    .distinctUntilChanged();
+  // const stage11$ = stage$
+  //   .map(stage => stage >= 11)
+  //   .distinctUntilChanged();
 
   // Create
   stage11$
