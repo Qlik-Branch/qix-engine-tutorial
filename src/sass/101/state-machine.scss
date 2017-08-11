@@ -67,7 +67,8 @@
         &.filtered-table {
           position: absolute;
           top: 0;
-          left: 50%;
+          left: 75%;
+          transform: translateX(-50%);
         }
       }
 
