@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import '../../imgs/light-checkmark.png';
 import '../../imgs/dark-checkmark.png';
 
-import checkmarkSVG from '../../imgs/checkmark.svg';
+import checkmarkSrc from '../../imgs/checkmark.svg';
 
 
 export default function(list, data, offset, altColor, selectionTransition){
@@ -65,11 +65,6 @@ export default function(list, data, offset, altColor, selectionTransition){
 
 
   // =========== Checkmark ===========
-  const check = d3.xml(checkmarkSVG)
-    .get((error, xml) =>{
-      // console.log(xml.documentElement);
-    })
-
   // Attach data
   const updateCheckmark = list
     .selectAll('.list-object-checkmark')
@@ -81,10 +76,11 @@ export default function(list, data, offset, altColor, selectionTransition){
     .enter()
     .append('image')
     .attr('class', 'list-object-checkmark')
-    .attr('xlink:href', 'images/dark-checkmark.png')
+    // .attr('xlink:href', 'images/dark-checkmark.png')
+    .attr('xlink:href', checkmarkSrc)
     .attr('data-qelemno', d => d[0].qElemNumber)
-    .attr('x', (d, i) => (circleContainerRadius*.6)*Math.cos(i*theta + offset) - 7)
-    .attr('y', (d, i) => (circleContainerRadius*.6)*Math.sin(i*theta + offset) - 5)
+    .attr('x', (d, i) => (circleContainerRadius*.6)*Math.cos(i*theta + offset) - 6)
+    .attr('y', (d, i) => (circleContainerRadius*.6)*Math.sin(i*theta + offset) - 4)
     .style('opacity', 0)
     .transition()
     .delay(500)

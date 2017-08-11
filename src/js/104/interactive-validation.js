@@ -2,6 +2,9 @@ import * as d3 from 'd3';
 
 import '../../imgs/dark-checkmark.png';
 
+import checkmarkSrc from '../../imgs/checkmark.svg';
+import xmarkSrc from '../../imgs/x-mark.svg';
+
 export default function(sectionClass){
   var stage = 0;
 
@@ -136,9 +139,9 @@ export default function(sectionClass){
 
 
   // ============= Checkmark =============
-  var checkmarkImageData = ['images/dark-checkmark.png'];
+  var checkmarkImageData = [checkmarkSrc];
   updateCheckmarkImage(checkmarkImageData);
-  
+
   function updateCheckmarkImage(data){
     const update = svg.selectAll('.checkmark-image')
       .data(data, d => d);
@@ -148,8 +151,11 @@ export default function(sectionClass){
       .append('image')
       .attr('class', 'checkmark-image')
       .attr('xlink:href', d => d)
-      .attr('x', '45%')
+      .attr('x', '45.5%')
       .attr('y', 75);
+
+    update.exit()
+      .remove();
   }
 
 
@@ -222,11 +228,13 @@ export default function(sectionClass){
         stateCircleText[1].text = '1 of 4 records';
         actionButtonData = [{text: 'Get Layout', key: 1}];
         checkmarkValidationStatus = [{text: 'Invalidated', color: '#D0021B'}];
+        checkmarkImageData = [xmarkSrc];
         stage = 1;
       } else if(stage === 1){
         actionButtonData = [{text: 'Reset', key: 1}];
         checkmarkValidationStatus = [{text: 'Validated', color: '#4D4D4D'}];
         outputValueData = ['50'];
+        checkmarkImageData = [checkmarkSrc];
         stage = 2;
       } else if(stage === 2){
         recordCount = [{count: 4, key: 1}];
@@ -234,6 +242,7 @@ export default function(sectionClass){
         actionButtonData = [{text: 'Filter', key: 1}];
         checkmarkValidationStatus = [{text: 'Validated', color: '#4D4D4D'}];
         outputValueData = ['232'];
+        checkmarkImageData = [checkmarkSrc];
         stage = 0;
       }
 
@@ -243,6 +252,7 @@ export default function(sectionClass){
       updateActionButton(actionButtonData);
       updateCheckmarkValidationStatus(checkmarkValidationStatus);
       updateOutputValue(outputValueData);
+      updateCheckmarkImage(checkmarkImageData);
     })
 
   updateActionButton(actionButtonData);
@@ -262,11 +272,13 @@ export default function(sectionClass){
             stateCircleText[1].text = '1 of 4 records';
             actionButtonData = [{text: 'Get Layout', key: 1}];
             checkmarkValidationStatus = [{text: 'Invalidated', color: '#D0021B'}];
+            checkmarkImageData = [xmarkSrc];
             stage = 1;
           } else if(stage === 1){
             actionButtonData = [{text: 'Reset', key: 1}];
             checkmarkValidationStatus = [{text: 'Validated', color: '#4D4D4D'}];
             outputValueData = ['50'];
+            checkmarkImageData = [checkmarkSrc];
             stage = 2;
           } else if(stage === 2){
             recordCount = [{count: 4, key: 1}];
@@ -274,6 +286,7 @@ export default function(sectionClass){
             actionButtonData = [{text: 'Filter', key: 1}];
             checkmarkValidationStatus = [{text: 'Validated', color: '#4D4D4D'}];
             outputValueData = ['232'];
+            checkmarkImageData = [checkmarkSrc];
             stage = 0;
           }
 
@@ -283,6 +296,7 @@ export default function(sectionClass){
           updateActionButton(actionButtonData);
           updateCheckmarkValidationStatus(checkmarkValidationStatus);
           updateOutputValue(outputValueData);
+          updateCheckmarkImage(checkmarkImageData);
         })
       .merge(update)
         .text(d => d.text);
