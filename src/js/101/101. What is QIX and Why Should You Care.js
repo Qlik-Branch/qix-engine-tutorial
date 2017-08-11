@@ -6,6 +6,7 @@ import activateSidebar from '../lib/activate-sidebar.js';
 import {scrollPosition} from '../lib/scrolly-graph.js';
 import connectToApp from '../lib/connect-to-app.js';
 
+import stateMachine from './state-machine/state-machine.js';
 import associations from './modeling-associations/associations.js';
 import multipleDataSets from './multiple-data-sets/multiple.js';
 
@@ -24,8 +25,11 @@ d3.select('.embed-dashboard .graph')
   .append('div')
     .classed('iframe-container', true)
   .append('iframe')
-    .attr('src', 'https://sense-demo.qlik.com/site/sense/app/ec296874-47bf-48e4-822f-0cc4e1068723/sheet/af39d324-2604-4182-b1a5-08b49898e35f/state/analysis');
+    // .attr('src', 'https://sense-demo.qlik.com/site/sense/app/ec296874-47bf-48e4-822f-0cc4e1068723/sheet/af39d324-2604-4182-b1a5-08b49898e35f/state/analysis');
 
+
+// ========= Embed Dashboard =========
+stateMachine('.state-machine');
 
 // ========= Connect App =========
 // Connect to app
