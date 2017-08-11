@@ -12,6 +12,7 @@ module.exports = {
     p5: './src/js/105/105. Streamline with Enigma.js',
     p6: './src/js/106/106. Build a Dashboard - Set Up.js',
     p7: './src/js/107/107. Creating Filters with ListObjects.js',
+    p7: './src/js/108/108. Creating Charts with HyperCubes.js',
     app: './src/js/index.js'
   },
   output: {
@@ -99,6 +100,12 @@ module.exports = {
       template: "src/html/107. Creating Filters with ListObjects/107. Creating Filters with ListObjects.ejs",
       filename: "107. Creating Filters with ListObjects.html",
       title: "Creating Filters with ListObjects",
+      chunks: ['app', 'p7']
+    }),
+    new HtmlWebpackPlugin({
+      template: "src/html/108. Creating Charts with HyperCubes/108. Creating Charts with HyperCubes.ejs",
+      filename: "108. Creating Charts with HyperCubes.html",
+      title: "Creating Charts with HyperCubes",
       chunks: ['app', 'p7']
     }),
     new HtmlWebpackPlugin({

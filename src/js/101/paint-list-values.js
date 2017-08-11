@@ -67,7 +67,7 @@ export default function(list, data, offset, altColor, selectionTransition){
   // =========== Checkmark ===========
   const check = d3.xml(checkmarkSVG)
     .get((error, xml) =>{
-      console.log(xml.documentElement);
+      // console.log(xml.documentElement);
     })
 
   // Attach data

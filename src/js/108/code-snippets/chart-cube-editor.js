@@ -1,0 +1,30 @@
+export default
+`{
+    "qInfo": {
+        "qType": "chart"
+    },
+    "qHyperCubeDef": {
+        "qDimensions": [
+            {
+                 "qDef": {
+                    "qFieldDefs": ["Quarter"]
+                }
+            }
+        ],
+        "qMeasures": [
+            {
+                "qDef":{
+                    "qDef": "=sum([Avg Listing Price] * [Total Listing Count])/sum([Total Listing Count])"
+                }
+            }
+        ],
+        "qInitialDataFetch": [
+            {
+                "qLeft": 0,
+                "qWidth": 2,
+                "qTop": 0,
+                "qHeight": 1000
+            }
+        ]
+    }
+}`
