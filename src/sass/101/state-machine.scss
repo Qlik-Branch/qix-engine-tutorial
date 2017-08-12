@@ -10,7 +10,7 @@
   }
 
   .body-right {
-    padding-top: 300px;
+    padding-top: calc((100vh - 400px)/2);
 
     .graph {
       position: relative;

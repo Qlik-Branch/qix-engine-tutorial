@@ -22,6 +22,7 @@ $sidebar-width: 220px;
 
     .body-right {
       // padding-top: 100px;
+      padding-top: calc((100vh - 600px)/2);
 
       .graph {
         position: relative;

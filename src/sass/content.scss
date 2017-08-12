@@ -13,7 +13,7 @@ $hamburger-width: 47px;
 $sidebar-width: 220px;
 
 body {
-  overflow-x: hidden;
+  // overflow-x: hidden;
 }
 
 .main-content {
@@ -189,7 +189,7 @@ body {
               position: absolute;
               width: 100%;
               top: 0;
-              padding-top: 150px;
+              // padding-top: 150px;
             } 
 
             &.graph-scroll-fixed {

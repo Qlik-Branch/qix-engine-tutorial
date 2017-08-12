@@ -12,20 +12,20 @@ import multipleDataSets from './multiple-data-sets/multiple.js';
 
 import createObjectObservables from './create-object-observables.js';
 
-import serverConfig from '../server-config/john-server.json';
-// import serverConfig from '../server-config/qlik-playground.json';
+// import serverConfig from '../server-config/john-server.json';
+import serverConfig from '../server-config/qlik-playground.json';
 // import serverConfig from '../server-config/axis-sense-internal.json';
 
 import '../../sass/101/101. What is QIX and Why Should You Care.scss';
 
 activateSidebar(1);
 
-// ========= Embed Dashboard =========
-d3.select('.embed-dashboard .graph')
-  .append('div')
-    .classed('iframe-container', true)
-  .append('iframe')
-    // .attr('src', 'https://sense-demo.qlik.com/site/sense/app/ec296874-47bf-48e4-822f-0cc4e1068723/sheet/af39d324-2604-4182-b1a5-08b49898e35f/state/analysis');
+// // ========= Embed Dashboard =========
+// d3.select('.embed-dashboard .graph')
+//   .append('div')
+//     .classed('iframe-container', true)
+//   .append('iframe')
+//     .attr('src', 'https://sense-demo.qlik.com/site/sense/app/ec296874-47bf-48e4-822f-0cc4e1068723/sheet/af39d324-2604-4182-b1a5-08b49898e35f/state/analysis');
 
 
 // ========= Embed Dashboard =========
