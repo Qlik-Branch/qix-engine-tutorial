@@ -12,7 +12,7 @@ var renderFilter = require("./render-filter.js");
 
 var config = {
     schema: qixSchema,
-    url: "ws://qs-sk/app/"
+    url: "wss://playground.qlik.com/app/"
 };
 
 var session = enigma.create(config);
