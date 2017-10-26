@@ -15,7 +15,7 @@ activateSidebar(6);
 d3.select('.resource-list .graph')
   .html(resourceList);
 
-aceEditor('load-enigmajs', 'javascript', loadEnigmaJs, 'srcindex.js');
-aceEditor('enigma-config', 'javascript', enigmaConfig, 'srcindex.js');
-aceEditor('engine-connect', 'javascript', engineConnect, 'srcindex.js');
-aceEditor('open-doc', 'javascript', openDoc, 'srcindex.js');
+aceEditor('load-enigmajs', 'javascript', loadEnigmaJs, 'src/index.js');
+aceEditor('enigma-config', 'javascript', enigmaConfig, 'src/index.js');
+aceEditor('engine-connect', 'javascript', engineConnect, 'src/index.js');
+aceEditor('open-doc', 'javascript', openDoc, 'src/index.js');
