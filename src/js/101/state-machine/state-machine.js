@@ -30,7 +30,7 @@ export default function(sectionClass){
 
   // ========== Observables ==========
   const stage$ = stateStageObservable(sectionClass);
-  stage$.subscribe(s => console.log(s));
+  // stage$.subscribe(s => console.log(s));
 
 
   // ========== Subscribe ==========
