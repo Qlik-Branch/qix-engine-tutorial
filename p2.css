@@ -1,0 +1,100 @@
+.section .graph img {
+  position: absolute;
+  width: 12%;
+  transform: translateY(-50%); }
+
+.section.static-dyn-prop-diagram {
+  height: calc(1000px + 50vh); }
+  .section.static-dyn-prop-diagram .scroll-line {
+    height: calc(1000px + 50vh); }
+  .section.static-dyn-prop-diagram .graph img {
+    top: 74%;
+    left: 55%; }
+  .section.static-dyn-prop-diagram .graph svg {
+    position: relative; }
+    .section.static-dyn-prop-diagram .graph svg .property-label {
+      font-family: 'Open Sans';
+      font-size: 16px;
+      color: #565656; }
+    .section.static-dyn-prop-diagram .graph svg .number-label-left {
+      text-anchor: end; }
+    .section.static-dyn-prop-diagram .graph svg .arrow-head {
+      fill: #36B7CF; }
+    .section.static-dyn-prop-diagram .graph svg .static-line {
+      stroke-width: 1;
+      stroke: #36B7CF; }
+    .section.static-dyn-prop-diagram .graph svg .dynamic-circle {
+      fill: none;
+      stroke: #36B7CF;
+      stroke-dasharray: 2, 4; }
+    .section.static-dyn-prop-diagram .graph svg .dynamic-line-1,
+    .section.static-dyn-prop-diagram .graph svg .dynamic-line-2 {
+      stroke-width: 1;
+      stroke: #36B7CF;
+      stroke-dasharray: 2, 4; }
+    .section.static-dyn-prop-diagram .graph svg .dynamic-line-1-fill {
+      stroke-width: 1.5;
+      stroke: #36B7CF; }
+    .section.static-dyn-prop-diagram .graph svg .dynamic-circle-fill {
+      stroke: #36B7CF; }
+    .section.static-dyn-prop-diagram .graph svg .dynamic-line-2-fill {
+      stroke-width: 1.5;
+      stroke: #36B7CF; }
+
+.section.static-dyn-prop-interactive .graph {
+  position: relative;
+  height: 300px;
+  margin-top: 52px; }
+  .section.static-dyn-prop-interactive .graph img {
+    top: 71%;
+    left: 50%; }
+  .section.static-dyn-prop-interactive .graph .input-box {
+    position: absolute;
+    left: 140px;
+    top: 29%;
+    font-family: "Open Sans";
+    font-size: 16px;
+    color: #565656;
+    width: 40px;
+    border: solid 1px #36B7CF; }
+  .section.static-dyn-prop-interactive .graph .dropdown-box {
+    position: absolute;
+    left: 60px;
+    top: 67%;
+    width: 80px;
+    font-family: "Open Sans";
+    font-size: 14px;
+    color: #565656;
+    border: solid 1px #36B7CF; }
+  .section.static-dyn-prop-interactive .graph svg {
+    width: 100%;
+    height: 100%; }
+    .section.static-dyn-prop-interactive .graph svg .right-label {
+      text-anchor: start; }
+    .section.static-dyn-prop-interactive .graph svg .interactive-number {
+      text-anchor: start; }
+    .section.static-dyn-prop-interactive .graph svg .interactive-label,
+    .section.static-dyn-prop-interactive .graph svg .interactive-number {
+      font-family: "Open Sans";
+      font-size: 16px;
+      color: #565656; }
+    .section.static-dyn-prop-interactive .graph svg .static-line {
+      stroke-width: 1;
+      stroke: #36B7CF; }
+    .section.static-dyn-prop-interactive .graph svg .dotted-circle {
+      fill: none;
+      stroke: #36B7CF;
+      stroke-dasharray: 2, 4; }
+    .section.static-dyn-prop-interactive .graph svg .dotted-line-1,
+    .section.static-dyn-prop-interactive .graph svg .dotted-line-2 {
+      stroke-width: 1;
+      stroke: #36B7CF;
+      stroke-dasharray: 2, 4; }
+    .section.static-dyn-prop-interactive .graph svg .line-1-fill {
+      stroke-width: 1.5;
+      stroke: #36B7CF; }
+    .section.static-dyn-prop-interactive .graph svg .circle-fill {
+      stroke: #36B7CF; }
+    .section.static-dyn-prop-interactive .graph svg .line-2-fill {
+      stroke-width: 1.5;
+      stroke: #36B7CF; }
