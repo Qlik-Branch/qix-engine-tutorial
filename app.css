@@ -265,33 +265,33 @@
       margin-top: 66px;
       font-family: Raleway;
       font-weight: 500;
-      color: #36B7CE; }
+      color: #36b7ce; }
     .main-content .container.content .header p {
-      font-family: "Open Sans";
+      font-family: 'Open Sans';
       font-weight: 300;
       padding: 15px 26px 17px 24px;
       background-color: rgba(54, 183, 207, 0.07); }
     .main-content .container.content .header hr {
       border-top-width: 1px;
-      border-top-color: #E1E1E1; }
+      border-top-color: #e1e1e1; }
     .main-content .container.content #body-content h2 {
       font-family: Raleway;
       font-size: 24px;
       font-weight: 500;
       font-style: normal;
-      color: #36B7CF; }
+      color: #36b7cf; }
     .main-content .container.content #body-content h3 {
       font-family: Raleway;
       font-size: 20px;
       font-weight: 500;
       font-style: normal;
-      color: #36B7CF; }
+      color: #36b7cf; }
     .main-content .container.content #body-content h4 {
       font-family: Raleway;
       font-size: 18px;
       font-weight: 500;
       font-style: normal;
-      color: #36B7CF; }
+      color: #36b7cf; }
     .main-content .container.content #body-content p {
       font-family: 'Open Sans';
       font-size: 16px;
@@ -313,7 +313,7 @@
           .main-content .container.content #body-content .section .row .body-right .ace_editor .ace_scroller {
             padding-top: 10px; }
           .main-content .container.content #body-content .section .row .body-right .ace_editor .ace_gutter {
-            border-left: 5px solid #36B7CF; }
+            border-left: 5px solid #36b7cf; }
             .main-content .container.content #body-content .section .row .body-right .ace_editor .ace_gutter .ace_fold-widget {
               display: none; }
           .main-content .container.content #body-content .section .row .body-right .ace_editor .copy-button {
@@ -322,7 +322,7 @@
             right: 0;
             width: 54px;
             height: 24px;
-            background-color: #36B7CF;
+            background-color: #36b7cf;
             color: white;
             font-family: Helvetica;
             font-size: 14px;
@@ -335,7 +335,7 @@
           position: fixed;
           top: 0;
           right: 0;
-          left: calc(47px + 0.5*(100% - 47px));
+          left: calc( 47px + 0.5*(100% - 47px));
           width: calc(0.5*(100% - 47px)); }
           @media (min-width: 992px) {
             .main-content .container.content #body-content .section .row.graph-scroll-fixed .body-right {
@@ -347,11 +347,11 @@
           right: 0;
           top: auto; }
         .main-content .container.content #body-content .section .row.row-5-12.graph-scroll-fixed .body-right {
-          left: calc(47px + (5/12)*(100% - 47px));
+          left: calc( 47px + (5/12)*(100% - 47px));
           width: calc((7/12)*(100% - 47px)); }
           @media (min-width: 992px) {
             .main-content .container.content #body-content .section .row.row-5-12.graph-scroll-fixed .body-right {
-              left: calc(220px + (5/12)*(100% - 220px + 15px));
+              left: calc( 220px + (5/12)*(100% - 220px + 15px));
               width: calc((7/12)*(100% - 220px - 70px)); } }
         .main-content .container.content #body-content .section .row.overlap-graph-scroll .body-left {
           z-index: 100;
@@ -416,7 +416,6 @@
 
 @media (min-width: 992px) {
   .main-content {
-    margin-left: 220px;
     width: calc(100% - 220px); }
     .main-content .container.content {
       padding-left: 50px;
