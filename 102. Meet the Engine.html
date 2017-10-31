@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Meet the Engine</title>
-    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="p2.css" rel="stylesheet"><link href="app.css" rel="stylesheet"></head>
-  <body>
-    <script src="jquery.min.js"></script>
-    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <div id="sidebar" class="sidebar">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    Meet the Engine
+  </title>
+  <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="p2.css" rel="stylesheet"><link href="app.css" rel="stylesheet"></head>
+
+<body>
+  <script src="jquery.min.js"></script>
+  <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <!-- <div id="sidebar" class="sidebar">
   <div class="sidebar-label">QIX Tutorial</div>
   <div><a href="javascript:void(0)" class="closebtn">&times;</a></div>
   <hr/>
@@ -87,16 +91,16 @@
   </ul>
 </div>
 
- <div class="hamburger-open">&#9776;</div> 
+ <div class="hamburger-open">&#9776;</div>  -->
 
-    <div class="main-content">
-      <div class="container content">
-        <div class="header">
-          <h1>102. Meet the Engine</h1><p>Learning goal: Understand the various components of the QIX Engine</p>
+  <div class="main-content">
+    <div class="container content">
+      <div class="header">
+        <h1>102. Meet the Engine</h1><p>Learning goal: Understand the various components of the QIX Engine</p>
           <hr/>
-        </div>
-        <div id="body-content">
-          <div id="section-0"class="section "><div class="row">
+      </div>
+      <div id="body-content">
+        <div id="section-0"class="section "><div class="row">
               <div class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 body-left">
         <h2>Structure of the Associative Model</h2><p>In the previous chapter, we talked about what the Associative Model is and demonstrated some of the advantages of using it. In this chapter, we will dive into the terminology and mechanics of the Engine. First, let’s set define some baseline terms.</br></br></p><p>The <strong>QIX Engine</strong> itself is the tool that can run an Associative Model. On it’s own, it contains no data or application logic.</br></br></p><p>A <strong>model</strong> is a file that contains an Associative Model. In Qlik’s API documentation models are referred to as <em>documents</em> or <em>apps</em>, but for our purposes the term <em>model</em> makes a bit more sense. It will hold all of the actual data and associations. It also could contain data about our application structure and logic, like storing off definitions for charts or calculations. Models can be saved to disk in the file format <code>.qvf</code>, which is readable by the <strong>QIX Engine</strong>.</br></br></p><p>On it’s own, the model does nothing other than store data. The QIX Engine is responsible for leveraging the model. For example, you might use the QIX Engine to create a new model or open a model. The QIX Engine would be used to load data into the model, to filter the state of the model, or to run some calculations.</br></br></p><p>To leverage the QIX Engine, you establish a <strong>session</strong> with it. A session connects you to the Engine. Within a session, you can only open and work with 1 model at a time. You can however open multiple sessions with the Engine if needed.</br></br></p><p>In order to leverage the Engine to work with models, we will use API calls to perform various functions with the Engine and our models. These calls are organized into classes.</p></div><div class="col-xs-0 col-sm-0 col-md-0 col-lg-0 body-right"><div class="graph"></div></div></div></div><div id="section-1"class="section "><div class="row">
               <div class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 body-left">
@@ -115,9 +119,10 @@
         <h3>Generic Object Methods</h3><p>The Generic Object class has methods that allow us to work with its properties and layout. When we create a Generic Object with our App class, we can pass in the properties at that time. However, we can get and update the properties in a few different ways directly with the Generic Object class via methods like:</p><ul><li><p>GetProperties – returns the properties of the object</p></li><li><p>SetProperties – sets the properties of the object</p></li><li><p>ApplyPatches – updates specific pieces of the existing properties</br></br></p></li></ul><p>We can evaluate our properties through the QIX Engine to get a layout using:</p><ul><li><p>GetLayout – calculates and returns a layout</br></br></p></li></ul><p>Later when we work with Generic Objects and dynamic properties, we’ll use methods on the Generic Object that correspond with those dynamic properties. For example, one time of dynamic property is the <code>ListObject</code>, which is useful for representing data from a field in a filter-like format. <code>ListObjects</code> are often used to produce filter components, so the Generic Object has specific methods for interacting with this dynamic property, like:</p><ul><li><p>SelectListObjectValues – Applies selections in the field of the list object based on an input</p></li><li><p>SelectListObjectPossible – Applies selections to all possible field values in a field of the list object</br></br></p></li></ul><h3>Other Class Properties and Layouts</h3><p>While Generic Objects are the most flexible structure in the model, our other classes have properties as well. Some even have their own layouts. However, their dynamic properties options are much more limited. For example, the App class has properties and a layout that can be retrieved. A model’s layout will include dynamic properties specific to the model, like the last time it was modified.</p></div><div class="col-xs-0 col-sm-0 col-md-0 col-lg-0 body-right"><div class="graph"></div></div></div></div><div id="section-8"class="section "><div class="row">
               <div class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 body-left">
         <h2>Fin</h2><h4>Recap</h4><ul><li><p>The Engine can create, open, and modify models.</p></li><li><p>Models are saved to disk in the file format <code>.qvf</code>. The API documentation refers to models as “apps” or “documents”.</p></li><li><p>In order to work with a model, we establish a session with a QIX Engine.</p></li><li><p>In a session, we can leverage several classes and their methods to interact with the Engine and models.</p></li><li><p>The key classes are Global, App, Field, and GenericObject.</p></li><li><p>Generic Objects are our main interface for using model data. They have properties which define them, like metadata. The Engine can evaluate these properties to produce a layout, which is the actual data from the model.</p></li></ul><h4>Resources</h4><ul><li><p><a href="http://help.qlik.com/en-US/sense-developer/June2017/Subsystems/EngineAPI/Content/Classes/classes.htm">Classes ‒ Qlik Sense</a></p></li><li><p><a href="http://help.qlik.com/en-US/sense-developer/3.2/Subsystems/EngineAPI/Content/GenericObject/PropertyLevel/properties-that-can-be-set.htm">Properties that can be set ‒ Qlik Sense</a></p></li></ul></div><div class="col-xs-0 col-sm-0 col-md-0 col-lg-0 body-right"><div class="graph"></div></div></div></div>
-        </div>
-        <hr/>
       </div>
+      <hr/>
     </div>
-  <script type="text/javascript" src="p2.bundle.js"></script><script type="text/javascript" src="app.bundle.js"></script></body>
+  </div>
+<script type="text/javascript" src="p2.bundle.js"></script><script type="text/javascript" src="app.bundle.js"></script></body>
+
 </html>

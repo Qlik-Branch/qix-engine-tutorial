@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Streamline with Enigma</title>
-    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="app.css" rel="stylesheet"></head>
-  <body>
-    <script src="jquery.min.js"></script>
-    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <div id="sidebar" class="sidebar">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    Streamline with Enigma
+  </title>
+  <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="app.css" rel="stylesheet"></head>
+
+<body>
+  <script src="jquery.min.js"></script>
+  <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <!-- <div id="sidebar" class="sidebar">
   <div class="sidebar-label">QIX Tutorial</div>
   <div><a href="javascript:void(0)" class="closebtn">&times;</a></div>
   <hr/>
@@ -87,16 +91,16 @@
   </ul>
 </div>
 
- <div class="hamburger-open">&#9776;</div> 
+ <div class="hamburger-open">&#9776;</div>  -->
 
-    <div class="main-content">
-      <div class="container content">
-        <div class="header">
-          <h1>105. Streamline with Enigma</h1><p>Learning goal: Understand how Enigma can be used to work with the QIX Engine API</p>
+  <div class="main-content">
+    <div class="container content">
+      <div class="header">
+        <h1>105. Streamline with Enigma</h1><p>Learning goal: Understand how Enigma can be used to work with the QIX Engine API</p>
           <hr/>
-        </div>
-        <div id="body-content">
-          <div id="section-0"class="section "><div class="row">
+      </div>
+      <div id="body-content">
+        <div id="section-0"class="section "><div class="row">
               <div class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 body-left">
         <h2>Meet Enigma</h2><p>In the previous chapters, we’ve reviewed how the Engine API works at a low level using JSON-RPC messages sent across a WebSocket between a browser and an Engine. Writing and parsing these messages, especially in an asynchronous manner, can be very tedious in JavaScript. Qlik’s Enigma library solves this problem by abstracting the Engine API to a slightly higher level. Enigma is an <a href="https://github.com/qlik-oss/enigma.js">open-source library hosted on GitHub</a>.</br></br></p><h3>A Promise Wrapper</h3><p>Enigma’s approach to the Engine API is to wrap all of the API methods with <em>Promises</em>.  Promises are a way of dealing with asynchronous code. Like their name implies, they execute some function that <em>promises</em> that it will return a value at some point in the future, or error. Promises have useful features such as chaining and error handling that make them much better for asynchronous programming than nested callback functions that developers used to rely on. Promises are now natively supported in JavaScript. <a href="https://developers.google.com/web/fundamentals/getting-started/primers/promises">To learn more about Promises and how to use them, we recommend this introduction.</a></p></div><div class="col-xs-0 col-sm-0 col-md-0 col-lg-0 body-right"><div class="graph"></div></div></div></div><div id="section-1"class="section enigma-create-session"><div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 body-left">
@@ -119,9 +123,10 @@
         <p>We can augment the last part of our code to monitor for change events and make a <code>getLayout</code> call whenever the Generic Object is invalidated.</p></div><div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 body-right"><div class="graph" id="get-layout"></div></div></div></div><div id="section-10"class="section "><div class="row">
               <div class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 body-left">
         <h2>Fin</h2><h4>Recap</h4><ul><li><p>Enigma is an open-source library from Qlik that wraps the Engine API in Promises</p></li><li><p>Enigma returns objects representing instances in our session. Each instance has appropriate API methods available for it’s class</p></li><li><p>Instance invalidation events can be hooked into using the <code>.on(“changed”)</code> event listener</p></li></ul><h4>Resources</h4><ul><li><p><a href="https://github.com/qlik-oss/enigma.js">Enigma</a></p></li><li><p><a href="https://developers.google.com/web/fundamentals/getting-started/primers/promises">Intro to Promises</a></p></li></ul></div><div class="col-xs-0 col-sm-0 col-md-0 col-lg-0 body-right"><div class="graph"></div></div></div></div>
-        </div>
-        <hr/>
       </div>
+      <hr/>
     </div>
-  <script type="text/javascript" src="p5.bundle.js"></script><script type="text/javascript" src="app.bundle.js"></script></body>
+  </div>
+<script type="text/javascript" src="p5.bundle.js"></script><script type="text/javascript" src="app.bundle.js"></script></body>
+
 </html>

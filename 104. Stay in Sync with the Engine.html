@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Stay in Sync with the Engine</title>
-    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="p4.css" rel="stylesheet"><link href="app.css" rel="stylesheet"></head>
-  <body>
-    <script src="jquery.min.js"></script>
-    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <div id="sidebar" class="sidebar">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    Stay in Sync with the Engine
+  </title>
+  <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="p4.css" rel="stylesheet"><link href="app.css" rel="stylesheet"></head>
+
+<body>
+  <script src="jquery.min.js"></script>
+  <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <!-- <div id="sidebar" class="sidebar">
   <div class="sidebar-label">QIX Tutorial</div>
   <div><a href="javascript:void(0)" class="closebtn">&times;</a></div>
   <hr/>
@@ -87,16 +91,16 @@
   </ul>
 </div>
 
- <div class="hamburger-open">&#9776;</div> 
+ <div class="hamburger-open">&#9776;</div>  -->
 
-    <div class="main-content">
-      <div class="container content">
-        <div class="header">
-          <h1>104. Stay in Sync with the Engine</h1><p>Learning goal: Understand Generic Object invalidation and how to keep data in sync between browser and server</p>
+  <div class="main-content">
+    <div class="container content">
+      <div class="header">
+        <h1>104. Stay in Sync with the Engine</h1><p>Learning goal: Understand Generic Object invalidation and how to keep data in sync between browser and server</p>
           <hr/>
-        </div>
-        <div id="body-content">
-          <div id="section-0"class="section "><div class="row">
+      </div>
+      <div id="body-content">
+        <div id="section-0"class="section "><div class="row">
               <div class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 body-left">
         <p>In Chapter 102, we looked at how Generic Objects can be used to get dynamically calculated data from the QIX Engine. We saw how we can define special properties called <em>dynamic properties</em> on our Generic Objects. These properties are interpretable by the QIX Engine. The QIX Engine can use the dynamic property definitions along with the current state of data to produce a <em>layout</em>.</br></br></p><p>The layout is not persisted in the Engine. We only receive the layout when we use the API method <code>GetLayout</code> to calculate and retrieve it for an object. The layout is delivered to us in the browser via our WebSocket connection as discussed in Chapter 103.</p></div><div class="col-xs-0 col-sm-0 col-md-0 col-lg-0 body-right"><div class="graph"></div></div></div></div><div id="section-1"class="section "><div class="row">
               <div class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 body-left">
@@ -115,9 +119,10 @@
         <p>If we want our Generic Objects to stay in sync with this latest model change, we will need to call GetLayout on those handles. Note that if we don’t validate them, we will not get further notifications about them from the QIX Engine. The Engine will only notify us on invalidation; it will not continue to tell us they are invalid as we filter the data model further, unless we validate them again.</br></br></p><p>We could write some JavaScript to listen for these change events. Let’s assume we have a WebSocket open with a QIX Engine stored in the variable <code>conn</code>. We could write:</br></br></p><p>Depending on what you want to do on invalidation, there is a lot more code to be written to keep track of the calls and responses from the Engine and keep Generic Objects in sync. Fortunately for us, Qlik has a library called <code>enigma.js</code> that covers a lot of the boilerplate needed for productive programming with the QIX Engine. We will cover this library in the next chapter.</p></div><div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 body-right"><div class="graph" id="get-layout"></div></div></div></div><div id="section-8"class="section "><div class="row">
               <div class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 body-left">
         <h2>Fin</h2><h4>Recap</h4><ul><li><p>Generic Objects have dynamically calculated layouts that we can pull to our browser</p></li><li><p>When our layouts don’t match the state of the data in the Engine, our Generic Objects are said to be “invalidated”</p></li><li><p>In order to stay in sync with the Engine, we need to validate Generic Objects when the underlying data changes with </code>GetLayout</code> calls</p></li></ul></div><div class="col-xs-0 col-sm-0 col-md-0 col-lg-0 body-right"><div class="graph"></div></div></div></div>
-        </div>
-        <hr/>
       </div>
+      <hr/>
     </div>
-  <script type="text/javascript" src="p4.bundle.js"></script><script type="text/javascript" src="app.bundle.js"></script></body>
+  </div>
+<script type="text/javascript" src="p4.bundle.js"></script><script type="text/javascript" src="app.bundle.js"></script></body>
+
 </html>
