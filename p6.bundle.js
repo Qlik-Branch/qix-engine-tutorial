@@ -206,7 +206,7 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.default = \"var enigma = require(\\\"enigma.js\\\");\\nvar qixSchema = require(\\\"enigma.js/schemas/12.20.0.json\\\");\\n\\nvar config = {\\n    schema: qixSchema,\\n    url: \\\"wss://playground.qlik.com/app/\\\"\\n};\";//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNDQwLmpzIiwic291cmNlcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBIiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///440\n");
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.default = \"var enigma = require(\\\"enigma.js\\\");\\nvar qixSchema = require(\\\"enigma.js/schemas/12.20.0.json\\\");\\n\\nvar config = {\\n    schema: qixSchema,\\n    url: \\\"wss://playground-sense.qlik.com/app/\\\"\\n};\";//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNDQwLmpzIiwic291cmNlcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBIiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///440\n");
 
 /***/ }),
 
@@ -214,7 +214,7 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.default = \"var enigma = require(\\\"enigma.js\\\");\\nvar qixSchema = require(\\\"enigma.js/schemas/12.20.0.json\\\");\\n\\nvar config = {\\n    schema: qixSchema,\\n    url: \\\"wss://playground.qlik.com/app/\\\"\\n};\\n\\nvar session = enigma.create(config);\\n\\nsession.open().then(function(global) {\\n    // do something with the Global instance\\n});\";//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNDQxLmpzIiwic291cmNlcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBIiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///441\n");
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.default = \"var enigma = require(\\\"enigma.js\\\");\\nvar qixSchema = require(\\\"enigma.js/schemas/12.20.0.json\\\");\\n\\nvar config = {\\n    schema: qixSchema,\\n    url: \\\"wss://playground-sense.qlik.com/app/\\\"\\n};\\n\\nvar session = enigma.create(config);\\n\\nsession.open().then(function(global) {\\n    // do something with the Global instance\\n});\";//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNDQxLmpzIiwic291cmNlcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBIiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///441\n");
 
 /***/ }),
 
