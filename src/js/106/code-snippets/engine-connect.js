@@ -4,7 +4,7 @@ var qixSchema = require("enigma.js/schemas/12.20.0.json");
 
 var config = {
     schema: qixSchema,
-    url: "wss://playground.qlik.com/app/"
+    url: "wss://playground-sense.qlik.com/app/"
 };
 
 var session = enigma.create(config);

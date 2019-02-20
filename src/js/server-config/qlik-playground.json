@@ -1,5 +1,5 @@
 {
-  "host": "playground.qlik.com",
+  "host": "playground-sense.qlik.com",
   "prefix": "/",
   "port": "443",
   "rejectUnauthorized": false,

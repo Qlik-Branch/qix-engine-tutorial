@@ -1,6 +1,6 @@
 export default 
 `// Create the websocket connection
-var conn = new WebSocket("wss://playground.qlik.com/app/");
+var conn = new WebSocket("wss://playground-sense.qlik.com/app/");
 
 // Wait for the websocket connection to be established, and then make and listen for calls
 conn.onopen = function() {
